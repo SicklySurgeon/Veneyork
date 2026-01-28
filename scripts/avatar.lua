@@ -30,7 +30,7 @@ local playerCache = {}
 
 -- Creator Info
 local success, result = pcall(function()
-	return Players:GetUserIdFromNameAsync("akuramaa_xd")
+	return Players:GetUserIdFromNameAsync("Sickly255")
 end)
 if success then
 	creatorUserId = result
@@ -979,4 +979,4 @@ Players.PlayerRemoving:Connect(function()
 end)
 
 -- Initial Notification
-sendNotif("Morph Avatar Pro", "Skin Saving Fixed! 🎨", creatorThumbnail)
+sendNotif("Morph Avatar Pro", "By @sickly255 (SAGE) 🎨", creatorThumbnail)
