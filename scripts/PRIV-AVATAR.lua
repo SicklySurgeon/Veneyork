@@ -65,7 +65,6 @@ local playerCache = {}          -- [userId] = {name, displayName, thumbnail, des
 local history = {}              -- últimos morpheos (tabla con userId, name, timestamp)
 local confirmMorph = CONFIG.CONFIRM_MORPH
 local sortMode = CONFIG.SORT_MODE
-local tooltip = nil
 local previewFrame = nil
 local lastMorphTime = 0
 local canUseTween = SERVICES.Tween ~= nil
@@ -95,37 +94,25 @@ local function colorToHex(color)
 	return string.format("#%02X%02X%02X", color.R * 255, color.G * 255, color.B * 255)
 end
 
--- Crea un botón con estilo estándar
+-- Crea un botón con estilo estándar (SIN TOOLTIPS)
 local function createButton(parent, props)
-	local btn = Instance.new("TextButton")
-	btn.Size = props.Size or UDim2.new(0, 100, 0, 35)
-	btn.Position = props.Position or UDim2.new(0, 0, 0, 0)
-	btn.Text = props.Text or ""
-	btn.Font = props.Font or Enum.Font.GothamBold
-	btn.TextSize = props.TextSize or 14
-	btn.TextColor3 = props.TextColor or COLORS.WHITE
-	btn.BackgroundColor3 = props.Color or COLORS.MID_GRAY
-	btn.BorderSizePixel = 0
-	btn.AutoButtonColor = false
-	btn.Parent = parent
+    local btn = Instance.new("TextButton")
+    btn.Size = props.Size or UDim2.new(0, 100, 0, 35)
+    btn.Position = props.Position or UDim2.new(0, 0, 0, 0)
+    btn.Text = props.Text or ""
+    btn.Font = props.Font or Enum.Font.GothamBold
+    btn.TextSize = props.TextSize or 14
+    btn.TextColor3 = props.TextColor or COLORS.WHITE
+    btn.BackgroundColor3 = props.Color or COLORS.MID_GRAY
+    btn.BorderSizePixel = 0
+    btn.AutoButtonColor = false
+    btn.Parent = parent
 
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, props.CornerRadius or 6)
-	corner.Parent = btn
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, props.CornerRadius or 6)
+    corner.Parent = btn
 
-	if props.Tooltip then
-		task.spawn(function()
-			repeat task.wait() until tooltip
-			btn.MouseEnter:Connect(function()
-				tooltip:Show(props.Tooltip, btn.AbsolutePosition + Vector2.new(0, btn.AbsoluteSize.Y + 5))
-			end)
-			btn.MouseLeave:Connect(function()
-				tooltip:Hide()
-			end)
-		end)
-	end
-
-	return btn
+    return btn
 end
 
 -- Crea un frame con bordes redondeados
@@ -429,133 +416,117 @@ local function findPlayerById(userId)
 end
 
 local function morphToPlayer(target)
-	if not target then
-		sendNotification("Morph Avatar", "No target found!", "")
-		return
-	end
-
-    if confirmMorph then
-        local targetName = target.Name or "Unknown"
-        -- Usamos un flag para evitar que la función continúe inmediatamente
-        local confirmed = false
-        
-        -- Mostrar diálogo y esperar respuesta
-        showConfirmationDialog("Confirmar Morph", "¿Morfear a " .. targetName .. "?", function()
-            confirmed = true
-            -- Llamada recursiva evitando la confirmación para ejecutar el morph
-            confirmMorph = false -- Temporalmente desactivar para evitar bucle
-            morphToPlayer(target)
-            confirmMorph = true -- Restaurar estado
-        end)
-        return -- Detener ejecución aquí hasta que el usuario confirme
+    if not target then
+        sendNotification("Morph Avatar", "No target found!", "")
+        return
     end
 
-	if not checkCooldown() then return end
+    if not checkCooldown() then return end
 
-	local userId = target.UserId or (type(target) == "number" and target or target.UserId)
-	local targetName = target.Name or "Unknown"
+    local userId = target.UserId or (type(target) == "number" and target or target.UserId)
+    local targetName = target.Name or "Unknown"
 
-	if userId == player.UserId then
-		sendNotification("Morph Avatar", "Cannot morph to yourself!", "")
-		return
-	end
+    if userId == player.UserId then
+        sendNotification("Morph Avatar", "Cannot morph to yourself!", "")
+        return
+    end
 
-	local character = player.Character or player.CharacterAdded:Wait()
-	local humanoid = character:WaitForChild("Humanoid", 10)
-	if not humanoid then
-		sendNotification("Morph Avatar", "Failed to find humanoid!", "")
-		return
-	end
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid", 10)
+    if not humanoid then
+        sendNotification("Morph Avatar", "Failed to find humanoid!", "")
+        return
+    end
 
-	local desc = nil
+    local desc = nil
 
-	-- Intentar obtener descripción del objetivo (online)
-	if typeof(target) == "Instance" and target:IsA("Player") then
-		local targetChar = target.Character
-		if targetChar then
-			local targetHum = targetChar:FindFirstChild("Humanoid")
-			if targetHum then
-				local success, result = pcall(function()
-					return targetHum:GetAppliedDescription()
-				end)
-				if success then
-					desc = result
-				end
-			end
-		end
-	end
+    -- Intentar obtener descripción del objetivo (online)
+    if typeof(target) == "Instance" and target:IsA("Player") then
+        local targetChar = target.Character
+        if targetChar then
+            local targetHum = targetChar:FindFirstChild("Humanoid")
+            if targetHum then
+                local success, result = pcall(function()
+                    return targetHum:GetAppliedDescription()
+                end)
+                if success then
+                    desc = result
+                end
+            end
+        end
+    end
 
-	-- Si no, usar caché o API
-	if not desc then
-		local cached = playerCache[userId]
-		if cached and cached.Description then
-			desc = cached.Description
-		else
-			local success, result = pcall(function()
-				return SERVICES.Players:GetHumanoidDescriptionFromUserId(userId)
-			end)
-			if success then
-				desc = result
-				if not playerCache[userId] then
-					playerCache[userId] = {UserId = userId, Name = targetName}
-				end
-				playerCache[userId].Description = desc
-			end
-		end
-	end
+    -- Si no, usar caché o API
+    if not desc then
+        local cached = playerCache[userId]
+        if cached and cached.Description then
+            desc = cached.Description
+        else
+            local success, result = pcall(function()
+                return SERVICES.Players:GetHumanoidDescriptionFromUserId(userId)
+            end)
+            if success then
+                desc = result
+                if not playerCache[userId] then
+                    playerCache[userId] = {UserId = userId, Name = targetName}
+                end
+                playerCache[userId].Description = desc
+            end
+        end
+    end
 
-	if not desc then
-		sendNotification("Morph Avatar", "Failed to load avatar data!", "")
-		return
-	end
+    if not desc then
+        sendNotification("Morph Avatar", "Failed to load avatar data!", "")
+        return
+    end
 
-	-- Obtener thumbnail (puede fallar, no crítico)
-	local thumbnail = ""
-	if playerCache[userId] and playerCache[userId].Thumbnail then
-		thumbnail = playerCache[userId].Thumbnail
-	else
-		local thumbSuccess, thumb = pcall(function()
-			return SERVICES.Players:GetUserThumbnailAsync(userId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
-		end)
-		if thumbSuccess then
-			thumbnail = thumb
-			if playerCache[userId] then
-				playerCache[userId].Thumbnail = thumbnail
-			end
-		end
-	end
+    -- Obtener thumbnail (puede fallar, no crítico)
+    local thumbnail = ""
+    if playerCache[userId] and playerCache[userId].Thumbnail then
+        thumbnail = playerCache[userId].Thumbnail
+    else
+        local thumbSuccess, thumb = pcall(function()
+            return SERVICES.Players:GetUserThumbnailAsync(userId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
+        end)
+        if thumbSuccess then
+            thumbnail = thumb
+            if playerCache[userId] then
+                playerCache[userId].Thumbnail = thumbnail
+            end
+        end
+    end
 
-	-- Limpiar accesorios/ropa actual
-	for _, obj in ipairs(character:GetChildren()) do
-		if obj:IsA("Shirt") or obj:IsA("Pants") or obj:IsA("ShirtGraphic") or
-			obj:IsA("Accessory") or obj:IsA("BodyColors") then
-			obj:Destroy()
-		end
-	end
-	local head = character:FindFirstChild("Head")
-	if head then
-		for _, decal in ipairs(head:GetChildren()) do
-			if decal:IsA("Decal") then decal:Destroy() end
-		end
-	end
+    -- Limpiar accesorios/ropa actual
+    for _, obj in ipairs(character:GetChildren()) do
+        if obj:IsA("Shirt") or obj:IsA("Pants") or obj:IsA("ShirtGraphic") or
+            obj:IsA("Accessory") or obj:IsA("BodyColors") then
+            obj:Destroy()
+        end
+    end
+    local head = character:FindFirstChild("Head")
+    if head then
+        for _, decal in ipairs(head:GetChildren()) do
+            if decal:IsA("Decal") then decal:Destroy() end
+        end
+    end
 
-	-- Aplicar descripción
-	local applySuccess = pcall(function()
-		if humanoid.ApplyDescriptionClientServer then
-			humanoid:ApplyDescriptionClientServer(desc)
-		else
-			humanoid:ApplyDescription(desc)
-		end
-	end)
+    -- Aplicar descripción
+    local applySuccess = pcall(function()
+        if humanoid.ApplyDescriptionClientServer then
+            humanoid:ApplyDescriptionClientServer(desc)
+        else
+            humanoid:ApplyDescription(desc)
+        end
+    end)
 
-	if applySuccess then
-		applyMorphEffect(character)
-		flashCharacter(character)
-		addToHistory(userId, targetName, target.DisplayName or targetName)
-		sendNotification("Morph Avatar", "Morphed to " .. targetName .. "!", thumbnail)
-	else
-		sendNotification("Morph Avatar", "Failed to apply morph!", "")
-	end
+    if applySuccess then
+        applyMorphEffect(character)
+        flashCharacter(character)
+        addToHistory(userId, targetName, target.DisplayName or targetName)
+        sendNotification("Morph Avatar", "Morphed to " .. targetName .. "!", thumbnail)
+    else
+        sendNotification("Morph Avatar", "Failed to apply morph!", "")
+    end
 end
 
 -- Copiar objetos del cuerpo (con opciones selectivas)
@@ -842,8 +813,8 @@ infoCorner.CornerRadius = UDim.new(0, 8)
 infoCorner.Parent = infoContent
 
 local infoLabel = Instance.new("TextLabel")
-infoLabel.Size = UDim2.new(1, -30, 0, 0) -- Ancho fijo, Alto 0
-infoLabel.AutomaticSize = Enum.AutomaticSize.Y -- IMPORTANTE: Esto hace que crezca con el texto
+infoLabel.Size = UDim2.new(1, -30, 0, 0) 
+infoLabel.AutomaticSize = Enum.AutomaticSize.Y
 infoLabel.Position = UDim2.new(0, 15, 0, 10)
 infoLabel.BackgroundTransparency = 1
 infoLabel.TextColor3 = COLORS.WHITE
@@ -854,31 +825,30 @@ infoLabel.TextXAlignment = Enum.TextXAlignment.Left
 infoLabel.TextYAlignment = Enum.TextYAlignment.Top
 infoLabel.Text = [[📝 REGISTRO DE CAMBIOS (v1.0.0 Beta)
 
-🆕 NUEVAS CARACTERÍSTICAS
-• Tooltips informativos en botones.
-• Animaciones suaves (con fallback).
-• Confirmación opcional antes de morphear.
-• Vista previa de avatar al hacer clic.
-• Búsqueda y ordenamiento en Players.
-• Feedback visual (flash y efectos).
-• Historial de últimos morpheos.
-• Copiado selectivo de objetos.
-• Atajos de teclado (Ctrl+M, Ctrl+F).
-• Persistencia de favoritos (JSON).
+🆕 CARACTERÍSTICAS PRINCIPALES
+• Búsqueda de jugadores por Nombre o ID.
+• Lista de jugadores en el servidor (ordenar por nombre/distancia).
+• Historial de los últimos 10 morpheos.
+• Lista de Favoritos (se guardan automáticamente si el executor lo permite).
+• Paleta de colores para piel con entrada HEX validada.
 
-🎨 MEJORAS
-• Diseño limpio y alto contraste.
-• Barra de desplazamiento personalizada.
-• Soporte para dispositivos móviles.
+⚙️ FUNCIONES AVANZADAS
+• Copiado Inteligente (📋): Copia ropa y accesorios de otros jugadores, pero conserva tu color de piel y forma corporal (Complexión) automáticamente.
+• Validación HEX: El campo de color corrige errores y auto-completa el formato.
+• Atajos de Teclado:
+   - Ctrl + M: Morfear al nombre/ID ingresado inmediatamente.
+   - Ctrl + F: Enfocar automáticamente la barra de búsqueda.
+• Animaciones suaves y feedback visual (destellos).
+• Cooldown anti-spam y protección contra errores de API.
 
-🐛 CORRECCIONES
-• Fallback a PlayerGui si CoreGui falla.
-• Cooldown anti-spam.
-• Protección contra errores de API.
+🎨 INTERFAZ
+• Diseño limpio y oscuro de alto contraste.
+• Soporte para scroll horizontal en pestañas (móvil).
+• Vista previa de avatar al hacer clic en una tarjeta.
 
 👤 CRÉDITOS
 Desarrollo original: @sickly255 (SAGE)
-Mejoras y adaptación: Basado en ideas propias y por la IA.
+Adaptación y correcciones: Basado en feedback de la comunidad.
 ]]
 infoLabel.Parent = infoContent
 
@@ -927,32 +897,6 @@ usernameInput.Parent = searchContent
 local inputCorner = Instance.new("UICorner")
 inputCorner.CornerRadius = UDim.new(0, 8)
 inputCorner.Parent = usernameInput
-
-local confirmCheckbox = Instance.new("ImageButton")
-confirmCheckbox.Size = UDim2.new(0, 20, 0, 20)
-confirmCheckbox.Position = UDim2.new(0, 0, 0, 85)
-confirmCheckbox.BackgroundColor3 = confirmMorph and COLORS.LIGHT_GREEN or COLORS.MID_GRAY
-confirmCheckbox.BorderSizePixel = 0
-confirmCheckbox.Parent = searchContent
-local checkboxCorner = Instance.new("UICorner")
-checkboxCorner.CornerRadius = UDim.new(0, 4)
-checkboxCorner.Parent = confirmCheckbox
-
-local confirmLabel = Instance.new("TextLabel")
-confirmLabel.Size = UDim2.new(1, -30, 0, 20)
-confirmLabel.Position = UDim2.new(0, 25, 0, 85)
-confirmLabel.Text = "Confirm before morph"
-confirmLabel.TextColor3 = COLORS.LIGHT_GRAY
-confirmLabel.BackgroundTransparency = 1
-confirmLabel.Font = Enum.Font.Gotham
-confirmLabel.TextSize = 12
-confirmLabel.TextXAlignment = Enum.TextXAlignment.Left
-confirmLabel.Parent = searchContent
-
-confirmCheckbox.MouseButton1Click:Connect(function()
-	confirmMorph = not confirmMorph
-	confirmCheckbox.BackgroundColor3 = confirmMorph and COLORS.LIGHT_GREEN or COLORS.MID_GRAY
-end)
 
 local morphBtn = createButton(searchContent, {
 	Size = UDim2.new(1, 0, 0, 45),
@@ -1181,36 +1125,14 @@ hexInput.BorderSizePixel = 0
 hexInput.Parent = hexContainer
 local hexInputCorner = Instance.new("UICorner")
 -- Validación y lógica del Input Hexadecimal
+-- Lógica simplificada del Input Hexadecimal (SIN BUGS)
 hexInput:GetPropertyChangedSignal("Text"):Connect(function()
     local text = hexInput.Text
-    -- Forzar mayúsculas
-    if text ~= text:upper() then
-        hexInput.Text = text:upper()
-        return
-    end
     
-    -- Auto-corrección: Si el usuario escribe letras sin #, añadir #
-    if #text > 0 and text:sub(1,1) ~= "#" then
-        -- Verificar si el usuario está intentando borrar el # (evar loop infinito)
-        -- Simplemente anteponemos # si no existe
-        hexInput.Text = "#" .. text
-        return
-    end
-    
-    -- Validar caracteres permitidos (#, 0-9, A-F)
-    local cleanText = text:gsub("[^%x]", "") -- %x coincide con caracteres hexadecimales (0-9, a-f, A-F)
-    if #cleanText > 7 then cleanText = cleanText:sub(1, 7) end -- Limitar longitud
-    
-    -- Reconstruir texto limpio
-    if text ~= "#" .. cleanText:sub(2) then
-        hexInput.Text = "#" .. cleanText:sub(2)
-    end
-    
-    -- Vista previa del color
-    if #text == 7 then -- Formato #RRGGBB
-        local success, color = pcall(function()
-            return Color3.fromHex(text)
-        end)
+    -- 1. Vista previa en tiempo real (sin bloquear escritura)
+    -- Solo actualizamos el círculo de vista previa, no modificamos el texto activo
+    if #text == 7 and text:sub(1,1) == "#" then
+        local success, color = pcall(function() return Color3.fromHex(text) end)
         if success then
             hexPreviewCircle.BackgroundColor3 = color
         end
@@ -1218,17 +1140,24 @@ hexInput:GetPropertyChangedSignal("Text"):Connect(function()
 end)
 
 hexInput.FocusLost:Connect(function(enterPressed)
-    -- Aplicar color al personaje si es válido
     local text = hexInput.Text
+    
+    -- 2. Auto-corrección al terminar de escribir
+    -- Si falta el #, lo ponemos
+    if #text > 0 and text:sub(1,1) ~= "#" then
+        text = "#" .. text
+        hexInput.Text = text
+    end
+    
+    -- 3. Validar y aplicar
     if #text == 7 then
         local success, color = pcall(function() return Color3.fromHex(text) end)
         if success and color then
-            -- Funcionalidad para aplicar color (requiere HumanoidDescription)
+            -- Aplicar color
             local character = player.Character
             if character then
                 local humanoid = character:FindFirstChild("Humanoid")
                 if humanoid then
-                    -- Crear descripción temporal para cambiar color de piel
                     local desc = humanoid:GetAppliedDescription()
                     if desc then
                         desc.HeadColor = color
@@ -1240,13 +1169,17 @@ hexInput.FocusLost:Connect(function(enterPressed)
                         
                         humanoid:ApplyDescription(desc)
                         flashCharacter(character)
-                        sendNotification("Skin", "Color de piel aplicado: " .. text, "")
+                        sendNotification("Skin", "Color aplicado: " .. text, "")
                     end
                 end
             end
+        else
+            sendNotification("Error", "Color HEX inválido", "")
         end
     end
 end)
+
+-- Generar botones de paleta (ESTO FALTABA O ESTABA INCOMPLETO)
 hexInputCorner.CornerRadius = UDim.new(0, 6)
 hexInputCorner.Parent = hexInput
 
