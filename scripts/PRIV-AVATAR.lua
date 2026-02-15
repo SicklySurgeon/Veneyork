@@ -677,8 +677,6 @@ screenGui.DisplayOrder = 999999
 screenGui.Parent = guiParent
 screenGui.Enabled = true
 
-tooltip = setupTooltip(screenGui)
-
 local frame = createRoundedFrame(screenGui, UDim2.new(0, CONFIG.MENU_WIDTH, 0, CONFIG.MENU_HEIGHT), UDim2.new(0.5, -190, 0.5, -225), COLORS.BLACK, 10)
 frame.BackgroundTransparency = 1 - 0.95
 frame.Active = true
@@ -1646,26 +1644,6 @@ resetBtn.MouseButton1Click:Connect(function()
 	end
 end)
 
--- Atajos de teclado (si UserInputService está disponible)
-if SERVICES.UserInput then
-	SERVICES.UserInput.InputBegan:Connect(function(input, gameProcessed)
-		if gameProcessed then return end
-		if input.KeyCode == Enum.KeyCode.M and SERVICES.UserInput:IsKeyDown(Enum.KeyCode.LeftControl) then
-			-- Ctrl+M: morphear al texto actual
-			local inputText = usernameInput.Text
-			if inputText ~= "" then
-				local target = findPlayerByName(inputText)
-				if target then
-					morphToPlayer(target)
-				end
-			end
-		elseif input.KeyCode == Enum.KeyCode.F and SERVICES.UserInput:IsKeyDown(Enum.KeyCode.LeftControl) then
-			-- Ctrl+F: enfocar búsqueda
-			usernameInput:CaptureFocus()
-		end
-	end)
-end
-
 -- Atajos de teclado (Ctrl+M para morfear, Ctrl+F para buscar)
 SERVICES.UserInput.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end -- No activar si el usuario está escribiendo en una caja de texto
@@ -1796,28 +1774,6 @@ updateSkinCanvas()
 
 -- Opcional: si el grid cambia (por ejemplo, si añades más colores), se ajusta automáticamente
 skinGridLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateSkinCanvas)
-
-hexInput.FocusLost:Connect(function(enterPressed)
-	local text = hexInput.Text:gsub("#", "")
-	if #text == 6 then
-		-- Validar caracteres hexadecimales
-		if text:match("^[0-9A-Fa-f]+$") then
-			local success, newColor = pcall(function()
-				return Color3.fromHex(text)
-			end)
-
-			if success then
-				applySkinColor(newColor)
-			else
-				hexInput.Text = colorToHex(hexPreviewCircle.BackgroundColor3)
-			end
-		else
-			hexInput.Text = colorToHex(hexPreviewCircle.BackgroundColor3)
-		end
-	else
-		hexInput.Text = colorToHex(hexPreviewCircle.BackgroundColor3)
-	end
-end)
 
 -- ==========================================
 -- 8. CARGA INICIAL DE FAVORITOS Y NOTIFICACIÓN
