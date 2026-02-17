@@ -37,7 +37,7 @@ local CONFIG = {
     SORT_MODE = "name",
     MAX_HISTORY = 10,
     COOLDOWN = 1,
-    MAX_CACHE_SIZE = 50,
+    MAX_CACHE_SIZE = 50,  -- ✅ Límite de cache
     DEBOUNCE_TIME = 0.3,
     TAB_BUTTON_WIDTH = 90,
     CARD_HEIGHT = 50,
@@ -52,12 +52,12 @@ local dragStart, startPos = nil, nil
 local currentTab = "info"
 local favorites = {}
 local playerCache = {}
-local cacheOrder = {}
+local cacheOrder = {}  -- ✅ Para tracking LRU
 local history = {}
 local confirmMorph = CONFIG.CONFIRM_MORPH
 local sortMode = CONFIG.SORT_MODE
 local previewFrame = nil
-local previewImage = nil
+local previewImage = nil  -- ✅ Referencia correcta al ImageLabel
 local lastMorphTime = 0
 local canUseTween = SERVICES.Tween ~= nil
 local canUseWriteFile = pcall(function() return writefile end)
@@ -86,6 +86,11 @@ end
 -- ==========================================
 -- 2. FUNCIONES DE UTILIDAD (helpers)
 -- ==========================================
+
+--- Envía notificación al usuario con manejo de errores
+--- @param title string Título de la notificación
+--- @param text string Texto de la notificación
+--- @param icon string Icono opcional
 local function sendNotification(title, text, icon)
     local success, err = pcall(function()
         SERVICES.StarterGui:SetCore("SendNotification", {
@@ -100,32 +105,50 @@ local function sendNotification(title, text, icon)
     end
 end
 
+--- Convierte Color3 a formato hexadecimal
+--- @param color Color3 Color a convertir
+--- @return string Formato #RRGGBB
 local function colorToHex(color)
     return string.format("#%02X%02X%02X", color.R * 255, color.G * 255, color.B * 255)
 end
 
+--- ✅ Validación robusta de hexadecimal
+--- @param text string Texto a validar
+--- @return Color3|nil, string|nil Color válido o nil, mensaje de error o nil
 local function validateAndParseHex(text)
     if not text or type(text) ~= "string" then
         return nil, "Texto inválido"
     end
-    text = text:gsub("^%s+", ""):gsub("%s+$", "")
+    
+    text = text:trim()
+    
+    -- Auto-completar #
     if #text == 6 and text:match("^%x%x%x%x%x%x$") then
         text = "#" .. text
     end
+    
+    -- Validar formato
     if #text ~= 7 or text:sub(1,1) ~= "#" then
         return nil, "Formato inválido (debe ser #XXXXXX)"
     end
+    
     local hexPart = text:sub(2)
     if not hexPart:match("^%x%x%x%x%x%x$") then
         return nil, "Caracteres hexadecimales inválidos"
     end
+    
     local success, color = pcall(function() return Color3.fromHex(text) end)
     if not success then
         return nil, "Color inválido"
     end
+    
     return color, nil
 end
 
+--- ✅ Crea un botón con tooltips funcionales
+--- @param parent Instance Padre del botón
+--- @param props table Propiedades del botón
+--- @return TextButton Botón creado
 local function createButton(parent, props)
     local btn = Instance.new("TextButton")
     btn.Size = props.Size or UDim2.new(0, 100, 0, 35)
@@ -143,6 +166,7 @@ local function createButton(parent, props)
     corner.CornerRadius = UDim.new(0, props.CornerRadius or 6)
     corner.Parent = btn
     
+    -- ✅ Implementar tooltips
     if props.Tooltip and tooltip then
         connect(btn.MouseEnter, function()
             tooltip.Show(props.Tooltip, btn.AbsolutePosition + Vector2.new(0, btn.AbsoluteSize.Y))
@@ -155,6 +179,7 @@ local function createButton(parent, props)
     return btn
 end
 
+--- Crea un frame con bordes redondeados
 local function createRoundedFrame(parent, size, pos, color, radius)
     local frame = Instance.new("Frame")
     frame.Size = size or UDim2.new(0, 100, 0, 100)
@@ -170,6 +195,7 @@ local function createRoundedFrame(parent, size, pos, color, radius)
     return frame
 end
 
+--- ✅ Sistema de Tooltips funcional
 local tooltip = nil
 
 local function setupTooltip(screenGui)
@@ -203,11 +229,14 @@ local function setupTooltip(screenGui)
     return {Show = show, Hide = hide}
 end
 
+--- ✅ Animación con tracking de tweens para cleanup
 local function animateObject(obj, props, time)
     if canUseTween then
         local tInfo = TweenInfo.new(time or CONFIG.ANIM_SPEED, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
         local tween = SERVICES.Tween:Create(obj, tInfo, props)
+        
         table.insert(activeTweens, tween)
+        
         connect(tween.Completed, function()
             for i, t in ipairs(activeTweens) do
                 if t == tween then
@@ -216,6 +245,7 @@ local function animateObject(obj, props, time)
                 end
             end
         end)
+        
         tween:Play()
         return tween
     else
@@ -248,6 +278,7 @@ local function flashCharacter(character)
     highlight:Destroy()
 end
 
+--- ✅ Cooldown con persistencia entre sesiones
 local function loadCooldown()
     if not canUseWriteFile then return 0 end
     local success, data = pcall(function()
@@ -271,10 +302,11 @@ local function checkCooldown()
         return false
     end
     lastMorphTime = now
-    saveCooldown(lastMorphTime)
+    saveCooldown(lastMorphTime)  -- ✅ Persistir
     return true
 end
 
+--- ✅ Cache con límite LRU
 local function addToCache(userId, data)
     if playerCache[userId] then
         for i, id in ipairs(cacheOrder) do
@@ -284,6 +316,7 @@ local function addToCache(userId, data)
             end
         end
     end
+    
     table.insert(cacheOrder, userId)
     playerCache[userId] = data
     
@@ -315,32 +348,39 @@ local function getCachedPlayerData(userId, name, displayName)
         end
     end)
     
-    addToCache(userId, data)
+    addToCache(userId, data)  -- ✅ Usar cache con límite
     return data
 end
 
 local function saveFavorites()
     if not canUseWriteFile then return end
+    
     local data = {}
     for name, info in pairs(favorites) do
         table.insert(data, {Name = name, UserId = info.UserId, DisplayName = info.DisplayName})
     end
+    
     local success, err = pcall(function()
         writefile("MorphFavorites.json", SERVICES.HttpService:JSONEncode(data))
     end)
+    
     if not success then
         warn("No se pudieron guardar favoritos: " .. tostring(err))
     end
 end
 
+--- ✅ Cargar favoritos con validación de estructura
 local function loadFavorites()
     if not canUseWriteFile then return end
+    
     local success, data = pcall(function()
         return readfile("MorphFavorites.json")
     end)
+    
     if not success or not data then return end
     
     local decoded = SERVICES.HttpService:JSONDecode(data)
+    
     if type(decoded) ~= "table" then
         warn("[Favorites] Invalid data structure")
         return
@@ -366,6 +406,7 @@ end
 -- ==========================================
 -- 3. LÓGICA PRINCIPAL
 -- ==========================================
+
 local function getDistanceToPlayer(targetPlayer)
     local localChar = player.Character
     local targetChar = targetPlayer.Character
@@ -378,18 +419,14 @@ local function getDistanceToPlayer(targetPlayer)
     return (localRoot.Position - targetRoot.Position).Magnitude
 end
 
---- ✅ Sanitización de inputs de usuario (COMPATIBLE)
+--- ✅ Sanitización de inputs de usuario
 local function sanitizeInput(text)
     if not text or type(text) ~= "string" then
         return ""
     end
-    
-    -- ✅ Reemplazo compatible para trim()
-    text = text:gsub("^%s+", ""):gsub("%s+$", "")
-    
     text = text:sub(1, 50)
     text = text:gsub("[<>\"'%;()]", "")
-    return text
+    return text:trim()
 end
 
 local function applyMorphEffect(character)
@@ -422,18 +459,22 @@ local function applyMorphEffect(character)
     end)
 end
 
+--- ✅ Manejo explícito de errores en API calls
 local function safeGetHumanoidDescription(userId)
     local success, result = pcall(function()
         return SERVICES.Players:GetHumanoidDescriptionFromUserId(userId)
     end)
+    
     if not success then
         warn("[Morph] Failed to get description for userId " .. userId .. ": " .. tostring(result))
         return nil
     end
+    
     if not result then
         warn("[Morph] No description returned for userId " .. userId)
         return nil
     end
+    
     return result
 end
 
@@ -441,8 +482,8 @@ local function findPlayerByName(partialName)
     if not partialName or partialName == "" then return nil end
     
     local searchName = sanitizeInput(partialName):lower()
-    local onlineMatch = nil
     
+    local onlineMatch = nil
     for _, v in ipairs(SERVICES.Players:GetPlayers()) do
         local nameLower = v.Name:lower()
         local dNameLower = v.DisplayName:lower()
@@ -483,6 +524,7 @@ local function findPlayerById(userId)
     return getCachedPlayerData(userId)
 end
 
+--- ✅ Función refactorizada en partes más pequeñas
 local function validateMorphTarget(target)
     if not target then
         sendNotification("Morph Avatar", "No target found!", "")
@@ -490,6 +532,7 @@ local function validateMorphTarget(target)
     end
     
     local userId = target.UserId or (type(target) == "number" and target or target.UserId)
+    
     if userId == player.UserId then
         sendNotification("Morph Avatar", "Cannot morph to yourself!", "")
         return false
@@ -559,6 +602,7 @@ local function morphToPlayer(target)
     
     local userId = target.UserId or (type(target) == "number" and target or target.UserId)
     local targetName = target.Name or "Unknown"
+    
     local character = player.Character or player.CharacterAdded:Wait()
     local humanoid = character:WaitForChild("Humanoid", 10)
     
@@ -568,11 +612,13 @@ local function morphToPlayer(target)
     end
     
     local desc = getTargetDescription(target, userId)
+    
     if not desc then
         sendNotification("Morph Avatar", "Failed to load avatar data!", "")
         return
     end
     
+    -- ✅ Carga diferida de thumbnail
     local thumbnail = ""
     if playerCache[userId] and playerCache[userId].Thumbnail then
         thumbnail = playerCache[userId].Thumbnail
@@ -611,6 +657,7 @@ local function copyBodyObjects(target, options)
     if not target then return end
     
     local userId = target.UserId or (type(target) == "number" and target or target.UserId)
+    
     if userId == player.UserId then
         sendNotification("Copy Objects", "Cannot copy from yourself!", "")
         return
@@ -618,9 +665,11 @@ local function copyBodyObjects(target, options)
     
     local character = player.Character or player.CharacterAdded:Wait()
     local humanoid = character:WaitForChild("Humanoid", 10)
+    
     if not humanoid then return end
     
     local targetDesc = nil
+    
     if typeof(target) == "Instance" and target:IsA("Player") and target.Character then
         local tHum = target.Character:FindFirstChild("Humanoid")
         if tHum then
@@ -690,6 +739,7 @@ end
 -- ==========================================
 -- 4. CONSTRUCCIÓN DE LA INTERFAZ
 -- ==========================================
+
 local guiParent = SERVICES.CoreGui
 local useCoreGui = true
 
@@ -754,7 +804,7 @@ local closeBtn = createButton(titleBar, {
     Tooltip = "Cerrar"
 })
 
--- ✅ Inicializar tooltips ANTES de crear botones que los usen
+-- ✅ Inicializar tooltips
 tooltip = setupTooltip(screenGui)
 
 local tabsContainer = Instance.new("ScrollingFrame")
@@ -814,7 +864,7 @@ contentContainer.BorderSizePixel = 0
 contentContainer.Parent = frame
 
 -- ==========================================
--- PESTAÑA INFO
+-- PESTAÑA INFO (✅ Variable renombrada)
 -- ==========================================
 local infoContent = Instance.new("ScrollingFrame")
 infoContent.Name = "InfoContent"
@@ -831,7 +881,7 @@ local infoCorner = Instance.new("UICorner")
 infoCorner.CornerRadius = UDim.new(0, 8)
 infoCorner.Parent = infoContent
 
-local infoContentLabel = Instance.new("TextLabel")
+local infoContentLabel = Instance.new("TextLabel")  -- ✅ Renombrado para evitar conflicto
 infoContentLabel.Size = UDim2.new(1, 180, 0, 0)
 infoContentLabel.AutomaticSize = Enum.AutomaticSize.Y
 infoContentLabel.Position = UDim2.new(0, 15, 0, 10)
@@ -843,6 +893,7 @@ infoContentLabel.TextWrapped = true
 infoContentLabel.TextXAlignment = Enum.TextXAlignment.Left
 infoContentLabel.TextYAlignment = Enum.TextYAlignment.Top
 infoContentLabel.Text = [[📝 REGISTRO DE CAMBIOS (v2.0.0)
+
 🆕 NUEVAS FUNCIONALIDADES
 • ✅ Tooltips informativos en todos los botones (pasa el mouse para ver descripciones)
 • ✅ Vista previa de avatar mejorada (muestra thumbnail al hacer clic en jugadores)
@@ -852,18 +903,21 @@ infoContentLabel.Text = [[📝 REGISTRO DE CAMBIOS (v2.0.0)
 • ✅ Paleta de colores de piel con 56 tonos predefinidos
 • ✅ Entrada hexadecimal con auto-corrección y validación
 • ✅ Atajos de teclado: Ctrl+M (morfear), Ctrl+F (enfocar búsqueda)
+
 ⚙️ MEJORAS DE RENDIMIENTO
 • ✅ Carga más rápida de la lista de jugadores
 • ✅ Optimización en la búsqueda de jugadores offline
 • ✅ Reducción de lag en servidores con muchos jugadores
 • ✅ Animaciones suaves con fallback automático
 • ✅ Memoria optimizada (limpieza automática de recursos)
+
 🔒 SEGURIDAD Y ESTABILIDAD
 • ✅ Protección contra errores de API (no crashea si falla una conexión)
 • ✅ Validación de entradas de usuario (evita caracteres inválidos)
 • ✅ Cooldown anti-spam en botones de morph
 • ✅ Manejo robusto de jugadores que se desconectan
 • ✅ Fallback automático si CoreGui está bloqueado
+
 🎨 INTERFAZ DE USUARIO
 • ✅ Diseño moderno de alto contraste
 • ✅ Pestañas con scroll horizontal (compatible con móvil)
@@ -871,6 +925,7 @@ infoContentLabel.Text = [[📝 REGISTRO DE CAMBIOS (v2.0.0)
 • ✅ Notificaciones nativas de Roblox
 • ✅ Ventana minimizable y arrastrable
 • ✅ Diálogos de confirmación opcionales
+
 🛠️ CORRECCIONES DE BUGS
 • ✅ Arreglado: Vista previa de thumbnail ahora funciona correctamente
 • ✅ Arreglado: Tooltips ahora se muestran en todos los botones
@@ -878,11 +933,13 @@ infoContentLabel.Text = [[📝 REGISTRO DE CAMBIOS (v2.0.0)
 • ✅ Arreglado: Favoritos se guardan y cargan correctamente
 • ✅ Arreglado: Cooldown se mantiene entre recargas (si hay writefile)
 • ✅ Arreglado: Scroll de pestañas funciona en todas las resoluciones
+
 👥 SOPORTE
 • ✅ Compatible con R6 y R15
 • ✅ Funciona en la mayoría de executors (PC y móvil)
 • ✅ Soporte para juegos con CoreGui bloqueado
 • ✅ Actualizaciones automáticas de lista de jugadores
+
 👤 CRÉDITOS
 Desarrollo original: @sickly255 (SAGE)
 Versión optimizada: v2.0.0
@@ -896,7 +953,7 @@ task.spawn(function()
 end)
 
 -- ==========================================
--- PESTAÑA SEARCH
+-- PESTAÑA SEARCH (✅ Variable renombrada)
 -- ==========================================
 local searchContent = Instance.new("Frame")
 searchContent.Name = "SearchContent"
@@ -962,12 +1019,12 @@ local resetBtn = createButton(searchContent, {
     Tooltip = "Volver a tu avatar original"
 })
 
-local searchInfoLabel = Instance.new("TextLabel")
+local searchInfoLabel = Instance.new("TextLabel")  -- ✅ Renombrado para evitar conflicto
 searchInfoLabel.Size = UDim2.new(1, 0, 0, 80)
 searchInfoLabel.Position = UDim2.new(0, 0, 1, -85)
 searchInfoLabel.Text = "💡 Tips:\n• Enter partial username\n• Works with offline players\n• Press Enter to morph"
-searchInfoLabel.TextColor3 = COLORS.WHITE
-searchInfoLabel.TextTransparency = 0.3
+searchInfoLabel.TextColor3 = COLORS.WHITE       -- ✅ Cambiado a Blanco
+searchInfoLabel.TextTransparency = 0.3          -- ✅ Con transparencia
 searchInfoLabel.BackgroundTransparency = 1
 searchInfoLabel.Font = Enum.Font.Gotham
 searchInfoLabel.TextSize = 11
@@ -976,7 +1033,7 @@ searchInfoLabel.TextYAlignment = Enum.TextYAlignment.Top
 searchInfoLabel.Parent = searchContent
 
 -- ==========================================
--- PESTAÑA PLAYERS
+-- PESTAÑA PLAYERS (CORREGIDA)
 -- ==========================================
 local playersContent = Instance.new("Frame")
 playersContent.Name = "PlayersContent"
@@ -997,8 +1054,8 @@ searchPlayersBox.PlaceholderText = "🔍 Filtrar jugadores..."
 searchPlayersBox.Font = Enum.Font.Gotham
 searchPlayersBox.TextSize = 12
 searchPlayersBox.BorderSizePixel = 0
-searchPlayersBox.Text = ""
-searchPlayersBox.ClearTextOnFocus = true
+searchPlayersBox.Text = ""  -- ✅ CORRECCIÓN: Forzar texto vacío para que no diga "TextBox"
+searchPlayersBox.ClearTextOnFocus = true -- ✅ Opcional: Limpia el texto al hacer clic
 searchPlayersBox.Parent = playersTopBar
 
 local searchBoxCorner = Instance.new("UICorner")
@@ -1006,12 +1063,12 @@ searchBoxCorner.CornerRadius = UDim.new(0, 4)
 searchBoxCorner.Parent = searchPlayersBox
 
 local sortBtn = createButton(playersTopBar, {
-    Size = UDim2.new(0.3, -5, 0, 25),
-    Position = UDim2.new(0.7, 0, 0.5, -12.5),
-    Text = "📛 Name",
-    TextSize = 11,
-    Color = COLORS.MID_GRAY,
-    Tooltip = "Cambiar orden (nombre/distancia)"
+	Size = UDim2.new(0.3, -5, 0, 25),
+	Position = UDim2.new(0.7, 0, 0.5, -12.5),
+	Text = "📛 Name",
+	TextSize = 11,
+	Color = COLORS.MID_GRAY,
+	Tooltip = "Cambiar orden (nombre/distancia)"
 })
 
 local playersScrollFrame = Instance.new("ScrollingFrame")
@@ -1173,6 +1230,7 @@ local hexInputCorner = Instance.new("UICorner")
 hexInputCorner.CornerRadius = UDim.new(0, 6)
 hexInputCorner.Parent = hexInput
 
+-- ✅ Validación hexadecimal mejorada
 hexInput:GetPropertyChangedSignal("Text"):Connect(function()
     local text = hexInput.Text
     if #text == 7 and text:sub(1,1) == "#" then
@@ -1189,6 +1247,7 @@ hexInput.FocusLost:Connect(function(enterPressed)
         text = "#" .. text
         hexInput.Text = text
     end
+    
     if #text == 7 then
         local color, err = validateAndParseHex(text)
         if color then
@@ -1238,6 +1297,8 @@ local skinColors = {
 -- ==========================================
 -- 5. FUNCIONES DE ACTUALIZACIÓN DE LISTAS
 -- ==========================================
+
+--- ✅ Función base para tarjetas (elimina código duplicado)
 local function createBaseCard(parent, config)
     local card = createRoundedFrame(parent, config.size, config.position, COLORS.MID_GRAY, 6)
     
@@ -1266,8 +1327,8 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
     displayName.Size = UDim2.new(1, -145, 0, 20)
     displayName.Position = UDim2.new(0, 10, 0, 25)
     displayName.Text = "@" .. (targetPlayer.DisplayName or targetPlayer.Name)
-    displayName.TextColor3 = COLORS.WHITE
-    displayName.TextTransparency = 0.4
+    displayName.TextColor3 = COLORS.WHITE          -- ✅ Usar Blanco
+    displayName.TextTransparency = 0.4             -- ✅ Transparencia para que parezca gris claro pero legible
     displayName.BackgroundTransparency = 1
     displayName.Font = Enum.Font.Gotham
     displayName.TextSize = 11
@@ -1344,6 +1405,7 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
         copyBodyObjects(targetPlayer, {clothes=true, accessories=true, skin=false, shape=false})
     end)
     
+    -- ✅ Vista previa corregida con referencia correcta
     connect(card.InputBegan, function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             if not previewFrame then
@@ -1361,11 +1423,11 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
             local cached = playerCache[userId]
             
             if cached and cached.Thumbnail ~= "" then
-                previewImage.Image = cached.Thumbnail
+                previewImage.Image = cached.Thumbnail  -- ✅ Referencia correcta
             else
                 pcall(function()
                     local thumb = SERVICES.Players:GetUserThumbnailAsync(userId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
-                    previewImage.Image = thumb
+                    previewImage.Image = thumb  -- ✅ Referencia correcta
                     if cached then cached.Thumbnail = thumb end
                 end)
             end
@@ -1428,15 +1490,20 @@ local function createHistoryCard(entry)
     return card
 end
 
+-- ==========================================
+-- EN LA FUNCIÓN getSortedPlayers (MODIFICADA)
+-- ==========================================
 local function getSortedPlayers(filterText)
     local playersList = {}
     local distances = {}
-    local searchText = filterText:lower():gsub("^%s+", ""):gsub("%s+$", "")
+    
+    local searchText = filterText:lower():trim()
     
     for _, p in ipairs(SERVICES.Players:GetPlayers()) do
         if p ~= player then
             local playerName = p.Name or ""
             local playerDisplayName = p.DisplayName or p.Name or ""
+            
             local matchesName = playerName:lower():find(searchText) ~= nil
             local matchesDisplayName = playerDisplayName:lower():find(searchText) ~= nil
             
@@ -1447,17 +1514,20 @@ local function getSortedPlayers(filterText)
         end
     end
     
+    -- ✅ NUEVO: Tres modos de ordenamiento
     if sortMode == "distance" then
         table.sort(playersList, function(a, b)
             return distances[a] < distances[b]
         end)
     elseif sortMode == "displayname" then
+        -- ✅ Ordenar por Display Name (@)
         table.sort(playersList, function(a, b)
             local dA = a.DisplayName or a.Name or ""
             local dB = b.DisplayName or b.Name or ""
             return dA:lower() < dB:lower()
         end)
     else
+        -- Por defecto: Nombre de usuario
         table.sort(playersList, function(a, b)
             return a.Name:lower() < b.Name:lower()
         end)
@@ -1466,6 +1536,7 @@ local function getSortedPlayers(filterText)
     return playersList
 end
 
+--- ✅ Actualización diferencial (solo cambios)
 local function updatePlayersList(filterText)
     filterText = filterText or ""
     local sorted = getSortedPlayers(filterText)
@@ -1574,6 +1645,7 @@ end
 -- ==========================================
 -- 6. EVENTOS Y CONEXIONES
 -- ==========================================
+
 connect(titleBar.InputBegan, function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         draggingTitleBar = true
@@ -1610,6 +1682,7 @@ connect(miniBtn.MouseButton1Click, function()
     end
 end)
 
+-- ✅ Limpieza de conexiones al cerrar
 connect(closeBtn.MouseButton1Click, function()
     cleanupAll()
     screenGui:Destroy()
@@ -1622,11 +1695,13 @@ connect(favoritesTab.MouseButton1Click, function() switchTab("favorites") end)
 connect(skinTab.MouseButton1Click, function() switchTab("skin") end)
 connect(historyTab.MouseButton1Click, function() switchTab("history") end)
 
+-- ✅ Debounce mejorado
 local searchDebounce = nil
 searchPlayersBox:GetPropertyChangedSignal("Text"):Connect(function()
     if searchDebounce then
         searchDebounce:Cancel()
     end
+    
     local searchText = searchPlayersBox.Text
     searchDebounce = task.delay(CONFIG.DEBOUNCE_TIME, function()
         updatePlayersList(searchText)
@@ -1634,10 +1709,14 @@ searchPlayersBox:GetPropertyChangedSignal("Text"):Connect(function()
     end)
 end)
 
+-- ==========================================
+-- EN LA SECCIÓN DE EVENTOS (MODIFICADA)
+-- ==========================================
 connect(sortBtn.MouseButton1Click, function()
+    -- ✅ Ciclar entre 3 modos: name → displayname → distance → name
     if sortMode == "name" then
         sortMode = "displayname"
-        sortBtn.Text = "🏷️ @Name"
+        sortBtn.Text = "🏷️ @Name"  -- Icono diferente para Display Name
     elseif sortMode == "displayname" then
         sortMode = "distance"
         sortBtn.Text = "📏 Distance"
@@ -1699,7 +1778,6 @@ end)
 connect(resetBtn.MouseButton1Click, function()
     local character = player.Character
     if not character then return end
-    
     local humanoid = character:FindFirstChild("Humanoid")
     if not humanoid then return end
     
@@ -1759,10 +1837,10 @@ end)
 -- ==========================================
 -- 7. INICIALIZACIÓN DE LA PALETA DE COLORES
 -- ==========================================
+
 local function applySkinColor(color)
     local character = player.Character
     if not character then return end
-    
     local humanoid = character:FindFirstChild("Humanoid")
     if not humanoid then return end
     
@@ -1791,7 +1869,6 @@ local function applySkinColor(color)
         desc.LeftLegColor = color
         desc.RightLegColor = color
         desc.TorsoColor = color
-        
         if humanoid.ApplyDescriptionClientServer then
             humanoid:ApplyDescriptionClientServer(desc)
         else
@@ -1838,12 +1915,12 @@ local function updateSkinCanvas()
 end
 
 updateSkinCanvas()
-
 connect(skinGridLayout:GetPropertyChangedSignal("AbsoluteContentSize"), updateSkinCanvas)
 
 -- ==========================================
 -- 8. CARGA INICIAL
 -- ==========================================
-lastMorphTime = loadCooldown()
+
+lastMorphTime = loadCooldown()  -- ✅ Cargar cooldown persistente
 loadFavorites()
 sendNotification("Morph Avatar Pro", "By @sickly255 (SAGE) 🎨 v2.0.0", "")
