@@ -170,7 +170,6 @@
             50% { transform: scale(1.08); }
         }
 
-        /* Image Loading Animations */
         @keyframes skeletonShimmer {
             0% { background-position: -1000px 0; }
             100% { background-position: 1000px 0; }
@@ -186,9 +185,19 @@
             to { transform: rotate(360deg); }
         }
 
-        @keyframes pulseRing {
-            0% { transform: scale(0.8); opacity: 0.5; }
-            100% { transform: scale(1.3); opacity: 0; }
+        @keyframes carEntrance {
+            0% {
+                opacity: 0;
+                transform: translateX(-150%) scale(0.8);
+            }
+            60% {
+                opacity: 1;
+                transform: translateX(20px) scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
         }
 
         .animate-fade { animation: fadeIn var(--duration-slow) var(--ease-smooth) forwards; }
@@ -239,7 +248,7 @@
 
         .logo {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
             font-weight: 900;
             color: var(--neon-green);
             text-transform: uppercase;
@@ -294,7 +303,7 @@
             color: var(--pure-white);
             text-decoration: none;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.85rem;
+            font-size: clamp(0.7rem, 1.5vw, 0.85rem);
             text-transform: uppercase;
             letter-spacing: 2px;
             position: relative;
@@ -369,7 +378,7 @@
         }
 
         .loader-bar {
-            width: 220px;
+            width: clamp(180px, 60vw, 220px);
             height: 5px;
             background: #1a1a1a;
             margin-top: 25px;
@@ -396,7 +405,7 @@
             font-family: 'Orbitron', sans-serif;
             color: var(--neon-green);
             letter-spacing: 5px;
-            font-size: 1.1rem;
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
             text-transform: uppercase;
             animation: glow 2s ease-in-out infinite;
         }
@@ -420,49 +429,33 @@
             padding: 120px 20px 60px;
         }
 
-.car-container {
-    position: relative;
-    width: 100%;
-    max-width: 1200px; /* Aumentado de 900px */
-    height: 600px; /* Aumentado de 500px */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transform-style: preserve-3d;
-    z-index: 10;
-    will-change: transform;
-    overflow: visible; /* Permitir que se vea completo */
-}
+        .car-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
+            z-index: 10;
+            will-change: transform;
+            overflow: visible;
+        }
 
-.eclipse-car {
-    width: 100%;
-    max-width: 1000px;
-    height: 100%; /* AÑADIR ESTO */
-    min-height: 500px; /* AÑADIR ESTO */
-    filter: drop-shadow(0 0 25px rgba(57, 255, 20, 0.5));
-    transform: translateZ(70px);
-    transition: transform 0.08s ease-out;
-    will-change: transform;
-    animation: carEntrance 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards, 
-               float 5s ease-in-out infinite 1.2s;
-    opacity: 0;
-}
-
-/* Nueva animación de entrada */
-@keyframes carEntrance {
-    0% {
-        opacity: 0;
-        transform: translateX(-150%) translateZ(70px) scale(0.8);
-    }
-    60% {
-        opacity: 1;
-        transform: translateX(20px) translateZ(70px) scale(1.05);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(0) translateZ(70px) scale(1);
-    }
-}
+        .eclipse-car {
+            width: 100%;
+            max-width: 1000px;
+            height: 100%;
+            min-height: 500px;
+            filter: drop-shadow(0 0 25px rgba(57, 255, 20, 0.5));
+            transform: translateZ(70px);
+            transition: transform 0.08s ease-out;
+            will-change: transform;
+            animation: carEntrance 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards, 
+                       float 5s ease-in-out infinite 1.2s;
+            opacity: 0;
+        }
 
         /* Floating Cards */
         .glass-card {
@@ -545,7 +538,7 @@
 
         /* --- Content Sections --- */
         .content-section {
-            padding: 100px 5%;
+            padding: clamp(60px, 10vh, 100px) 5%;
             position: relative;
             z-index: 20;
             background: var(--deep-black);
@@ -554,7 +547,7 @@
 
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
             gap: 25px;
             max-width: 1400px;
             margin: 0 auto;
@@ -563,7 +556,7 @@
         .info-block {
             background: var(--panel-black);
             border: 1px solid #222;
-            padding: 30px;
+            padding: clamp(20px, 4vw, 30px);
             position: relative;
             overflow: hidden;
             transition: all 0.35s var(--ease-smooth);
@@ -603,7 +596,7 @@
         .info-block h2 {
             color: var(--neon-green);
             margin-bottom: 25px;
-            font-size: 1.4rem;
+            font-size: clamp(1.2rem, 3vw, 1.4rem);
             border-bottom: 1px solid #222;
             padding-bottom: 12px;
             display: inline-block;
@@ -618,6 +611,8 @@
             padding-bottom: 12px;
             transition: all 0.25s var(--ease-smooth);
             cursor: default;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .stat-row:hover {
@@ -628,14 +623,30 @@
             border-color: var(--glass-border);
         }
 
-        .stat-label { color: #666; font-weight: 500; letter-spacing: 0.5px; }
-        .stat-value { color: var(--pure-white); font-weight: 700; font-family: 'Orbitron'; text-align: right; }
-        .stat-value.highlight { color: var(--electric-blue); text-shadow: 0 0 10px rgba(0, 240, 255, 0.5); }
+        .stat-label { 
+            color: #666; 
+            font-weight: 500; 
+            letter-spacing: 0.5px;
+            font-size: clamp(0.85rem, 2vw, 1rem);
+        }
+        
+        .stat-value { 
+            color: var(--pure-white); 
+            font-weight: 700; 
+            font-family: 'Orbitron'; 
+            text-align: right;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+        
+        .stat-value.highlight { 
+            color: var(--electric-blue); 
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5); 
+        }
 
         /* Quote Section */
         .quote-section {
             text-align: center;
-            padding: 120px 20px;
+            padding: clamp(80px, 15vh, 120px) 5%;
             background: radial-gradient(ellipse at center, #0f0f0f 0%, var(--deep-black) 85%);
             border-top: 1px solid #111;
             border-bottom: 1px solid #111;
@@ -643,7 +654,7 @@
 
         .quote-text {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
+            font-size: clamp(1.3rem, 4vw, 2rem);
             color: var(--pure-white);
             max-width: 950px;
             margin: 0 auto 35px;
@@ -660,7 +671,7 @@
 
         .quote-author {
             color: var(--accent-orange);
-            font-size: 1.1rem;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
             letter-spacing: 4px;
             font-weight: 700;
             text-transform: uppercase;
@@ -683,8 +694,8 @@
 
         .tribute-img {
             flex: 1;
-            min-width: 300px;
-            height: 380px;
+            min-width: min(100%, 300px);
+            height: clamp(250px, 40vh, 380px);
             background: #111;
             border: 2px solid var(--electric-blue);
             position: relative;
@@ -706,7 +717,7 @@
             content: 'LEGEND';
             color: #222;
             font-family: 'Orbitron';
-            font-size: 4.5rem;
+            font-size: clamp(3rem, 8vw, 4.5rem);
             font-weight: 900;
             opacity: 0.4;
             letter-spacing: 3px;
@@ -714,12 +725,12 @@
 
         .tribute-text {
             flex: 1;
-            min-width: 300px;
+            min-width: min(100%, 300px);
         }
 
         .tribute-text h2 {
             color: var(--electric-blue);
-            font-size: 2.1rem;
+            font-size: clamp(1.5rem, 4vw, 2.1rem);
             margin-bottom: 25px;
             text-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
         }
@@ -728,12 +739,12 @@
             line-height: 1.9;
             color: #b0b0b0;
             margin-bottom: 25px;
-            font-size: 1.15rem;
+            font-size: clamp(1rem, 2.5vw, 1.15rem);
         }
 
         .btn {
             display: inline-block;
-            padding: 18px 45px;
+            padding: clamp(14px, 3vw, 18px) clamp(30px, 6vw, 45px);
             background: transparent;
             border: 2px solid var(--neon-green);
             color: var(--neon-green);
@@ -748,7 +759,7 @@
             animation: pulse 2.5s infinite;
             border-radius: 4px;
             letter-spacing: 1.5px;
-            font-size: 0.9rem;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
         }
 
         .btn::before {
@@ -788,6 +799,7 @@
             opacity: 0;
             transition: opacity var(--duration-modal) var(--ease-smooth);
             backdrop-filter: blur(8px);
+            padding: 20px;
         }
 
         .modal-overlay.active {
@@ -805,8 +817,8 @@
             border: 2px solid var(--neon-green);
             border-radius: 12px;
             max-width: 950px;
-            width: 92%;
-            max-height: 88vh;
+            width: 100%;
+            max-height: 90vh;
             overflow-y: auto;
             position: relative;
             transform: scale(0.85);
@@ -826,14 +838,14 @@
 
         .modal-close {
             position: absolute;
-            top: 25px;
-            right: 25px;
-            width: 45px;
-            height: 45px;
+            top: clamp(15px, 3vw, 25px);
+            right: clamp(15px, 3vw, 25px);
+            width: clamp(40px, 8vw, 45px);
+            height: clamp(40px, 8vw, 45px);
             background: transparent;
             border: 2px solid var(--neon-green);
             color: var(--neon-green);
-            font-size: 1.8rem;
+            font-size: clamp(1.5rem, 4vw, 1.8rem);
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -860,7 +872,7 @@
 
         .modal-header {
             background: rgba(57, 255, 20, 0.08);
-            padding: 35px 35px 25px;
+            padding: clamp(25px, 5vw, 35px) clamp(20px, 4vw, 35px) clamp(20px, 4vw, 25px);
             border-bottom: 2px solid var(--neon-green);
             position: sticky;
             top: 0;
@@ -870,25 +882,25 @@
 
         .modal-header h2 {
             color: var(--neon-green);
-            font-size: 2.2rem;
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
             margin-bottom: 8px;
             text-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
         }
 
         .modal-header p {
             color: #888;
-            font-size: 0.95rem;
+            font-size: clamp(0.8rem, 2vw, 0.95rem);
             letter-spacing: 1px;
         }
 
         .modal-body {
-            padding: 30px 35px 40px;
+            padding: clamp(20px, 4vw, 30px) clamp(20px, 4vw, 35px) clamp(30px, 5vw, 40px);
         }
 
         /* Gallery Modal Specific with Loading States */
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
             gap: 22px;
         }
 
@@ -936,8 +948,8 @@
         }
 
         .spinner {
-            width: 40px;
-            height: 40px;
+            width: clamp(30px, 6vw, 40px);
+            height: clamp(30px, 6vw, 40px);
             border: 3px solid rgba(57, 255, 20, 0.2);
             border-top-color: var(--neon-green);
             border-radius: 50%;
@@ -947,7 +959,7 @@
 
         .loading-text {
             color: var(--neon-green);
-            font-size: 0.75rem;
+            font-size: clamp(0.65rem, 1.5vw, 0.75rem);
             font-family: 'Orbitron', sans-serif;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -986,7 +998,7 @@
             left: 0;
             right: 0;
             background: rgba(5, 5, 5, 0.92);
-            padding: 20px 15px;
+            padding: clamp(15px, 3vw, 20px) clamp(12px, 2.5vw, 15px);
             transform: translateY(100%);
             transition: transform 0.35s var(--ease-smooth);
             border-top: 1px solid var(--glass-border);
@@ -1000,7 +1012,7 @@
         .gallery-item .overlay p {
             color: var(--neon-green);
             font-family: 'Orbitron';
-            font-size: 0.9rem;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
             letter-spacing: 1px;
             text-transform: uppercase;
         }
@@ -1008,7 +1020,7 @@
         /* Info Modal Specific */
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
             gap: 18px;
             margin-top: 25px;
         }
@@ -1016,7 +1028,7 @@
         .info-card {
             background: rgba(57, 255, 20, 0.06);
             border: 1px solid var(--glass-border);
-            padding: 22px;
+            padding: clamp(18px, 3vw, 22px);
             border-radius: 6px;
             transition: all 0.3s var(--ease-smooth);
             border-left: 3px solid var(--neon-green);
@@ -1038,20 +1050,20 @@
 
         .info-card h3 {
             color: var(--electric-blue);
-            font-size: 0.85rem;
+            font-size: clamp(0.75rem, 2vw, 0.85rem);
             margin-bottom: 12px;
             letter-spacing: 1.5px;
             text-transform: uppercase;
         }
 
         .info-card p {
-            font-size: 1.3rem;
+            font-size: clamp(1.1rem, 3vw, 1.3rem);
             font-weight: 700;
             color: var(--pure-white);
             font-family: 'Orbitron';
         }
 
-        /* Enhanced Stat Bars - Solid Colors Only */
+        /* Enhanced Stat Bars */
         .stat-bar-container {
             margin: 25px 0;
             opacity: 0;
@@ -1068,7 +1080,7 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
-            font-size: 0.95rem;
+            font-size: clamp(0.85rem, 2vw, 0.95rem);
         }
 
         .stat-bar-label span:first-child {
@@ -1090,7 +1102,7 @@
         }
 
         .stat-bar-track {
-            height: 14px;
+            height: clamp(10px, 2vw, 14px);
             background: #1a1a1a;
             border-radius: 7px;
             overflow: hidden;
@@ -1147,6 +1159,7 @@
             align-items: center;
             opacity: 0;
             transition: opacity var(--duration-modal) var(--ease-smooth);
+            padding: 20px;
         }
 
         .image-viewer.active {
@@ -1160,8 +1173,8 @@
         }
 
         .image-viewer img {
-            max-width: 92%;
-            max-height: 88vh;
+            max-width: 95%;
+            max-height: 90vh;
             object-fit: contain;
             border: 4px solid var(--neon-green);
             box-shadow: 0 0 60px rgba(57, 255, 20, 0.5);
@@ -1171,14 +1184,14 @@
 
         .image-viewer-close {
             position: absolute;
-            top: 35px;
-            right: 35px;
-            width: 55px;
-            height: 55px;
+            top: clamp(20px, 4vw, 35px);
+            right: clamp(20px, 4vw, 35px);
+            width: clamp(45px, 8vw, 55px);
+            height: clamp(45px, 8vw, 55px);
             background: transparent;
             border: 3px solid var(--neon-green);
             color: var(--neon-green);
-            font-size: 2.2rem;
+            font-size: clamp(1.8rem, 4vw, 2.2rem);
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -1204,10 +1217,10 @@
         /* Enhanced Scroll to Top Button */
         .scroll-top {
             position: fixed;
-            bottom: 35px;
-            right: 35px;
-            width: 60px;
-            height: 60px;
+            bottom: clamp(20px, 4vw, 35px);
+            right: clamp(20px, 4vw, 35px);
+            width: clamp(50px, 10vw, 60px);
+            height: clamp(50px, 10vw, 60px);
             background: var(--neon-green);
             color: var(--deep-black);
             border: none;
@@ -1216,7 +1229,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: clamp(1.5rem, 3vw, 1.8rem);
             opacity: 0;
             transform: translateY(40px) scale(0.8);
             transition: all 0.4s var(--ease-bounce);
@@ -1254,29 +1267,46 @@
             opacity: 0.5;
         }
 
-        /* Responsive */
+        /* ====================================
+           RESPONSIVE BREAKPOINTS
+           ==================================== */
+
+        /* Tablets (768px - 1024px) */
         @media (max-width: 1024px) {
-            .car-container { height: 420px; }
-            .eclipse-car { width: 85%; }
-            .title-overlay h1 { font-size: 28vw; }
-            .glass-card { width: 200px; padding: 18px; }
+            .car-container {
+                height: 500px;
+            }
+            
+            .eclipse-car {
+                max-width: 850px;
+                min-height: 450px;
+            }
+
+            .glass-card {
+                width: 200px;
+                padding: 18px;
+            }
         }
 
+        /* Mobile & Tablets (768px and below) */
         @media (max-width: 768px) {
+            /* Navigation for mobile */
             .nav-links {
                 position: fixed;
                 top: 0;
                 right: -100%;
                 width: 75%;
+                max-width: 350px;
                 height: 100vh;
                 background: rgba(10, 10, 10, 0.99);
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                gap: 50px;
+                gap: 40px;
                 transition: right 0.4s var(--ease-smooth);
                 border-left: 3px solid var(--neon-green);
                 backdrop-filter: blur(20px);
+                padding: 20px;
             }
 
             .nav-links.active {
@@ -1310,32 +1340,27 @@
                 transform: rotate(-45deg) translate(7px, -7px);
             }
 
-/* Ajustar hero section para más espacio */
-.hero {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    perspective: 1400px;
-    overflow: visible; /* Cambiado de hidden a visible */
-    padding: 120px 20px 60px;
-}
+            /* Hero adjustments - Stack cards vertically */
+            .hero {
+                padding: 100px 4% 50px;
+                overflow: visible;
+            }
 
-    .car-container {
-        height: 400px; /* Aumentado de 320px */
-        margin-bottom: 50px;
-        transform: none !important;
-    }
-    
-    .eclipse-car {
-        transform: translateZ(0) !important;
-        width: 100%;
-        height: 100%;
-        min-height: 400px; /* AÑADIR */
-        animation: none;
-    }
+            .car-container {
+                height: 400px;
+                margin-bottom: 30px;
+                transform: none !important;
+            }
 
+            .eclipse-car {
+                width: 100%;
+                height: 100%;
+                min-height: 400px;
+                transform: translateZ(0) !important;
+                animation: float 5s ease-in-out infinite;
+            }
+
+            /* Convert absolute positioned cards to stacked layout */
             .glass-card {
                 position: relative;
                 top: auto !important;
@@ -1344,13 +1369,22 @@
                 bottom: auto !important;
                 transform: none !important;
                 width: 100%;
+                max-width: 100%;
                 margin: 12px 0;
-                border-left: 4px solid var(--neon-green);
+                padding: 18px 16px;
+            }
+
+            .glass-card.visible {
+                transform: none !important;
+            }
+
+            .glass-card:hover {
+                transform: translateY(-5px) !important;
             }
 
             .title-overlay {
-                top: 42%;
-                opacity: 0.04;
+                top: 40%;
+                opacity: 0.05;
             }
 
             .title-overlay h1 {
@@ -1358,73 +1392,81 @@
                 letter-spacing: -8px;
             }
 
-            .tribute {
-                flex-direction: column;
-            }
-            
-            .tribute-img {
-                width: 100%;
-                height: 280px;
-            }
-
-            .quote-text {
-                font-size: 1.5rem;
-            }
-
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .modal-content {
-                width: 96%;
-                margin: 15px;
-                max-height: 92vh;
-            }
-
-            .modal-header h2 {
-                font-size: 1.8rem;
+            /* Content sections */
+            .content-section {
+                padding: clamp(50px, 8vh, 80px) 4%;
             }
 
             .grid-container {
                 grid-template-columns: 1fr;
+                gap: 18px;
             }
 
-            .gallery-loader {
-                transform: translate(-50%, -50%) scale(0.8);
+            .tribute {
+                flex-direction: column;
+                gap: 30px;
             }
 
-            .spinner {
-                width: 30px;
-                height: 30px;
+            .tribute-img {
+                width: 100%;
+                height: clamp(220px, 35vh, 280px);
+            }
+
+            /* Quote section */
+            .quote-section {
+                padding: clamp(70px, 12vh, 100px) 4%;
+            }
+
+            .quote-text {
+                font-size: clamp(1.3rem, 4vw, 1.5rem);
+            }
+
+            /* Modals */
+            .modal-content {
+                width: 95%;
+                max-height: 85vh;
+            }
+
+            .modal-header h2 {
+                font-size: clamp(1.5rem, 4vw, 1.8rem);
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .info-grid {
+                grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
+                gap: 15px;
             }
         }
 
+        /* Small Mobile (480px and below) */
         @media (max-width: 480px) {
             .navbar {
                 padding: 15px 4%;
             }
-            
+
             .logo {
                 font-size: 1.3rem;
                 letter-spacing: 2px;
             }
 
             .hero {
-                padding: 100px 15px 50px;
+                padding: 90px 4% 40px;
             }
 
-    .car-container {
-        height: 350px; /* Aumentado de 280px */
-    }
+            .car-container {
+                height: 350px;
+            }
 
-    .eclipse-car {
-        width: 100%;
-        height: 100%;
-        min-height: 350px; /* AÑADIR */
-    }
+            .eclipse-car {
+                min-height: 350px;
+            }
 
             .glass-card {
-                padding: 18px 15px;
+                padding: 16px 14px;
             }
 
             .glass-card h3 {
@@ -1436,11 +1478,11 @@
             }
 
             .content-section {
-                padding: 70px 4%;
+                padding: clamp(45px, 8vh, 70px) 4%;
             }
 
             .info-block {
-                padding: 25px 20px;
+                padding: 20px 16px;
             }
 
             .info-block h2 {
@@ -1448,16 +1490,33 @@
             }
 
             .quote-section {
-                padding: 80px 15px;
+                padding: clamp(60px, 10vh, 80px) 4%;
             }
 
             .quote-text {
                 font-size: 1.3rem;
             }
 
+            .tribute-img {
+                height: clamp(200px, 30vh, 250px);
+            }
+
             .btn {
-                padding: 15px 35px;
-                font-size: 0.85rem;
+                padding: 14px 28px;
+                font-size: 0.8rem;
+            }
+
+            .modal-body {
+                padding: 20px 18px 30px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .gallery-grid {
+                gap: 15px;
             }
 
             .scroll-top {
@@ -1467,9 +1526,99 @@
                 right: 25px;
                 font-size: 1.5rem;
             }
+        }
 
-            .loading-text {
-                font-size: 0.65rem;
+        /* Extra Small Mobile (360px and below) */
+        @media (max-width: 360px) {
+            .navbar {
+                padding: 12px 3%;
+            }
+
+            .logo {
+                font-size: 1.1rem;
+            }
+
+            .car-container {
+                height: 300px;
+            }
+
+            .eclipse-car {
+                min-height: 300px;
+            }
+
+            .glass-card {
+                padding: 14px 12px;
+            }
+
+            .info-block {
+                padding: 18px 14px;
+            }
+
+            .modal-header {
+                padding: 20px 18px 18px;
+            }
+
+            .modal-body {
+                padding: 18px 16px 25px;
+            }
+        }
+
+        /* Landscape Mobile Phones */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .hero {
+                min-height: auto;
+                padding: 80px 4% 40px;
+            }
+
+            .car-container {
+                height: 60vh;
+                max-height: 400px;
+            }
+
+            .eclipse-car {
+                min-height: 300px;
+            }
+
+            .glass-card {
+                padding: 14px;
+                margin: 8px 0;
+            }
+
+            .quote-section {
+                padding: 60px 4%;
+            }
+
+            .modal-content {
+                max-height: 92vh;
+            }
+
+            .tribute-img {
+                height: 50vh;
+                max-height: 300px;
+            }
+        }
+
+        /* Touch device optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .glass-card:hover {
+                transform: translateY(-8px) !important;
+            }
+
+            .glass-card:active {
+                transform: translateY(-5px) !important;
+            }
+
+            .gallery-item .overlay {
+                transform: translateY(0);
+                background: rgba(5, 5, 5, 0.85);
+            }
+
+            .info-block:hover {
+                transform: translateY(0);
+            }
+
+            .scroll-top:hover {
+                transform: translateY(0) scale(1);
             }
         }
     </style>
@@ -1510,21 +1659,22 @@
         </div>
 
         <div class="car-container" id="car-container">
-<!-- Asegúrate de poner la ruta correcta a tu archivo .glb descargado -->
-<model-viewer
-    src="eclipse.glb"
-    alt="Mitsubishi Eclipse 3D"
-    class="eclipse-car"
-    id="car-img"
-    auto-rotate
-    camera-controls
-    camera-orbit="0deg 75deg 4m"
-    field-of-view="30deg"
-    shadow-intensity="1"
-    environment-image="neutral"
-    exposure="1"
-    loading="eager">
-</model-viewer>
+            <model-viewer
+                src="eclipse.glb"
+                alt="Mitsubishi Eclipse 3D"
+                class="eclipse-car"
+                id="car-img"
+                auto-rotate
+                camera-controls
+                camera-orbit="0deg 80deg 2.5m"
+                field-of-view="40deg"
+                min-camera-orbit="auto auto 1m"
+                max-camera-orbit="auto auto 5m"
+                shadow-intensity="1"
+                environment-image="neutral"
+                exposure="1.2"
+                loading="eager">
+            </model-viewer>
         </div>
 
         <div class="glass-card card-top-left stagger-1" onclick="openModal('specs')">
@@ -1678,13 +1828,13 @@
 
     <!-- Modals -->
 
-    <!-- Gallery Modal with Image Loading -->
+    <!-- Gallery Modal -->
     <div class="modal-overlay" id="modal-gallery">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('gallery')">&times;</button>
             <div class="modal-header">
                 <h2>Gallery</h2>
-                <p style="color: #888;">Mitsubishi Eclipse GSX - The 9 Second Car</p>
+                <p>Mitsubishi Eclipse GSX - The 9 Second Car</p>
             </div>
             <div class="modal-body">
                 <div class="gallery-grid">
@@ -1777,7 +1927,7 @@
             <button class="modal-close" onclick="closeModal('specs')">&times;</button>
             <div class="modal-header">
                 <h2>Engine Specifications</h2>
-                <p style="color: #888;">Mitsubishi 4G63T Turbocharged Engine</p>
+                <p>Mitsubishi 4G63T Turbocharged Engine</p>
             </div>
             <div class="modal-body">
                 <div class="info-grid">
@@ -1830,7 +1980,7 @@
             <button class="modal-close" onclick="closeModal('performance')">&times;</button>
             <div class="modal-header">
                 <h2>Performance Data</h2>
-                <p style="color: #888;">Stock vs Modified Specifications</p>
+                <p>Stock vs Modified Specifications</p>
             </div>
             <div class="modal-body">
                 <div class="info-grid">
@@ -1913,7 +2063,7 @@
             <button class="modal-close" onclick="closeModal('history')">&times;</button>
             <div class="modal-header">
                 <h2>History & Legacy</h2>
-                <p style="color: #888;">From the Streets to the Screen</p>
+                <p>From the Streets to the Screen</p>
             </div>
             <div class="modal-body">
                 <div style="margin-bottom: 35px;">
@@ -1967,30 +2117,22 @@
 
         // Handle Image Load with Animation
         function handleImageLoad(img) {
-            // Add loaded class for fade-in animation
             img.classList.add('loaded');
-            
-            // Get parent gallery item
             const galleryItem = img.closest('.gallery-item');
             if (galleryItem) {
-                // Hide skeleton and loader with fade out
                 const skeleton = galleryItem.querySelector('.gallery-skeleton');
                 const loader = galleryItem.querySelector('.gallery-loader');
                 
                 if (skeleton) {
                     skeleton.style.opacity = '0';
                     skeleton.style.transition = 'opacity 0.4s ease';
-                    setTimeout(() => {
-                        skeleton.style.display = 'none';
-                    }, 400);
+                    setTimeout(() => skeleton.style.display = 'none', 400);
                 }
                 
                 if (loader) {
                     loader.style.opacity = '0';
                     loader.style.transition = 'opacity 0.4s ease';
-                    setTimeout(() => {
-                        loader.style.display = 'none';
-                    }, 400);
+                    setTimeout(() => loader.style.display = 'none', 400);
                 }
             }
         }
@@ -1999,9 +2141,7 @@
         function handleImageError(img) {
             const galleryItem = img.closest('.gallery-item');
             if (galleryItem) {
-                const skeleton = galleryItem.querySelector('.gallery-skeleton');
                 const loader = galleryItem.querySelector('.gallery-loader');
-                
                 if (loader) {
                     const loadingText = loader.querySelector('.loading-text');
                     if (loadingText) {
@@ -2012,7 +2152,6 @@
                     if (spinner) {
                         spinner.style.animation = 'none';
                         spinner.style.borderColor = 'var(--accent-orange)';
-                        spinner.style.borderTopColor = 'var(--accent-orange)';
                     }
                 }
             }
@@ -2024,17 +2163,12 @@
                 const img = new Image();
                 img.src = src;
                 img.onload = function() {
-                    // Image loaded successfully
                     const galleryItem = document.querySelector(`.gallery-item[data-index="${index}"] img`);
-                    if (galleryItem) {
-                        handleImageLoad(galleryItem);
-                    }
+                    if (galleryItem) handleImageLoad(galleryItem);
                 };
                 img.onerror = function() {
                     const galleryItem = document.querySelector(`.gallery-item[data-index="${index}"] img`);
-                    if (galleryItem) {
-                        handleImageError(galleryItem);
-                    }
+                    if (galleryItem) handleImageError(galleryItem);
                 };
             });
         }
@@ -2097,24 +2231,19 @@
             });
         });
 
-        // Modal Functions with Enhanced Close Animation
+        // Modal Functions
         function openModal(modalName) {
             const modal = document.getElementById(`modal-${modalName}`);
             modal.classList.remove('closing');
             modal.style.display = 'flex';
-            
-            // Trigger reflow for animation restart
             void modal.offsetWidth;
-            
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
             
-            // Preload gallery images when gallery modal opens
             if (modalName === 'gallery') {
                 setTimeout(preloadGalleryImages, 100);
             }
             
-            // Animate info cards inside modal with stagger
             if (modalName === 'performance') {
                 setTimeout(() => {
                     animateStatBars();
@@ -2127,11 +2256,7 @@
 
         function closeModal(modalName) {
             const modal = document.getElementById(`modal-${modalName}`);
-            
-            // Add closing class for slide-out animation
             modal.classList.add('closing');
-            
-            // Wait for animation to complete before hiding
             setTimeout(() => {
                 modal.classList.remove('active');
                 modal.classList.remove('closing');
@@ -2150,16 +2275,13 @@
             });
         });
 
-        // Image Viewer Functions with Animation
+        // Image Viewer Functions
         function openImageViewer(index) {
             const viewer = document.getElementById('imageViewer');
             const img = document.getElementById('viewerImage');
-            
             viewer.classList.remove('closing');
             viewer.style.display = 'flex';
             img.src = galleryImages[index];
-            
-            // Trigger reflow
             void viewer.offsetWidth;
             viewer.classList.add('active');
         }
@@ -2167,7 +2289,6 @@
         function closeImageViewer() {
             const viewer = document.getElementById('imageViewer');
             viewer.classList.add('closing');
-            
             setTimeout(() => {
                 viewer.classList.remove('active');
                 viewer.classList.remove('closing');
@@ -2204,19 +2325,16 @@
                 });
             }, observerOptions);
 
-            // Animate glass cards with stagger
             document.querySelectorAll('.glass-card').forEach((card, index) => {
                 setTimeout(() => {
                     card.classList.add('visible');
                 }, 600 + (index * 150));
             });
 
-            // Observe content blocks
             document.querySelectorAll('[data-animate]').forEach(el => {
                 observer.observe(el);
             });
 
-            // Observe quote section
             document.querySelectorAll('.quote-section [data-animate]').forEach(el => {
                 observer.observe(el);
             });
@@ -2232,30 +2350,26 @@
             });
         }
 
-        // Enhanced Stat Bar Animation with Number Counter
         function animateStatBars() {
             const bars = document.querySelectorAll('.stat-bar-fill');
             const containers = document.querySelectorAll('.stat-bar-container');
             
-            // Animate containers first
             containers.forEach((container, index) => {
                 setTimeout(() => {
                     container.classList.add('visible');
                 }, index * 150);
             });
             
-            // Then animate bars
             setTimeout(() => {
                 bars.forEach(bar => {
                     const targetWidth = bar.style.getPropertyValue('--target-width');
                     bar.style.width = '0';
-                    void bar.offsetWidth; // Trigger reflow
+                    void bar.offsetWidth;
                     bar.style.width = targetWidth;
                 });
             }, 400);
         }
 
-        // Animate info cards inside modals
         function animateInfoCardsInModal() {
             const cards = document.querySelectorAll('.modal-body .info-card');
             cards.forEach((card, index) => {
@@ -2265,7 +2379,6 @@
             });
         }
 
-        // Animate info cards on main page
         function animateInfoCards() {
             const cards = document.querySelectorAll('.info-block');
             cards.forEach((card, index) => {
@@ -2275,27 +2388,17 @@
             });
         }
 
-        // Enhanced Scroll to Top with Smooth Animation
         function scrollToTop() {
             const scrollTopBtn = document.getElementById('scrollTop');
-            
-            // Add click animation
             scrollTopBtn.style.transform = 'scale(0.9)';
             setTimeout(() => {
                 scrollTopBtn.style.transform = '';
             }, 150);
             
-            // Smooth scroll with easing
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
             });
-            
-            // Add a subtle glow pulse on click
-            scrollTopBtn.style.boxShadow = '0 0 40px var(--neon-green), 0 0 80px var(--neon-green)';
-            setTimeout(() => {
-                scrollTopBtn.style.boxShadow = '';
-            }, 300);
         }
 
         // Particle Background System
@@ -2366,45 +2469,19 @@
         initParticles();
         animateParticles();
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
+        // Initialize on resize
+        window.addEventListener('resize', () => {
+            initParticles();
         });
 
         // Parallax effect to hero section
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
-            const hero = document.querySelector('.hero');
             const car = document.querySelector('.eclipse-car');
             
-            if (hero && car && scrolled < window.innerHeight) {
+            if (car && scrolled < window.innerHeight && window.innerWidth > 768) {
                 car.style.transform = `translateY(${scrolled * 0.25}px) translateZ(70px)`;
             }
-        });
-
-        // Initialize on resize
-        window.addEventListener('resize', () => {
-            initParticles();
-            if (window.innerWidth <= 768) {
-                carContainer.style.transition = 'none';
-                carImg.style.transition = 'none';
-            }
-        });
-
-        // Add hover sound effect hint (visual feedback only)
-        document.querySelectorAll('.btn, .glass-card, .gallery-item, .modal-close, .scroll-top').forEach(el => {
-            el.addEventListener('mouseenter', function() {
-                this.style.cursor = 'pointer';
-            });
         });
     </script>
 </body>
