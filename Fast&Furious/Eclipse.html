@@ -1630,6 +1630,9 @@
                 height: 100%;
                 min-height: 300px;
                 animation: none;
+                opacity: 1 !important;
+                filter: none;
+                display: block;
             }
 
             .glass-card {
@@ -1812,6 +1815,7 @@
 
             .eclipse-car {
                 min-height: 260px;
+                opacity: 1 !important;
             }
 
             .glass-card {
@@ -1940,6 +1944,7 @@
 
             .eclipse-car {
                 min-height: 220px;
+                opacity: 1 !important;
             }
 
             .glass-card {
@@ -2917,8 +2922,9 @@
             });
         });
 
-        // Parallax effect to hero section
+        // Parallax effect to hero section (desktop only)
         window.addEventListener('scroll', () => {
+            if (window.innerWidth <= 768) return;
             const scrolled = window.pageYOffset;
             const hero = document.querySelector('.hero');
             const car = document.querySelector('.eclipse-car');
