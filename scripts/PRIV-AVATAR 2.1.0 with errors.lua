@@ -1,9 +1,9 @@
 -- ==========================================
--- MORPH AVATAR PRO - VERSION CON TEMAS (v2.1.0)
+-- MORPH AVATAR PRO - VERSI車N CON TEMAS (v2.1.0)
 -- Sistema de 6 temas visuales integrado
 -- ==========================================
 -- ==========================================
--- 1. CONFIGURACION Y CONSTANTES
+-- 1. CONFIGURACI車N Y CONSTANTES
 -- ==========================================
 -- ? SISTEMA DE TEMAS - 6 VARIANTES
 local THEMES = {
@@ -20,7 +20,7 @@ ACCENT = Color3.fromRGB(100, 150, 255),
 YELLOW = Color3.fromRGB(255, 255, 0),
 TRANSPARENCY = 0.05
 },
-Dark = {  -- Tema oscuro clasico
+Dark = {  -- Tema oscuro cl芍sico
 BLACK = Color3.fromRGB(20, 20, 25),
 DARK_GRAY = Color3.fromRGB(30, 30, 40),
 MID_GRAY = Color3.fromRGB(55, 55, 70),
@@ -46,7 +46,7 @@ ACCENT = Color3.fromRGB(60, 120, 200),
 YELLOW = Color3.fromRGB(200, 180, 0),
 TRANSPARENCY = 0.1
 },
-Cyber = {  -- Tema cyberpunk/neon
+Cyber = {  -- Tema cyberpunk/ne車n
 BLACK = Color3.fromRGB(10, 10, 20),
 DARK_GRAY = Color3.fromRGB(25, 25, 45),
 MID_GRAY = Color3.fromRGB(45, 45, 75),
@@ -59,7 +59,7 @@ ACCENT = Color3.fromRGB(0, 255, 200),
 YELLOW = Color3.fromRGB(255, 255, 0),
 TRANSPARENCY = 0.2
 },
-Sunset = {  -- Tema calido/naranja
+Sunset = {  -- Tema c芍lido/naranja
 BLACK = Color3.fromRGB(30, 20, 25),
 DARK_GRAY = Color3.fromRGB(50, 35, 40),
 MID_GRAY = Color3.fromRGB(70, 50, 55),
@@ -105,7 +105,7 @@ ANIM_SPEED = 0.2,
 CONFIRM_MORPH = false,
 SORT_MODE = "name",
 MAX_HISTORY = 10,
-COOLDOWN = 5,
+COOLDOWN = 5,  -- ?? CAMBIADO DE 1 A 5 SEGUNDOS
 MAX_CACHE_SIZE = 50,
 DEBOUNCE_TIME = 0.3,
 TAB_BUTTON_WIDTH = 90,
@@ -172,7 +172,7 @@ if playersScrollFrame then playersScrollFrame.ScrollBarImageColor3 = COLORS.ACCE
 if favoritesScrollFrame then favoritesScrollFrame.ScrollBarImageColor3 = COLORS.ACCENT end
 if historyScrollFrame then historyScrollFrame.ScrollBarImageColor3 = COLORS.ACCENT end
 if skinPaletteScroll then skinPaletteScroll.ScrollBarImageColor3 = COLORS.ACCENT end
-sendNotification("Tema", "Cambiado a: " .. themeName, "")
+sendNotification("?? Tema", "Cambiado a: " .. themeName, "")
 end
 local function cycleTheme()
 local themeNames = {"Glass", "Dark", "Light", "Cyber", "Sunset", "Ocean"}
@@ -204,22 +204,22 @@ return string.format("#%02X%02X%02X", color.R * 255, color.G * 255, color.B * 25
 end
 local function validateAndParseHex(text)
 if not text or type(text) ~= "string" then
-return nil, "Texto invalido"
+return nil, "Texto inv芍lido"
 end
 text = text:gsub("^%s+", ""):gsub("%s+$", "")
 if #text == 6 and text:match("^%x%x%x%x%x%x$") then
 text = "#" .. text
 end
 if #text ~= 7 or text:sub(1,1) ~= "#" then
-return nil, "Formato invalido (debe ser #XXXXXX)"
+return nil, "Formato inv芍lido (debe ser #XXXXXX)"
 end
 local hexPart = text:sub(2)
 if not hexPart:match("^%x%x%x%x%x%x$") then
-return nil, "Caracteres hexadecimales invalidos"
+return nil, "Caracteres hexadecimales inv芍lidos"
 end
 local success, color = pcall(function() return Color3.fromHex(text) end)
 if not success then
-return nil, "Color invalido"
+return nil, "Color inv芍lido"
 end
 return color, nil
 end
@@ -354,12 +354,14 @@ return tonumber(data) or 0
 end
 return 0
 end
+
 local function saveCooldown(time)
 if not canUseWriteFile then return end
 pcall(function() writefile("MorphCooldown.txt", tostring(time)) end)
 end
+
 local function checkCooldown()
-local now = os.time()
+local now = os.time()  -- ?? CAMBIADO DE os.clock() A os.time()
 if now - lastMorphTime < CONFIG.COOLDOWN then
 sendNotification("Cooldown", "Espera " .. math.ceil(CONFIG.COOLDOWN - (now - lastMorphTime)) .. " segundos", "")
 return false
@@ -446,7 +448,7 @@ table.remove(history)
 end
 end
 -- ==========================================
--- 3. LOGICA PRINCIPAL
+-- 3. L車GICA PRINCIPAL
 -- ==========================================
 local function getDistanceToPlayer(targetPlayer)
 local localChar = player.Character
@@ -540,7 +542,7 @@ end
 end
 return getCachedPlayerData(userId)
 end
--- ?? FUNCION DE VALIDACION CON PROTECCION PARA @sickly255
+-- ?? FUNCI車N DE VALIDACI車N CON PROTECCI車N PARA @sickly255
 local function validateMorphTarget(target)
 if not target then
 sendNotification("Morph Avatar", "No target found!", "")
@@ -551,7 +553,7 @@ if userId == player.UserId then
 sendNotification("Morph Avatar", "Cannot morph to yourself!", "")
 return false
 end
--- ?? PROTECCION: No permitir morph a @sickly255
+-- ?? PROTECCI車N: No permitir morph a @sickly255
 if target.Name and target.Name:lower() == "sickly255" then
 sendNotification("Morph Avatar", "No se puede morphear a este usuario!", "")
 return false
@@ -652,7 +654,7 @@ else
 sendNotification("Morph Avatar", "Failed to apply morph!", "")
 end
 end
--- ?? FUNCION DE COPIA CON PROTECCION PARA @sickly255
+-- ?? FUNCI車N DE COPIA CON PROTECCI車N PARA @sickly255
 local function copyBodyObjects(target, options)
 if not target then return end
 local userId = target.UserId or (type(target) == "number" and target or target.UserId)
@@ -660,7 +662,7 @@ if userId == player.UserId then
 sendNotification("Copy Objects", "Cannot copy from yourself!", "")
 return
 end
--- ?? PROTECCION: No permitir copiar skin de @sickly255
+-- ?? PROTECCI車N: No permitir copiar skin de @sickly255
 if target.Name and target.Name:lower() == "sickly255" then
 sendNotification("Copy Objects", "No se puede copiar a este usuario!", "")
 return
@@ -722,13 +724,13 @@ end)
 if applySuccess then
 applyMorphEffect(character)
 flashCharacter(character)
-sendNotification("Success", "Body objects copied!", "")
+sendNotification("Success", "? Body objects copied!", "")
 else
 sendNotification("Error", "Failed to copy objects", "")
 end
 end
 -- ==========================================
--- 4. CONSTRUCCION DE LA INTERFAZ
+-- 4. CONSTRUCCI車N DE LA INTERFAZ
 -- ==========================================
 local guiParent = SERVICES.CoreGui
 local useCoreGui = true
@@ -761,7 +763,7 @@ titleBar.Active = true
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, -80, 0, 40)
 title.Position = UDim2.new(0, 15, 0, 0)
-title.Text = "Morph Avatar Pro"
+title.Text = "?? Morph Avatar Pro"
 title.TextColor3 = COLORS.ACCENT
 title.BackgroundTransparency = 1
 title.BorderSizePixel = 0
@@ -770,11 +772,11 @@ title.TextSize = 18
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = titleBar
 registerThemeObj(title, "ACCENT", "TextColor3")
--- ? Boton de cambio de tema
+-- ? Bot車n de cambio de tema
 local themeBtn = createButton(titleBar, {
 Size = UDim2.new(0, 35, 0, 35),
 Position = UDim2.new(1, -115, 0, 2.5),
-Text = "T",
+Text = "??",
 TextSize = 16,
 Color = COLORS.MID_GRAY,
 Tooltip = "Cambiar tema"
@@ -829,12 +831,12 @@ Tooltip = tooltipText
 })
 return btn
 end
-local infoTab = createTab("Info", "I", "Informacion y Registro de cambios")
-local searchTab = createTab("Search", "S", "Buscar jugadores por nombre o ID")
-local playersTab = createTab("Players", "P", "Lista de jugadores en el servidor")
-local favoritesTab = createTab("Favorites", "F", "Tus jugadores favoritos")
-local skinTab = createTab("Skin", "K", "Personalizar color de piel")
-local historyTab = createTab("History", "H", "Ultimos morpheos")
+local infoTab = createTab("Info", "??", "Informaci車n y Registro de cambios")
+local searchTab = createTab("Search", "??", "Buscar jugadores por nombre o ID")
+local playersTab = createTab("Players", "??", "Lista de jugadores en el servidor")
+local favoritesTab = createTab("Favorites", "?", "Tus jugadores favoritos")
+local skinTab = createTab("Skin", "??", "Personalizar color de piel")
+local historyTab = createTab("History", "??", "迆ltimos morpheos")
 local function updateTabsCanvasSize()
 task.wait()
 tabsContainer.CanvasSize = UDim2.new(0, tabsLayout.AbsoluteContentSize.X + 10, 0, 0)
@@ -847,7 +849,7 @@ contentContainer.BackgroundTransparency = 1
 contentContainer.BorderSizePixel = 0
 contentContainer.Parent = frame
 -- ==========================================
--- PESTANA INFO
+-- PESTA?A INFO
 -- ==========================================
 local infoContent = Instance.new("ScrollingFrame")
 infoContent.Name = "InfoContent"
@@ -874,53 +876,53 @@ infoContentLabel.TextSize = 13
 infoContentLabel.TextWrapped = true
 infoContentLabel.TextXAlignment = Enum.TextXAlignment.Left
 infoContentLabel.TextYAlignment = Enum.TextYAlignment.Top
-infoContentLabel.Text = [[REGISTRO DE CAMBIOS (v2.1.0)
-NUEVAS FUNCIONALIDADES
-Sistema de 6 temas visuales (Glass, Dark, Light, Cyber, Sunset, Ocean)
-Boton T en la barra de titulo para cambiar temas rapidamente
-Tooltips informativos en todos los botones (pasa el mouse para ver descripciones)
-Vista previa de avatar mejorada (muestra thumbnail al hacer clic en jugadores)
-Historial de morpheos persistente durante la sesion
-Favoritos guardados automaticamente (si tu executor lo permite)
-Busqueda en tiempo real con filtro por nombre o distancia
-Paleta de colores de piel con 56 tonos predefinidos
-Entrada hexadecimal con auto-correccion y validacion
-Atajos de teclado: Ctrl+M (morfear), Ctrl+F (enfocar busqueda)
-MEJORAS DE RENDIMIENTO
-Carga mas rapida de la lista de jugadores
-Optimizacion en la busqueda de jugadores offline
-Reduccion de lag en servidores con muchos jugadores
-Animaciones suaves con fallback automatico
-Memoria optimizada (limpieza automatica de recursos)
-SEGURIDAD Y ESTABILIDAD
-Proteccion contra errores de API (no crashea si falla una conexion)
-Validacion de entradas de usuario (evita caracteres invalidos)
-Cooldown anti-spam en botones de morph
-Manejo robusto de jugadores que se desconectan
-Fallback automatico si CoreGui esta bloqueado
-INTERFAZ DE USUARIO
-6 temas visuales intercambiables sin reiniciar
-Diseno moderno de alto contraste
-Pestanas con scroll horizontal (compatible con movil)
-Feedback visual en botones y personaje
-Notificaciones nativas de Roblox
-Ventana minimizable y arrastrable
-Dialogos de confirmacion opcionales
-CORRECCIONES DE BUGS
-Arreglado: Vista previa de thumbnail ahora funciona correctamente
-Arreglado: Tooltips ahora se muestran en todos los botones
-Arreglado: Lista de jugadores se actualiza sin duplicados
-Arreglado: Favoritos se guardan y cargan correctamente
-Arreglado: Cooldown se mantiene entre recargas (si hay writefile)
-Arreglado: Scroll de pestanas funciona en todas las resoluciones
-SOPORTE
-Compatible con R6 y R15
-Funciona en la mayoria de executors (PC y movil)
-Soporte para juegos con CoreGui bloqueado
-Actualizaciones automaticas de lista de jugadores
-CREDITOS
+infoContentLabel.Text = [[?? REGISTRO DE CAMBIOS (v2.1.0)
+?? NUEVAS FUNCIONALIDADES
+?? Sistema de 6 temas visuales (Glass, Dark, Light, Cyber, Sunset, Ocean)
+?? Bot車n ?? en la barra de t赤tulo para cambiar temas r芍pidamente
+?? Tooltips informativos en todos los botones (pasa el mouse para ver descripciones)
+??? Vista previa de avatar mejorada (muestra thumbnail al hacer clic en jugadores)
+?? Historial de morpheos persistente durante la sesi車n
+? Favoritos guardados autom芍ticamente (si tu executor lo permite)
+?? B迆squeda en tiempo real con filtro por nombre o distancia
+?? Paleta de colores de piel con 56 tonos predefinidos
+?? Entrada hexadecimal con auto-correcci車n y validaci車n
+?? Atajos de teclado: Ctrl+M (morfear), Ctrl+F (enfocar b迆squeda)
+? MEJORAS DE RENDIMIENTO
+?? Carga m芍s r芍pida de la lista de jugadores
+?? Optimizaci車n en la b迆squeda de jugadores offline
+?? Reducci車n de lag en servidores con muchos jugadores
+? Animaciones suaves con fallback autom芍tico
+?? Memoria optimizada (limpieza autom芍tica de recursos)
+?? SEGURIDAD Y ESTABILIDAD
+??? Protecci車n contra errores de API (no crashea si falla una conexi車n)
+? Validaci車n de entradas de usuario (evita caracteres inv芍lidos)
+?? Cooldown anti-spam en botones de morph
+?? Manejo robusto de jugadores que se desconectan
+?? Fallback autom芍tico si CoreGui est芍 bloqueado
+?? INTERFAZ DE USUARIO
+?? 6 temas visuales intercambiables sin reiniciar
+?? Dise?o moderno de alto contraste
+?? Pesta?as con scroll horizontal (compatible con m車vil)
+?? Feedback visual en botones y personaje
+?? Notificaciones nativas de Roblox
+?? Ventana minimizable y arrastrable
+? Di芍logos de confirmaci車n opcionales
+?? CORRECCIONES DE BUGS
+? Arreglado: Vista previa de thumbnail ahora funciona correctamente
+? Arreglado: Tooltips ahora se muestran en todos los botones
+? Arreglado: Lista de jugadores se actualiza sin duplicados
+? Arreglado: Favoritos se guardan y cargan correctamente
+? Arreglado: Cooldown se mantiene entre recargas (si hay writefile)
+? Arreglado: Scroll de pesta?as funciona en todas las resoluciones
+??? SOPORTE
+? Compatible con R6 y R15
+? Funciona en la mayor赤a de executors (PC y m車vil)
+? Soporte para juegos con CoreGui bloqueado
+? Actualizaciones autom芍ticas de lista de jugadores
+?? CR谷DITOS
 Desarrollo original: @sickly255 (SAGE)
-Version con temas: v2.1.0
+Versi車n con temas: v2.1.0
 Basado en feedback de la comunidad
 ]]
 infoContentLabel.Parent = infoContent
@@ -930,7 +932,7 @@ task.wait()
 infoContent.CanvasSize = UDim2.new(0, 0, 0, infoContentLabel.AbsoluteSize.Y + 30)
 end)
 -- ==========================================
--- PESTANA SEARCH
+-- PESTA?A SEARCH
 -- ==========================================
 local searchContent = Instance.new("Frame")
 searchContent.Name = "SearchContent"
@@ -971,7 +973,7 @@ inputCorner.Parent = usernameInput
 local morphBtn = createButton(searchContent, {
 Size = UDim2.new(1, 0, 0, 45),
 Position = UDim2.new(0, 0, 0, 115),
-Text = "MORPH NOW",
+Text = "?? MORPH NOW",
 TextSize = 16,
 Color = COLORS.LIGHT_GREEN,
 Tooltip = "Morfear al jugador ingresado"
@@ -979,15 +981,15 @@ Tooltip = "Morfear al jugador ingresado"
 local idMorphBtn = createButton(searchContent, {
 Size = UDim2.new(1, 0, 0, 40),
 Position = UDim2.new(0, 0, 0, 170),
-Text = "Morph by ID",
+Text = "?? Morph by ID",
 TextSize = 14,
 Color = COLORS.BLUE,
-Tooltip = "Usar el ID numerico ingresado"
+Tooltip = "Usar el ID num谷rico ingresado"
 })
 local resetBtn = createButton(searchContent, {
 Size = UDim2.new(1, 0, 0, 40),
 Position = UDim2.new(0, 0, 0, 220),
-Text = "Reset to Original",
+Text = "?? Reset to Original",
 TextSize = 14,
 Color = COLORS.MID_GRAY,
 Tooltip = "Volver a tu avatar original"
@@ -995,7 +997,10 @@ Tooltip = "Volver a tu avatar original"
 local searchInfoLabel = Instance.new("TextLabel")
 searchInfoLabel.Size = UDim2.new(1, 0, 0, 80)
 searchInfoLabel.Position = UDim2.new(0, 0, 1, -85)
-searchInfoLabel.Text = "Tips:\nEnter partial username\nWorks with offline players\nPress Enter to morph"
+searchInfoLabel.Text = "?? Tips:
+?? Enter partial username
+?? Works with offline players
+?? Press Enter to morph"
 searchInfoLabel.TextColor3 = COLORS.WHITE
 searchInfoLabel.TextTransparency = 0.3
 searchInfoLabel.BackgroundTransparency = 1
@@ -1006,7 +1011,7 @@ searchInfoLabel.TextYAlignment = Enum.TextYAlignment.Top
 searchInfoLabel.Parent = searchContent
 registerThemeObj(searchInfoLabel, "WHITE", "TextColor3")
 -- ==========================================
--- PESTANA PLAYERS
+-- PESTA?A PLAYERS
 -- ==========================================
 local playersContent = Instance.new("Frame")
 playersContent.Name = "PlayersContent"
@@ -1021,7 +1026,7 @@ searchPlayersBox.Position = UDim2.new(0, 5, 0.5, -12.5)
 searchPlayersBox.BackgroundColor3 = COLORS.MID_GRAY
 searchPlayersBox.TextColor3 = COLORS.WHITE
 searchPlayersBox.PlaceholderColor3 = COLORS.LIGHT_GRAY
-searchPlayersBox.PlaceholderText = "Filtrar jugadores..."
+searchPlayersBox.PlaceholderText = "?? Filtrar jugadores..."
 searchPlayersBox.Font = Enum.Font.Gotham
 searchPlayersBox.TextSize = 12
 searchPlayersBox.BorderSizePixel = 0
@@ -1036,7 +1041,7 @@ searchBoxCorner.Parent = searchPlayersBox
 local sortBtn = createButton(playersTopBar, {
 Size = UDim2.new(0.3, -5, 0, 25),
 Position = UDim2.new(0.7, 0, 0.5, -12.5),
-Text = "Name",
+Text = "?? Name",
 TextSize = 11,
 Color = COLORS.MID_GRAY,
 Tooltip = "Cambiar orden (nombre/distancia)"
@@ -1058,7 +1063,7 @@ playersLayout.Padding = UDim.new(0, 5)
 playersLayout.SortOrder = Enum.SortOrder.LayoutOrder
 playersLayout.Parent = playersScrollFrame
 -- ==========================================
--- PESTANA FAVORITES
+-- PESTA?A FAVORITES
 -- ==========================================
 local favoritesContent = Instance.new("Frame")
 favoritesContent.Name = "FavoritesContent"
@@ -1084,7 +1089,8 @@ favoritesLayout.Parent = favoritesScrollFrame
 local noFavoritesLabel = Instance.new("TextLabel")
 noFavoritesLabel.Size = UDim2.new(1, -20, 0, 60)
 noFavoritesLabel.Position = UDim2.new(0, 10, 0.5, -30)
-noFavoritesLabel.Text = "No favorites yet!\nAdd players from the Players tab"
+noFavoritesLabel.Text = "? No favorites yet!
+Add players from the Players tab"
 noFavoritesLabel.TextColor3 = COLORS.WHITE
 noFavoritesLabel.BackgroundTransparency = 1
 noFavoritesLabel.Font = Enum.Font.Gotham
@@ -1092,7 +1098,7 @@ noFavoritesLabel.TextSize = 13
 noFavoritesLabel.Parent = favoritesContent
 registerThemeObj(noFavoritesLabel, "WHITE", "TextColor3")
 -- ==========================================
--- PESTANA HISTORY
+-- PESTA?A HISTORY
 -- ==========================================
 local historyContent = Instance.new("Frame")
 historyContent.Name = "HistoryContent"
@@ -1118,7 +1124,8 @@ historyLayout.Parent = historyScrollFrame
 local noHistoryLabel = Instance.new("TextLabel")
 noHistoryLabel.Size = UDim2.new(1, -20, 0, 60)
 noHistoryLabel.Position = UDim2.new(0, 10, 0.5, -30)
-noHistoryLabel.Text = "No history yet!\nMorph to someone to see it here"
+noHistoryLabel.Text = "?? No history yet!
+Morph to someone to see it here"
 noHistoryLabel.TextColor3 = COLORS.WHITE
 noHistoryLabel.BackgroundTransparency = 1
 noHistoryLabel.Font = Enum.Font.Gotham
@@ -1126,7 +1133,7 @@ noHistoryLabel.TextSize = 13
 noHistoryLabel.Parent = historyContent
 registerThemeObj(noHistoryLabel, "WHITE", "TextColor3")
 -- ==========================================
--- PESTANA SKIN
+-- PESTA?A SKIN
 -- ==========================================
 local skinContent = Instance.new("Frame")
 skinContent.Name = "SkinContent"
@@ -1224,7 +1231,7 @@ end
 end
 end
 else
-sendNotification("Error", err or "Color HEX invalido", "")
+sendNotification("Error", err or "Color HEX inv芍lido", "")
 hexInput.Text = "#F0F0F0"
 end
 end
@@ -1246,7 +1253,7 @@ Color3.fromHex("1C1C1C"), Color3.fromHex("363636"), Color3.fromHex("555555"), Co
 Color3.fromHex("A9A9A9"), Color3.fromHex("C0C0C0"), Color3.fromHex("D3D3D3"), Color3.fromHex("F5F5F5")
 }
 -- ==========================================
--- 5. FUNCIONES DE ACTUALIZACION DE LISTAS
+-- 5. FUNCIONES DE ACTUALIZACI車N DE LISTAS
 -- ==========================================
 local function createBaseCard(parent, config)
 local card = createRoundedFrame(parent, config.size, config.position, COLORS.MID_GRAY, 6)
@@ -1293,7 +1300,7 @@ Tooltip = "Morfear a este jugador"
 local copyBtn = createButton(card, {
 Size = UDim2.new(0, 30, 0, 35),
 Position = UDim2.new(1, -100, 0, 7.5),
-Text = "C",
+Text = "??",
 TextSize = 14,
 Color = COLORS.DARK_GRAY,
 Tooltip = "Copiar objetos (ropa/accesorios)"
@@ -1302,19 +1309,19 @@ if not isFavorite then
 local favBtn = createButton(card, {
 Size = UDim2.new(0, 30, 0, 35),
 Position = UDim2.new(1, -135, 0, 7.5),
-Text = favorites[targetPlayer.Name] and "F" or "+",
+Text = favorites[targetPlayer.Name] and "?" or "∵",
 TextSize = 16,
 Color = COLORS.DARK_GRAY,
-Tooltip = favorites[targetPlayer.Name] and "Quitar de favoritos" or "Anadir a favoritos"
+Tooltip = favorites[targetPlayer.Name] and "Quitar de favoritos" or "A?adir a favoritos"
 })
 connect(favBtn.MouseButton1Click, function()
 if favorites[targetPlayer.Name] then
 favorites[targetPlayer.Name] = nil
-favBtn.Text = "+"
+favBtn.Text = "∵"
 sendNotification("Favorites", "Removed from favorites", "")
 else
 favorites[targetPlayer.Name] = {UserId = targetPlayer.UserId, DisplayName = targetPlayer.DisplayName or targetPlayer.Name}
-favBtn.Text = "F"
+favBtn.Text = "?"
 sendNotification("Favorites", "Added to favorites", "")
 end
 updateFavoritesList()
@@ -1324,7 +1331,7 @@ else
 local removeBtn = createButton(card, {
 Size = UDim2.new(0, 30, 0, 35),
 Position = UDim2.new(1, -135, 0, 7.5),
-Text = "X",
+Text = "?",
 TextSize = 16,
 Color = COLORS.RED,
 Tooltip = "Eliminar de favoritos"
@@ -1603,13 +1610,13 @@ end)
 connect(sortBtn.MouseButton1Click, function()
 if sortMode == "name" then
 sortMode = "displayname"
-sortBtn.Text = "@Name"
+sortBtn.Text = "?? @Name"
 elseif sortMode == "displayname" then
 sortMode = "distance"
-sortBtn.Text = "Distance"
+sortBtn.Text = "?? Distance"
 else
 sortMode = "name"
-sortBtn.Text = "Name"
+sortBtn.Text = "?? Name"
 end
 updatePlayersList(searchPlayersBox.Text)
 end)
@@ -1710,7 +1717,7 @@ updatePlayersList(searchPlayersBox.Text)
 end
 end)
 -- ==========================================
--- 7. INICIALIZACION DE LA PALETA DE COLORES
+-- 7. INICIALIZACI車N DE LA PALETA DE COLORES
 -- ==========================================
 local function applySkinColor(color)
 local character = player.Character
@@ -1783,4 +1790,4 @@ connect(skinGridLayout:GetPropertyChangedSignal("AbsoluteContentSize"), updateSk
 -- ==========================================
 lastMorphTime = loadCooldown()
 loadFavorites()
-sendNotification("Morph Avatar Pro", "By @sickly255 (SAGE) - v2.1.0 | 6 Temas", "")
+sendNotification("?? Morph Avatar Pro", "By @sickly255 (SAGE) ??? v2.1.0 | 6 Temas", "")
