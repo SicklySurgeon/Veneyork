@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The 9 Second Car | Mitsubishi Eclipse</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap"
+        rel="stylesheet">
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
-    
+
     <style>
         :root {
             --neon-green: #39ff14;
@@ -19,7 +22,7 @@
             --accent-orange: #ff5e00;
             --glass-bg: rgba(10, 10, 10, 0.85);
             --glass-border: rgba(57, 255, 20, 0.3);
-            
+
             /* Animation timing */
             --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
             --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -56,8 +59,15 @@
         }
 
         @keyframes scrollbarGlow {
-            0%, 100% { box-shadow: 0 0 10px var(--neon-green); }
-            50% { box-shadow: 0 0 20px var(--neon-green), 0 0 30px var(--electric-blue); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 10px var(--neon-green);
+            }
+
+            50% {
+                box-shadow: 0 0 20px var(--neon-green), 0 0 30px var(--electric-blue);
+            }
         }
 
         ::-webkit-scrollbar-thumb:hover {
@@ -84,145 +94,347 @@
 
         /* --- Enhanced Animations --- */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes slideInLeft {
-            from { opacity: 0; transform: translateX(-60px); }
-            to { opacity: 1; transform: translateX(0); }
+            from {
+                opacity: 0;
+                transform: translateX(-60px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(60px); }
-            to { opacity: 1; transform: translateX(0); }
+            from {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.85); }
-            to { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0.85);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         @keyframes scaleOut {
-            from { opacity: 1; transform: scale(1); }
-            to { opacity: 0; transform: scale(0.92); }
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            to {
+                opacity: 0;
+                transform: scale(0.92);
+            }
         }
 
         @keyframes slideOutDown {
-            from { opacity: 1; transform: translateY(0) scale(1); }
-            to { opacity: 0; transform: translateY(20px) scale(0.95); }
+            from {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
         }
 
         @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 10px var(--neon-green); }
-            50% { box-shadow: 0 0 30px var(--neon-green), 0 0 50px var(--neon-green); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 10px var(--neon-green);
+            }
+
+            50% {
+                box-shadow: 0 0 30px var(--neon-green), 0 0 50px var(--neon-green);
+            }
         }
 
         @keyframes pulseBlue {
-            0%, 100% { box-shadow: 0 0 10px var(--electric-blue); }
-            50% { box-shadow: 0 0 30px var(--electric-blue), 0 0 50px var(--electric-blue); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 10px var(--electric-blue);
+            }
+
+            50% {
+                box-shadow: 0 0 30px var(--electric-blue), 0 0 50px var(--electric-blue);
+            }
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
         }
 
         @keyframes glow {
-            0%, 100% { text-shadow: 0 0 10px var(--neon-green); }
-            50% { text-shadow: 0 0 30px var(--neon-green), 0 0 50px var(--neon-green); }
+
+            0%,
+            100% {
+                text-shadow: 0 0 10px var(--neon-green);
+            }
+
+            50% {
+                text-shadow: 0 0 30px var(--neon-green), 0 0 50px var(--neon-green);
+            }
         }
 
         @keyframes barFill {
-            from { width: 0; }
-            to { width: var(--target-width); }
+            from {
+                width: 0;
+            }
+
+            to {
+                width: var(--target-width);
+            }
         }
 
         @keyframes barGlow {
-            0%, 100% { box-shadow: 0 0 15px var(--neon-green); }
-            50% { box-shadow: 0 0 25px var(--neon-green), 0 0 35px var(--neon-green); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 15px var(--neon-green);
+            }
+
+            50% {
+                box-shadow: 0 0 25px var(--neon-green), 0 0 35px var(--neon-green);
+            }
         }
 
         @keyframes numberCount {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
         }
 
         @keyframes bounceIn {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.05); }
-            70% { transform: scale(0.9); }
-            100% { transform: scale(1); opacity: 1; }
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            70% {
+                transform: scale(0.9);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         @keyframes bouncePulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+            }
         }
 
+        /* Image Loading Animations */
         @keyframes skeletonShimmer {
-            0% { background-position: -1000px 0; }
-            100% { background-position: 1000px 0; }
+            0% {
+                background-position: -1000px 0;
+            }
+
+            100% {
+                background-position: 1000px 0;
+            }
         }
 
         @keyframes imageFadeIn {
-            0% { opacity: 0; filter: blur(10px); transform: scale(1.05); }
-            100% { opacity: 1; filter: blur(0); transform: scale(1); }
+            0% {
+                opacity: 0;
+                filter: blur(10px);
+                transform: scale(1.05);
+            }
+
+            100% {
+                opacity: 1;
+                filter: blur(0);
+                transform: scale(1);
+            }
         }
 
         @keyframes spinnerRotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
 
-        @keyframes carEntrance {
+        @keyframes pulseRing {
             0% {
-                opacity: 0;
-                transform: translateX(-150%) scale(0.8);
+                transform: scale(0.8);
+                opacity: 0.5;
             }
-            60% {
-                opacity: 1;
-                transform: translateX(20px) scale(1.05);
-            }
+
             100% {
-                opacity: 1;
-                transform: translateX(0) scale(1);
+                transform: scale(1.3);
+                opacity: 0;
             }
         }
 
-        .animate-fade { animation: fadeIn var(--duration-slow) var(--ease-smooth) forwards; }
-        .animate-fade-up { animation: fadeInUp var(--duration-slow) var(--ease-smooth) forwards; }
-        .animate-slide-left { animation: slideInLeft var(--duration-slow) var(--ease-smooth) forwards; }
-        .animate-slide-right { animation: slideInRight var(--duration-slow) var(--ease-smooth) forwards; }
-        .animate-scale { animation: scaleIn var(--duration-normal) var(--ease-bounce) forwards; }
-        .animate-scale-out { animation: scaleOut var(--duration-fast) var(--ease-smooth) forwards; }
-        .animate-slide-out { animation: slideOutDown var(--duration-modal) var(--ease-smooth) forwards; }
-        .animate-float { animation: float 4s ease-in-out infinite; }
-        .animate-glow { animation: glow 2.5s ease-in-out infinite; }
-        .animate-bar { animation: barFill var(--duration-slow) var(--ease-spring) forwards, barGlow 2s ease-in-out infinite; }
-        .animate-number { animation: numberCount 0.4s var(--ease-smooth) forwards; }
-        .animate-bounce { animation: bounceIn 0.6s var(--ease-bounce) forwards; }
-        .animate-bounce-pulse { animation: bouncePulse 2s ease-in-out infinite; }
-        .animate-skeleton { animation: skeletonShimmer 1.5s infinite linear; }
-        .animate-image-load { animation: imageFadeIn 0.6s var(--ease-smooth) forwards; }
-        .animate-spinner { animation: spinnerRotate 1s linear infinite; }
+        .animate-fade {
+            animation: fadeIn var(--duration-slow) var(--ease-smooth) forwards;
+        }
 
-        .stagger-1 { animation-delay: 0.1s; }
-        .stagger-2 { animation-delay: 0.2s; }
-        .stagger-3 { animation-delay: 0.3s; }
-        .stagger-4 { animation-delay: 0.4s; }
-        .stagger-5 { animation-delay: 0.5s; }
-        .stagger-6 { animation-delay: 0.6s; }
+        .animate-fade-up {
+            animation: fadeInUp var(--duration-slow) var(--ease-smooth) forwards;
+        }
+
+        .animate-slide-left {
+            animation: slideInLeft var(--duration-slow) var(--ease-smooth) forwards;
+        }
+
+        .animate-slide-right {
+            animation: slideInRight var(--duration-slow) var(--ease-smooth) forwards;
+        }
+
+        .animate-scale {
+            animation: scaleIn var(--duration-normal) var(--ease-bounce) forwards;
+        }
+
+        .animate-scale-out {
+            animation: scaleOut var(--duration-fast) var(--ease-smooth) forwards;
+        }
+
+        .animate-slide-out {
+            animation: slideOutDown var(--duration-modal) var(--ease-smooth) forwards;
+        }
+
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .animate-glow {
+            animation: glow 2.5s ease-in-out infinite;
+        }
+
+        .animate-bar {
+            animation: barFill var(--duration-slow) var(--ease-spring) forwards, barGlow 2s ease-in-out infinite;
+        }
+
+        .animate-number {
+            animation: numberCount 0.4s var(--ease-smooth) forwards;
+        }
+
+        .animate-bounce {
+            animation: bounceIn 0.6s var(--ease-bounce) forwards;
+        }
+
+        .animate-bounce-pulse {
+            animation: bouncePulse 2s ease-in-out infinite;
+        }
+
+        .animate-skeleton {
+            animation: skeletonShimmer 1.5s infinite linear;
+        }
+
+        .animate-image-load {
+            animation: imageFadeIn 0.6s var(--ease-smooth) forwards;
+        }
+
+        .animate-spinner {
+            animation: spinnerRotate 1s linear infinite;
+        }
+
+        .stagger-1 {
+            animation-delay: 0.1s;
+        }
+
+        .stagger-2 {
+            animation-delay: 0.2s;
+        }
+
+        .stagger-3 {
+            animation-delay: 0.3s;
+        }
+
+        .stagger-4 {
+            animation-delay: 0.4s;
+        }
+
+        .stagger-5 {
+            animation-delay: 0.5s;
+        }
+
+        .stagger-6 {
+            animation-delay: 0.6s;
+        }
 
         /* --- Navbar --- */
         .navbar {
@@ -248,11 +460,11 @@
 
         .logo {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
             font-weight: 900;
             color: var(--neon-green);
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: clamp(1px, 0.3vw, 3px);
             cursor: pointer;
             transition: all var(--duration-fast) var(--ease-smooth);
             position: relative;
@@ -294,16 +506,27 @@
             animation: fadeIn var(--duration-fast) var(--ease-smooth) forwards;
         }
 
-        .nav-links li:nth-child(1) { animation-delay: 0.15s; }
-        .nav-links li:nth-child(2) { animation-delay: 0.25s; }
-        .nav-links li:nth-child(3) { animation-delay: 0.35s; }
-        .nav-links li:nth-child(4) { animation-delay: 0.45s; }
+        .nav-links li:nth-child(1) {
+            animation-delay: 0.15s;
+        }
+
+        .nav-links li:nth-child(2) {
+            animation-delay: 0.25s;
+        }
+
+        .nav-links li:nth-child(3) {
+            animation-delay: 0.35s;
+        }
+
+        .nav-links li:nth-child(4) {
+            animation-delay: 0.45s;
+        }
 
         .nav-links a {
             color: var(--pure-white);
             text-decoration: none;
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+            font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             position: relative;
@@ -378,7 +601,7 @@
         }
 
         .loader-bar {
-            width: clamp(180px, 60vw, 220px);
+            width: 220px;
             height: 5px;
             background: #1a1a1a;
             margin-top: 25px;
@@ -405,13 +628,15 @@
             font-family: 'Orbitron', sans-serif;
             color: var(--neon-green);
             letter-spacing: 5px;
-            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            font-size: 1.1rem;
             text-transform: uppercase;
             animation: glow 2s ease-in-out infinite;
         }
 
         /* --- Typography --- */
-        h1, h2, h3 {
+        h1,
+        h2,
+        h3 {
             font-family: 'Orbitron', sans-serif;
             text-transform: uppercase;
             font-style: italic;
@@ -433,7 +658,9 @@
             position: relative;
             width: 100%;
             max-width: 1200px;
+            /* Aumentado de 900px */
             height: 600px;
+            /* Aumentado de 500px */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -441,20 +668,41 @@
             z-index: 10;
             will-change: transform;
             overflow: visible;
+            /* Permitir que se vea completo */
         }
 
         .eclipse-car {
             width: 100%;
             max-width: 1000px;
             height: 100%;
+            /* AÑADIR ESTO */
             min-height: 500px;
+            /* AÑADIR ESTO */
             filter: drop-shadow(0 0 25px rgba(57, 255, 20, 0.5));
             transform: translateZ(70px);
             transition: transform 0.08s ease-out;
             will-change: transform;
-            animation: carEntrance 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards, 
-                       float 5s ease-in-out infinite 1.2s;
+            animation: carEntrance 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards,
+                float 5s ease-in-out infinite 1.2s;
             opacity: 0;
+        }
+
+        /* Nueva animación de entrada */
+        @keyframes carEntrance {
+            0% {
+                opacity: 0;
+                transform: translateX(-150%) translateZ(70px) scale(0.8);
+            }
+
+            60% {
+                opacity: 1;
+                transform: translateX(20px) translateZ(70px) scale(1.05);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(0) translateZ(70px) scale(1);
+            }
         }
 
         /* Floating Cards */
@@ -466,8 +714,8 @@
             border-left: 4px solid var(--neon-green);
             padding: 22px;
             border-radius: 4px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.9);
-            width: 230px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.9);
+            width: min(230px, 90%);
             opacity: 0;
             transform: translateY(40px) translateZ(0);
             transition: all 0.7s var(--ease-bounce);
@@ -482,15 +730,34 @@
 
         .glass-card:hover {
             border-color: var(--neon-green);
-            box-shadow: 0 0 40px rgba(57, 255, 20, 0.4), 0 25px 50px rgba(0,0,0,0.9);
+            box-shadow: 0 0 40px rgba(57, 255, 20, 0.4), 0 25px 50px rgba(0, 0, 0, 0.9);
             transform: translateY(-8px) !important;
             transition: all 0.25s var(--ease-smooth);
         }
 
-        .card-top-left { top: 10%; left: 5%; transform: translateZ(120px); }
-        .card-bottom-right { bottom: 10%; right: 5%; transform: translateZ(100px); }
-        .card-top-right { top: 15%; right: 5%; transform: translateZ(80px); }
-        .card-bottom-left { bottom: 15%; left: 5%; transform: translateZ(90px); }
+        .card-top-left {
+            top: 10%;
+            left: 5%;
+            transform: translateZ(120px);
+        }
+
+        .card-bottom-right {
+            bottom: 10%;
+            right: 5%;
+            transform: translateZ(100px);
+        }
+
+        .card-top-right {
+            top: 15%;
+            right: 5%;
+            transform: translateZ(80px);
+        }
+
+        .card-bottom-left {
+            bottom: 15%;
+            left: 5%;
+            transform: translateZ(90px);
+        }
 
         .glass-card h3 {
             color: var(--electric-blue);
@@ -538,7 +805,7 @@
 
         /* --- Content Sections --- */
         .content-section {
-            padding: clamp(60px, 10vh, 100px) 5%;
+            padding: 100px 5%;
             position: relative;
             z-index: 20;
             background: var(--deep-black);
@@ -547,7 +814,7 @@
 
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
             max-width: 1400px;
             margin: 0 auto;
@@ -556,7 +823,7 @@
         .info-block {
             background: var(--panel-black);
             border: 1px solid #222;
-            padding: clamp(20px, 4vw, 30px);
+            padding: 30px;
             position: relative;
             overflow: hidden;
             transition: all 0.35s var(--ease-smooth);
@@ -596,7 +863,7 @@
         .info-block h2 {
             color: var(--neon-green);
             margin-bottom: 25px;
-            font-size: clamp(1.2rem, 3vw, 1.4rem);
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
             border-bottom: 1px solid #222;
             padding-bottom: 12px;
             display: inline-block;
@@ -606,13 +873,14 @@
         .stat-row {
             display: flex;
             justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 4px 12px;
             margin-bottom: 18px;
             border-bottom: 1px solid #1a1a1a;
             padding-bottom: 12px;
             transition: all 0.25s var(--ease-smooth);
             cursor: default;
-            flex-wrap: wrap;
-            gap: 8px;
         }
 
         .stat-row:hover {
@@ -623,30 +891,28 @@
             border-color: var(--glass-border);
         }
 
-        .stat-label { 
-            color: #666; 
-            font-weight: 500; 
+        .stat-label {
+            color: #666;
+            font-weight: 500;
             letter-spacing: 0.5px;
-            font-size: clamp(0.85rem, 2vw, 1rem);
         }
-        
-        .stat-value { 
-            color: var(--pure-white); 
-            font-weight: 700; 
-            font-family: 'Orbitron'; 
+
+        .stat-value {
+            color: var(--pure-white);
+            font-weight: 700;
+            font-family: 'Orbitron';
             text-align: right;
-            font-size: clamp(0.9rem, 2vw, 1rem);
         }
-        
-        .stat-value.highlight { 
-            color: var(--electric-blue); 
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5); 
+
+        .stat-value.highlight {
+            color: var(--electric-blue);
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
         }
 
         /* Quote Section */
         .quote-section {
             text-align: center;
-            padding: clamp(80px, 15vh, 120px) 5%;
+            padding: 120px 20px;
             background: radial-gradient(ellipse at center, #0f0f0f 0%, var(--deep-black) 85%);
             border-top: 1px solid #111;
             border-bottom: 1px solid #111;
@@ -654,7 +920,7 @@
 
         .quote-text {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(1.3rem, 4vw, 2rem);
+            font-size: clamp(1.1rem, 4vw, 2rem);
             color: var(--pure-white);
             max-width: 950px;
             margin: 0 auto 35px;
@@ -671,8 +937,8 @@
 
         .quote-author {
             color: var(--accent-orange);
-            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-            letter-spacing: 4px;
+            font-size: clamp(0.8rem, 2vw, 1.1rem);
+            letter-spacing: clamp(2px, 0.5vw, 4px);
             font-weight: 700;
             text-transform: uppercase;
             opacity: 0;
@@ -694,8 +960,8 @@
 
         .tribute-img {
             flex: 1;
-            min-width: min(100%, 300px);
-            height: clamp(250px, 40vh, 380px);
+            min-width: min(300px, 100%);
+            height: clamp(220px, 40vw, 380px);
             background: #111;
             border: 2px solid var(--electric-blue);
             position: relative;
@@ -712,12 +978,12 @@
             transform: scale(1.02);
             border-color: var(--neon-green);
         }
-        
+
         .tribute-img::after {
             content: 'LEGEND';
             color: #222;
             font-family: 'Orbitron';
-            font-size: clamp(3rem, 8vw, 4.5rem);
+            font-size: 4.5rem;
             font-weight: 900;
             opacity: 0.4;
             letter-spacing: 3px;
@@ -725,12 +991,12 @@
 
         .tribute-text {
             flex: 1;
-            min-width: min(100%, 300px);
+            min-width: min(300px, 100%);
         }
 
         .tribute-text h2 {
             color: var(--electric-blue);
-            font-size: clamp(1.5rem, 4vw, 2.1rem);
+            font-size: clamp(1.3rem, 3.5vw, 2.1rem);
             margin-bottom: 25px;
             text-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
         }
@@ -739,12 +1005,12 @@
             line-height: 1.9;
             color: #b0b0b0;
             margin-bottom: 25px;
-            font-size: clamp(1rem, 2.5vw, 1.15rem);
+            font-size: 1.15rem;
         }
 
         .btn {
             display: inline-block;
-            padding: clamp(14px, 3vw, 18px) clamp(30px, 6vw, 45px);
+            padding: 18px 45px;
             background: transparent;
             border: 2px solid var(--neon-green);
             color: var(--neon-green);
@@ -759,7 +1025,7 @@
             animation: pulse 2.5s infinite;
             border-radius: 4px;
             letter-spacing: 1.5px;
-            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            font-size: 0.9rem;
         }
 
         .btn::before {
@@ -799,7 +1065,6 @@
             opacity: 0;
             transition: opacity var(--duration-modal) var(--ease-smooth);
             backdrop-filter: blur(8px);
-            padding: 20px;
         }
 
         .modal-overlay.active {
@@ -817,14 +1082,14 @@
             border: 2px solid var(--neon-green);
             border-radius: 12px;
             max-width: 950px;
-            width: 100%;
-            max-height: 90vh;
+            width: 92%;
+            max-height: 88vh;
             overflow-y: auto;
             position: relative;
             transform: scale(0.85);
             opacity: 0;
             transition: transform var(--duration-modal) var(--ease-bounce), opacity var(--duration-fast) var(--ease-smooth);
-            box-shadow: 0 0 60px rgba(57, 255, 20, 0.4), 0 30px 80px rgba(0,0,0,0.9);
+            box-shadow: 0 0 60px rgba(57, 255, 20, 0.4), 0 30px 80px rgba(0, 0, 0, 0.9);
         }
 
         .modal-overlay.active .modal-content {
@@ -838,14 +1103,14 @@
 
         .modal-close {
             position: absolute;
-            top: clamp(15px, 3vw, 25px);
-            right: clamp(15px, 3vw, 25px);
-            width: clamp(40px, 8vw, 45px);
-            height: clamp(40px, 8vw, 45px);
+            top: 25px;
+            right: 25px;
+            width: 45px;
+            height: 45px;
             background: transparent;
             border: 2px solid var(--neon-green);
             color: var(--neon-green);
-            font-size: clamp(1.5rem, 4vw, 1.8rem);
+            font-size: 1.8rem;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -872,7 +1137,7 @@
 
         .modal-header {
             background: rgba(57, 255, 20, 0.08);
-            padding: clamp(25px, 5vw, 35px) clamp(20px, 4vw, 35px) clamp(20px, 4vw, 25px);
+            padding: 35px 35px 25px;
             border-bottom: 2px solid var(--neon-green);
             position: sticky;
             top: 0;
@@ -882,25 +1147,25 @@
 
         .modal-header h2 {
             color: var(--neon-green);
-            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            font-size: clamp(1.3rem, 3.5vw, 2.2rem);
             margin-bottom: 8px;
             text-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
         }
 
         .modal-header p {
             color: #888;
-            font-size: clamp(0.8rem, 2vw, 0.95rem);
+            font-size: 0.95rem;
             letter-spacing: 1px;
         }
 
         .modal-body {
-            padding: clamp(20px, 4vw, 30px) clamp(20px, 4vw, 35px) clamp(30px, 5vw, 40px);
+            padding: 30px 35px 40px;
         }
 
         /* Gallery Modal Specific with Loading States */
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 22px;
         }
 
@@ -948,8 +1213,8 @@
         }
 
         .spinner {
-            width: clamp(30px, 6vw, 40px);
-            height: clamp(30px, 6vw, 40px);
+            width: 40px;
+            height: 40px;
             border: 3px solid rgba(57, 255, 20, 0.2);
             border-top-color: var(--neon-green);
             border-radius: 50%;
@@ -959,7 +1224,7 @@
 
         .loading-text {
             color: var(--neon-green);
-            font-size: clamp(0.65rem, 1.5vw, 0.75rem);
+            font-size: 0.75rem;
             font-family: 'Orbitron', sans-serif;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -998,7 +1263,7 @@
             left: 0;
             right: 0;
             background: rgba(5, 5, 5, 0.92);
-            padding: clamp(15px, 3vw, 20px) clamp(12px, 2.5vw, 15px);
+            padding: 20px 15px;
             transform: translateY(100%);
             transition: transform 0.35s var(--ease-smooth);
             border-top: 1px solid var(--glass-border);
@@ -1012,7 +1277,7 @@
         .gallery-item .overlay p {
             color: var(--neon-green);
             font-family: 'Orbitron';
-            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            font-size: 0.9rem;
             letter-spacing: 1px;
             text-transform: uppercase;
         }
@@ -1020,7 +1285,7 @@
         /* Info Modal Specific */
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 18px;
             margin-top: 25px;
         }
@@ -1028,7 +1293,7 @@
         .info-card {
             background: rgba(57, 255, 20, 0.06);
             border: 1px solid var(--glass-border);
-            padding: clamp(18px, 3vw, 22px);
+            padding: 22px;
             border-radius: 6px;
             transition: all 0.3s var(--ease-smooth);
             border-left: 3px solid var(--neon-green);
@@ -1050,20 +1315,20 @@
 
         .info-card h3 {
             color: var(--electric-blue);
-            font-size: clamp(0.75rem, 2vw, 0.85rem);
+            font-size: 0.85rem;
             margin-bottom: 12px;
             letter-spacing: 1.5px;
             text-transform: uppercase;
         }
 
         .info-card p {
-            font-size: clamp(1.1rem, 3vw, 1.3rem);
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--pure-white);
             font-family: 'Orbitron';
         }
 
-        /* Enhanced Stat Bars */
+        /* Enhanced Stat Bars - Solid Colors Only */
         .stat-bar-container {
             margin: 25px 0;
             opacity: 0;
@@ -1080,7 +1345,7 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
-            font-size: clamp(0.85rem, 2vw, 0.95rem);
+            font-size: 0.95rem;
         }
 
         .stat-bar-label span:first-child {
@@ -1102,7 +1367,7 @@
         }
 
         .stat-bar-track {
-            height: clamp(10px, 2vw, 14px);
+            height: 14px;
             background: #1a1a1a;
             border-radius: 7px;
             overflow: hidden;
@@ -1159,7 +1424,6 @@
             align-items: center;
             opacity: 0;
             transition: opacity var(--duration-modal) var(--ease-smooth);
-            padding: 20px;
         }
 
         .image-viewer.active {
@@ -1173,8 +1437,8 @@
         }
 
         .image-viewer img {
-            max-width: 95%;
-            max-height: 90vh;
+            max-width: 92%;
+            max-height: 88vh;
             object-fit: contain;
             border: 4px solid var(--neon-green);
             box-shadow: 0 0 60px rgba(57, 255, 20, 0.5);
@@ -1184,14 +1448,14 @@
 
         .image-viewer-close {
             position: absolute;
-            top: clamp(20px, 4vw, 35px);
-            right: clamp(20px, 4vw, 35px);
-            width: clamp(45px, 8vw, 55px);
-            height: clamp(45px, 8vw, 55px);
+            top: 35px;
+            right: 35px;
+            width: 55px;
+            height: 55px;
             background: transparent;
             border: 3px solid var(--neon-green);
             color: var(--neon-green);
-            font-size: clamp(1.8rem, 4vw, 2.2rem);
+            font-size: 2.2rem;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -1217,10 +1481,10 @@
         /* Enhanced Scroll to Top Button */
         .scroll-top {
             position: fixed;
-            bottom: clamp(20px, 4vw, 35px);
-            right: clamp(20px, 4vw, 35px);
-            width: clamp(50px, 10vw, 60px);
-            height: clamp(50px, 10vw, 60px);
+            bottom: 35px;
+            right: 35px;
+            width: 60px;
+            height: 60px;
             background: var(--neon-green);
             color: var(--deep-black);
             border: none;
@@ -1229,7 +1493,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: clamp(1.5rem, 3vw, 1.8rem);
+            font-size: 1.8rem;
             opacity: 0;
             transform: translateY(40px) scale(0.8);
             transition: all 0.4s var(--ease-bounce);
@@ -1267,46 +1531,51 @@
             opacity: 0.5;
         }
 
-        /* ====================================
-           RESPONSIVE BREAKPOINTS
-           ==================================== */
+        /* ========== RESPONSIVE ========== */
 
-        /* Tablets (768px - 1024px) */
+        /* --- Tablet Landscape & Small Desktop (≤1024px) --- */
         @media (max-width: 1024px) {
             .car-container {
-                height: 500px;
+                height: 420px;
             }
-            
+
             .eclipse-car {
-                max-width: 850px;
-                min-height: 450px;
+                width: 90%;
+            }
+
+            .title-overlay h1 {
+                font-size: 28vw;
             }
 
             .glass-card {
-                width: 200px;
+                width: min(200px, 45%);
                 padding: 18px;
+            }
+
+            .content-section {
+                padding: 80px 4%;
             }
         }
 
-        /* Mobile & Tablets (768px and below) */
+        /* --- Tablet Portrait & Small Screens (≤768px) --- */
         @media (max-width: 768px) {
-            /* Navigation for mobile */
+
+            /* -- Navbar: Mobile Menu -- */
             .nav-links {
                 position: fixed;
                 top: 0;
                 right: -100%;
                 width: 75%;
-                max-width: 350px;
                 height: 100vh;
                 background: rgba(10, 10, 10, 0.99);
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                gap: 40px;
+                gap: 50px;
                 transition: right 0.4s var(--ease-smooth);
                 border-left: 3px solid var(--neon-green);
                 backdrop-filter: blur(20px);
-                padding: 20px;
+                z-index: 1001;
             }
 
             .nav-links.active {
@@ -1340,27 +1609,29 @@
                 transform: rotate(-45deg) translate(7px, -7px);
             }
 
-            /* Hero adjustments - Stack cards vertically */
+            /* -- Hero Section -- */
             .hero {
-                padding: 100px 4% 50px;
+                flex-direction: column;
+                padding: 100px 20px 40px;
                 overflow: visible;
+                perspective: none;
             }
 
             .car-container {
-                height: 400px;
-                margin-bottom: 30px;
+                height: 350px;
+                width: 100%;
+                margin-bottom: 20px;
                 transform: none !important;
             }
 
             .eclipse-car {
+                transform: translateZ(0) !important;
                 width: 100%;
                 height: 100%;
-                min-height: 400px;
-                transform: translateZ(0) !important;
-                animation: float 5s ease-in-out infinite;
+                min-height: 300px;
+                animation: none;
             }
 
-            /* Convert absolute positioned cards to stacked layout */
             .glass-card {
                 position: relative;
                 top: auto !important;
@@ -1369,100 +1640,178 @@
                 bottom: auto !important;
                 transform: none !important;
                 width: 100%;
-                max-width: 100%;
-                margin: 12px 0;
-                padding: 18px 16px;
-            }
-
-            .glass-card.visible {
-                transform: none !important;
-            }
-
-            .glass-card:hover {
-                transform: translateY(-5px) !important;
+                margin: 8px 0;
+                border-left: 4px solid var(--neon-green);
             }
 
             .title-overlay {
-                top: 40%;
-                opacity: 0.05;
+                top: 30%;
+                opacity: 0.04;
             }
 
             .title-overlay h1 {
-                font-size: 35vw;
-                letter-spacing: -8px;
+                font-size: 30vw;
+                letter-spacing: -6px;
             }
 
-            /* Content sections */
+            /* -- Content Section -- */
             .content-section {
-                padding: clamp(50px, 8vh, 80px) 4%;
+                padding: 60px 4%;
             }
 
             .grid-container {
                 grid-template-columns: 1fr;
-                gap: 18px;
+                gap: 20px;
+            }
+
+            .info-block {
+                padding: 25px 20px;
+            }
+
+            .info-block[style*="grid-column"] {
+                grid-column: 1 / -1;
             }
 
             .tribute {
                 flex-direction: column;
-                gap: 30px;
             }
 
             .tribute-img {
                 width: 100%;
-                height: clamp(220px, 35vh, 280px);
+                min-width: 100%;
+                height: 260px;
             }
 
-            /* Quote section */
+            .tribute-text {
+                min-width: 100%;
+            }
+
+            .tribute-text p {
+                font-size: 1rem;
+            }
+
+            /* -- Quote Section -- */
             .quote-section {
-                padding: clamp(70px, 12vh, 100px) 4%;
+                padding: 80px 20px;
             }
 
-            .quote-text {
-                font-size: clamp(1.3rem, 4vw, 1.5rem);
-            }
-
-            /* Modals */
+            /* -- Modals -- */
             .modal-content {
-                width: 95%;
-                max-height: 85vh;
+                width: 96%;
+                margin: 10px;
+                max-height: 92vh;
+                border-radius: 8px;
             }
 
-            .modal-header h2 {
-                font-size: clamp(1.5rem, 4vw, 1.8rem);
+            .modal-header {
+                padding: 25px 20px 18px;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .modal-close {
+                top: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.5rem;
             }
 
             .gallery-grid {
                 grid-template-columns: 1fr;
-                gap: 18px;
+                gap: 16px;
             }
 
             .info-grid {
-                grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
-                gap: 15px;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 14px;
+            }
+
+            .info-card {
+                padding: 18px;
+            }
+
+            .info-card p {
+                font-size: 1.1rem;
+            }
+
+            .gallery-loader {
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+
+            .spinner {
+                width: 30px;
+                height: 30px;
+            }
+
+            /* -- Image Viewer -- */
+            .image-viewer img {
+                max-width: 96%;
+                max-height: 85vh;
+                border-width: 3px;
+            }
+
+            .image-viewer-close {
+                top: 15px;
+                right: 15px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.8rem;
+            }
+
+            /* -- Button -- */
+            .btn {
+                padding: 15px 35px;
+                font-size: 0.85rem;
+            }
+
+            /* -- Scroll Top -- */
+            .scroll-top {
+                width: 52px;
+                height: 52px;
+                bottom: 20px;
+                right: 20px;
+                font-size: 1.5rem;
             }
         }
 
-        /* Small Mobile (480px and below) */
-        @media (max-width: 480px) {
-            .navbar {
-                padding: 15px 4%;
+        /* --- Intermediate (≤600px) --- */
+        @media (max-width: 600px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
             }
 
-            .logo {
-                font-size: 1.3rem;
-                letter-spacing: 2px;
+            .info-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .stat-bar-label {
+                font-size: 0.85rem;
+            }
+
+            .tribute-img::after {
+                font-size: 3rem;
+            }
+        }
+
+        /* --- Mobile (≤480px) --- */
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 14px 4%;
             }
 
             .hero {
-                padding: 90px 4% 40px;
+                padding: 90px 12px 30px;
             }
 
             .car-container {
-                height: 350px;
+                height: 280px;
             }
 
             .eclipse-car {
-                min-height: 350px;
+                min-height: 260px;
             }
 
             .glass-card {
@@ -1471,43 +1820,62 @@
 
             .glass-card h3 {
                 font-size: 0.75rem;
+                letter-spacing: 1.5px;
             }
 
             .glass-card p {
-                font-size: 1.1rem;
+                font-size: 1.05rem;
             }
 
             .content-section {
-                padding: clamp(45px, 8vh, 70px) 4%;
+                padding: 50px 3%;
             }
 
             .info-block {
-                padding: 20px 16px;
+                padding: 22px 16px;
             }
 
-            .info-block h2 {
-                font-size: 1.3rem;
+            .stat-row {
+                font-size: 0.9rem;
+            }
+
+            .stat-value {
+                font-size: 0.85rem;
             }
 
             .quote-section {
-                padding: clamp(60px, 10vh, 80px) 4%;
-            }
-
-            .quote-text {
-                font-size: 1.3rem;
+                padding: 60px 12px;
             }
 
             .tribute-img {
-                height: clamp(200px, 30vh, 250px);
+                height: 200px;
             }
 
-            .btn {
-                padding: 14px 28px;
-                font-size: 0.8rem;
+            .tribute-img::after {
+                font-size: 2.5rem;
+            }
+
+            .modal-content {
+                width: 98%;
+                margin: 5px;
+                border-radius: 6px;
+                border-width: 1px;
+            }
+
+            .modal-header {
+                padding: 20px 16px 14px;
             }
 
             .modal-body {
-                padding: 20px 18px 30px;
+                padding: 16px;
+            }
+
+            .modal-close {
+                top: 12px;
+                right: 12px;
+                width: 36px;
+                height: 36px;
+                font-size: 1.3rem;
             }
 
             .info-grid {
@@ -1515,114 +1883,120 @@
                 gap: 12px;
             }
 
-            .gallery-grid {
-                gap: 15px;
+            .info-card {
+                padding: 16px;
+            }
+
+            .info-card p {
+                font-size: 1rem;
+            }
+
+            .image-viewer img {
+                max-width: 98%;
+                border-width: 2px;
+            }
+
+            .image-viewer-close {
+                top: 10px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.5rem;
+                border-width: 2px;
+            }
+
+            .btn {
+                padding: 14px 30px;
+                font-size: 0.8rem;
+                letter-spacing: 1px;
             }
 
             .scroll-top {
-                width: 50px;
-                height: 50px;
-                bottom: 25px;
-                right: 25px;
-                font-size: 1.5rem;
+                width: 46px;
+                height: 46px;
+                bottom: 18px;
+                right: 18px;
+                font-size: 1.3rem;
+            }
+
+            .loading-text {
+                font-size: 0.65rem;
+            }
+
+            .loader-bar {
+                width: 180px;
             }
         }
 
-        /* Extra Small Mobile (360px and below) */
+        /* --- Small Mobile (≤360px) --- */
         @media (max-width: 360px) {
-            .navbar {
-                padding: 12px 3%;
-            }
-
-            .logo {
-                font-size: 1.1rem;
+            .hero {
+                padding: 80px 8px 25px;
             }
 
             .car-container {
-                height: 300px;
+                height: 230px;
             }
 
             .eclipse-car {
-                min-height: 300px;
+                min-height: 220px;
             }
 
             .glass-card {
                 padding: 14px 12px;
+                margin: 6px 0;
+            }
+
+            .glass-card h3 {
+                font-size: 0.7rem;
+                margin-bottom: 6px;
+            }
+
+            .glass-card p {
+                font-size: 0.95rem;
+            }
+
+            .nav-links {
+                width: 85%;
+                gap: 35px;
+            }
+
+            .nav-links a {
+                font-size: 0.95rem;
+            }
+
+            .content-section {
+                padding: 40px 3%;
             }
 
             .info-block {
                 padding: 18px 14px;
             }
 
-            .modal-header {
-                padding: 20px 18px 18px;
+            .tribute-img {
+                height: 170px;
             }
 
-            .modal-body {
-                padding: 18px 16px 25px;
-            }
-        }
-
-        /* Landscape Mobile Phones */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .hero {
-                min-height: auto;
-                padding: 80px 4% 40px;
-            }
-
-            .car-container {
-                height: 60vh;
-                max-height: 400px;
-            }
-
-            .eclipse-car {
-                min-height: 300px;
-            }
-
-            .glass-card {
-                padding: 14px;
-                margin: 8px 0;
-            }
-
-            .quote-section {
-                padding: 60px 4%;
+            .btn {
+                padding: 12px 24px;
+                font-size: 0.75rem;
             }
 
             .modal-content {
-                max-height: 92vh;
+                max-height: 95vh;
             }
 
-            .tribute-img {
-                height: 50vh;
-                max-height: 300px;
-            }
-        }
-
-        /* Touch device optimizations */
-        @media (hover: none) and (pointer: coarse) {
-            .glass-card:hover {
-                transform: translateY(-8px) !important;
-            }
-
-            .glass-card:active {
-                transform: translateY(-5px) !important;
-            }
-
-            .gallery-item .overlay {
-                transform: translateY(0);
-                background: rgba(5, 5, 5, 0.85);
-            }
-
-            .info-block:hover {
-                transform: translateY(0);
-            }
-
-            .scroll-top:hover {
-                transform: translateY(0) scale(1);
+            .scroll-top {
+                width: 42px;
+                height: 42px;
+                bottom: 14px;
+                right: 14px;
+                font-size: 1.1rem;
             }
         }
     </style>
 </head>
+
 <body>
 
     <!-- Loading Screen -->
@@ -1659,21 +2033,10 @@
         </div>
 
         <div class="car-container" id="car-container">
-            <model-viewer
-                src="eclipse.glb"
-                alt="Mitsubishi Eclipse 3D"
-                class="eclipse-car"
-                id="car-img"
-                auto-rotate
-                camera-controls
-                camera-orbit="0deg 80deg 2.5m"
-                field-of-view="40deg"
-                min-camera-orbit="auto auto 1m"
-                max-camera-orbit="auto auto 5m"
-                shadow-intensity="1"
-                environment-image="neutral"
-                exposure="1.2"
-                loading="eager">
+            <!-- Asegúrate de poner la ruta correcta a tu archivo .glb descargado -->
+            <model-viewer src="eclipse.glb" alt="Mitsubishi Eclipse 3D" class="eclipse-car" id="car-img" auto-rotate
+                camera-controls camera-orbit="0deg 75deg 4m" field-of-view="30deg" shadow-intensity="1"
+                environment-image="neutral" exposure="1" loading="eager">
             </model-viewer>
         </div>
 
@@ -1705,7 +2068,7 @@
     <!-- Content Section -->
     <section class="content-section">
         <div class="grid-container">
-            
+
             <div class="info-block" data-animate>
                 <h2>Technical Specifications</h2>
                 <div class="stat-row">
@@ -1737,10 +2100,12 @@
             <div class="info-block" data-animate>
                 <h2>The Legend</h2>
                 <p style="margin-bottom: 15px; color: #ccc;">
-                    This wasn't just a car; it was a statement. In <em>The Fast and the Furious (2001)</em>, Brian O'Conner used this vehicle to infiltrate the street racing scene of Los Angeles.
+                    This wasn't just a car; it was a statement. In <em>The Fast and the Furious (2001)</em>, Brian
+                    O'Conner used this vehicle to infiltrate the street racing scene of Los Angeles.
                 </p>
                 <p style="color: #ccc;">
-                    The "9 Second Car" moniker became synonymous with the 4G63 engine's legendary tuning potential. With a shot of NOS, this car could hit 1320 feet in under 9 seconds, beating a Supra on the strip.
+                    The "9 Second Car" moniker became synonymous with the 4G63 engine's legendary tuning potential. With
+                    a shot of NOS, this car could hit 1320 feet in under 9 seconds, beating a Supra on the strip.
                 </p>
             </div>
 
@@ -1806,7 +2171,9 @@
                     <div class="tribute-text">
                         <h2>In Memory of Paul Walker</h2>
                         <p>
-                            The spirit of Brian O'Conner lives on through this machine. Paul Walker's genuine passion for cars and racing defined a generation of automotive enthusiasts. This page is a tribute to the actor and the character who made the Mitsubishi Eclipse an icon of street culture.
+                            The spirit of Brian O'Conner lives on through this machine. Paul Walker's genuine passion
+                            for cars and racing defined a generation of automotive enthusiasts. This page is a tribute
+                            to the actor and the character who made the Mitsubishi Eclipse an icon of street culture.
                         </p>
                         <p style="color: var(--neon-green); font-weight: 700; font-family: 'Orbitron';">
                             "I live my life a quarter mile at a time."
@@ -1828,13 +2195,13 @@
 
     <!-- Modals -->
 
-    <!-- Gallery Modal -->
+    <!-- Gallery Modal with Image Loading -->
     <div class="modal-overlay" id="modal-gallery">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('gallery')">&times;</button>
             <div class="modal-header">
                 <h2>Gallery</h2>
-                <p>Mitsubishi Eclipse GSX - The 9 Second Car</p>
+                <p style="color: #888;">Mitsubishi Eclipse GSX - The 9 Second Car</p>
             </div>
             <div class="modal-body">
                 <div class="gallery-grid">
@@ -1845,7 +2212,8 @@
                             <span class="loading-text">Loading...</span>
                         </div>
                         <div class="gallery-image-wrapper">
-                            <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs_webp/86848396994307.5ebb0138512c7.jpg" alt="Eclipse 1" loading="lazy" onload="handleImageLoad(this)">
+                            <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs_webp/86848396994307.5ebb0138512c7.jpg"
+                                alt="Eclipse 1" loading="lazy" onload="handleImageLoad(this)">
                         </div>
                         <div class="overlay">
                             <p>Street Racing</p>
@@ -1858,7 +2226,8 @@
                             <span class="loading-text">Loading...</span>
                         </div>
                         <div class="gallery-image-wrapper">
-                            <img src="https://static.wikia.nocookie.net/atodogas/images/c/c7/C48025b7eb1bbd796fe998268f9da8f6.jpg/revision/latest?cb=20220704185617&path-prefix=es" alt="Eclipse 2" loading="lazy" onload="handleImageLoad(this)">
+                            <img src="https://static.wikia.nocookie.net/atodogas/images/c/c7/C48025b7eb1bbd796fe998268f9da8f6.jpg/revision/latest?cb=20220704185617&path-prefix=es"
+                                alt="Eclipse 2" loading="lazy" onload="handleImageLoad(this)">
                         </div>
                         <div class="overlay">
                             <p>Neon Lights</p>
@@ -1871,7 +2240,8 @@
                             <span class="loading-text">Loading...</span>
                         </div>
                         <div class="gallery-image-wrapper">
-                            <img src="https://i.pinimg.com/564x/b6/39/f3/b639f36b90cb607a3f7ca5c0c93616ae.jpg" alt="Eclipse 3" loading="lazy" onload="handleImageLoad(this)">
+                            <img src="https://i.pinimg.com/564x/b6/39/f3/b639f36b90cb607a3f7ca5c0c93616ae.jpg"
+                                alt="Eclipse 3" loading="lazy" onload="handleImageLoad(this)">
                         </div>
                         <div class="overlay">
                             <p>Night Run</p>
@@ -1884,7 +2254,8 @@
                             <span class="loading-text">Loading...</span>
                         </div>
                         <div class="gallery-image-wrapper">
-                            <img src="https://i.ytimg.com/vi/1kx45VvtY-o/maxresdefault.jpg" alt="Eclipse 4" loading="lazy" onload="handleImageLoad(this)">
+                            <img src="https://i.ytimg.com/vi/1kx45VvtY-o/maxresdefault.jpg" alt="Eclipse 4"
+                                loading="lazy" onload="handleImageLoad(this)">
                         </div>
                         <div class="overlay">
                             <p>The Chase</p>
@@ -1897,7 +2268,8 @@
                             <span class="loading-text">Loading...</span>
                         </div>
                         <div class="gallery-image-wrapper">
-                            <img src="https://i.ytimg.com/vi/iMgo7Yw-Uu0/maxresdefault.jpg" alt="Eclipse 5" loading="lazy" onload="handleImageLoad(this)">
+                            <img src="https://i.ytimg.com/vi/iMgo7Yw-Uu0/maxresdefault.jpg" alt="Eclipse 5"
+                                loading="lazy" onload="handleImageLoad(this)">
                         </div>
                         <div class="overlay">
                             <p>Highway</p>
@@ -1910,7 +2282,8 @@
                             <span class="loading-text">Loading...</span>
                         </div>
                         <div class="gallery-image-wrapper">
-                            <img src="https://www.todomecanica.com/images/blog/2019/julio/IMG_20190111_150115597.jpg" alt="Eclipse 6" loading="lazy" onload="handleImageLoad(this)">
+                            <img src="https://www.todomecanica.com/images/blog/2019/julio/IMG_20190111_150115597.jpg"
+                                alt="Eclipse 6" loading="lazy" onload="handleImageLoad(this)">
                         </div>
                         <div class="overlay">
                             <p>Engine Bay</p>
@@ -1927,7 +2300,7 @@
             <button class="modal-close" onclick="closeModal('specs')">&times;</button>
             <div class="modal-header">
                 <h2>Engine Specifications</h2>
-                <p>Mitsubishi 4G63T Turbocharged Engine</p>
+                <p style="color: #888;">Mitsubishi 4G63T Turbocharged Engine</p>
             </div>
             <div class="modal-body">
                 <div class="info-grid">
@@ -1964,10 +2337,14 @@
                         <p>2-Stage Shot</p>
                     </div>
                 </div>
-                <div style="margin-top: 35px; padding: 25px; background: rgba(57, 255, 20, 0.06); border-left: 4px solid var(--neon-green); border-radius: 0 6px 6px 0;">
+                <div
+                    style="margin-top: 35px; padding: 25px; background: rgba(57, 255, 20, 0.06); border-left: 4px solid var(--neon-green); border-radius: 0 6px 6px 0;">
                     <h3 style="color: var(--neon-green); margin-bottom: 15px;">Tuning Potential</h3>
                     <p style="color: #aaa; line-height: 1.7;">
-                        The 4G63T is legendary for its ability to handle extreme power levels. With proper modifications, these engines have been known to produce over 1000 HP while maintaining reliability. The forged internals and robust block design make it one of the most sought-after engines in the tuning community.
+                        The 4G63T is legendary for its ability to handle extreme power levels. With proper
+                        modifications, these engines have been known to produce over 1000 HP while maintaining
+                        reliability. The forged internals and robust block design make it one of the most sought-after
+                        engines in the tuning community.
                     </p>
                 </div>
             </div>
@@ -1980,7 +2357,7 @@
             <button class="modal-close" onclick="closeModal('performance')">&times;</button>
             <div class="modal-header">
                 <h2>Performance Data</h2>
-                <p>Stock vs Modified Specifications</p>
+                <p style="color: #888;">Stock vs Modified Specifications</p>
             </div>
             <div class="modal-body">
                 <div class="info-grid">
@@ -2009,10 +2386,10 @@
                         <p>3150 lbs</p>
                     </div>
                 </div>
-                
+
                 <div style="margin-top: 35px;">
                     <h3 style="color: var(--electric-blue); margin-bottom: 20px;">Performance Metrics</h3>
-                    
+
                     <div class="stat-bar-container">
                         <div class="stat-bar-label">
                             <span>Acceleration (0-60)</span>
@@ -2022,7 +2399,7 @@
                             <div class="stat-bar-fill" style="--target-width: 95%"></div>
                         </div>
                     </div>
-                    
+
                     <div class="stat-bar-container">
                         <div class="stat-bar-label">
                             <span>Quarter Mile</span>
@@ -2032,7 +2409,7 @@
                             <div class="stat-bar-fill blue" style="--target-width: 98%"></div>
                         </div>
                     </div>
-                    
+
                     <div class="stat-bar-container">
                         <div class="stat-bar-label">
                             <span>Handling</span>
@@ -2042,7 +2419,7 @@
                             <div class="stat-bar-fill orange" style="--target-width: 88%"></div>
                         </div>
                     </div>
-                    
+
                     <div class="stat-bar-container">
                         <div class="stat-bar-label">
                             <span>Power Output</span>
@@ -2063,30 +2440,40 @@
             <button class="modal-close" onclick="closeModal('history')">&times;</button>
             <div class="modal-header">
                 <h2>History & Legacy</h2>
-                <p>From the Streets to the Screen</p>
+                <p style="color: #888;">From the Streets to the Screen</p>
             </div>
             <div class="modal-body">
                 <div style="margin-bottom: 35px;">
                     <h3 style="color: var(--neon-green); margin-bottom: 18px; font-size: 1.4rem;">The Movie Car</h3>
                     <p style="color: #aaa; line-height: 1.9; margin-bottom: 18px;">
-                        The 1995 Mitsubishi Eclipse GSX became an instant icon after its appearance in The Fast and the Furious (2001). Driven by Brian O'Conner (Paul Walker), this green Eclipse with underglow neon lights became synonymous with the underground street racing culture of early 2000s Los Angeles.
+                        The 1995 Mitsubishi Eclipse GSX became an instant icon after its appearance in The Fast and the
+                        Furious (2001). Driven by Brian O'Conner (Paul Walker), this green Eclipse with underglow neon
+                        lights became synonymous with the underground street racing culture of early 2000s Los Angeles.
                     </p>
                     <p style="color: #aaa; line-height: 1.9;">
-                        The car featured extensive modifications including a turbocharged 2.0L 4G63 engine, all-wheel drive system, and a distinctive green paint job with neon underglow lighting that became a signature look for the franchise.
-                    </p>
-                </div>
-                
-                <div style="margin-bottom: 35px;">
-                    <h3 style="color: var(--electric-blue); margin-bottom: 18px; font-size: 1.4rem;">Real World Impact</h3>
-                    <p style="color: #aaa; line-height: 1.9; margin-bottom: 18px;">
-                        Following the movie's release, Eclipse sales skyrocketed. The car became one of the most popular platforms for modification and tuning. The 4G63 engine's legendary status was cemented, and the Eclipse GSX became a highly sought-after vehicle in the tuner community.
+                        The car featured extensive modifications including a turbocharged 2.0L 4G63 engine, all-wheel
+                        drive system, and a distinctive green paint job with neon underglow lighting that became a
+                        signature look for the franchise.
                     </p>
                 </div>
 
-                <div style="padding: 25px; background: rgba(0, 240, 255, 0.06); border: 1px solid var(--electric-blue); border-radius: 8px;">
+                <div style="margin-bottom: 35px;">
+                    <h3 style="color: var(--electric-blue); margin-bottom: 18px; font-size: 1.4rem;">Real World Impact
+                    </h3>
+                    <p style="color: #aaa; line-height: 1.9; margin-bottom: 18px;">
+                        Following the movie's release, Eclipse sales skyrocketed. The car became one of the most popular
+                        platforms for modification and tuning. The 4G63 engine's legendary status was cemented, and the
+                        Eclipse GSX became a highly sought-after vehicle in the tuner community.
+                    </p>
+                </div>
+
+                <div
+                    style="padding: 25px; background: rgba(0, 240, 255, 0.06); border: 1px solid var(--electric-blue); border-radius: 8px;">
                     <h3 style="color: var(--electric-blue); margin-bottom: 12px;">Did You Know?</h3>
                     <p style="color: #888; font-size: 0.95rem; line-height: 1.7;">
-                        Multiple Eclipse cars were used during filming. The famous "9 second car" scene required precise timing and multiple takes. The neon underglow system used in the movie actually became a real aftermarket trend, though it was later regulated in many areas.
+                        Multiple Eclipse cars were used during filming. The famous "9 second car" scene required precise
+                        timing and multiple takes. The neon underglow system used in the movie actually became a real
+                        aftermarket trend, though it was later regulated in many areas.
                     </p>
                 </div>
             </div>
@@ -2117,22 +2504,30 @@
 
         // Handle Image Load with Animation
         function handleImageLoad(img) {
+            // Add loaded class for fade-in animation
             img.classList.add('loaded');
+
+            // Get parent gallery item
             const galleryItem = img.closest('.gallery-item');
             if (galleryItem) {
+                // Hide skeleton and loader with fade out
                 const skeleton = galleryItem.querySelector('.gallery-skeleton');
                 const loader = galleryItem.querySelector('.gallery-loader');
-                
+
                 if (skeleton) {
                     skeleton.style.opacity = '0';
                     skeleton.style.transition = 'opacity 0.4s ease';
-                    setTimeout(() => skeleton.style.display = 'none', 400);
+                    setTimeout(() => {
+                        skeleton.style.display = 'none';
+                    }, 400);
                 }
-                
+
                 if (loader) {
                     loader.style.opacity = '0';
                     loader.style.transition = 'opacity 0.4s ease';
-                    setTimeout(() => loader.style.display = 'none', 400);
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                    }, 400);
                 }
             }
         }
@@ -2141,7 +2536,9 @@
         function handleImageError(img) {
             const galleryItem = img.closest('.gallery-item');
             if (galleryItem) {
+                const skeleton = galleryItem.querySelector('.gallery-skeleton');
                 const loader = galleryItem.querySelector('.gallery-loader');
+
                 if (loader) {
                     const loadingText = loader.querySelector('.loading-text');
                     if (loadingText) {
@@ -2152,6 +2549,7 @@
                     if (spinner) {
                         spinner.style.animation = 'none';
                         spinner.style.borderColor = 'var(--accent-orange)';
+                        spinner.style.borderTopColor = 'var(--accent-orange)';
                     }
                 }
             }
@@ -2162,13 +2560,18 @@
             galleryImages.forEach((src, index) => {
                 const img = new Image();
                 img.src = src;
-                img.onload = function() {
+                img.onload = function () {
+                    // Image loaded successfully
                     const galleryItem = document.querySelector(`.gallery-item[data-index="${index}"] img`);
-                    if (galleryItem) handleImageLoad(galleryItem);
+                    if (galleryItem) {
+                        handleImageLoad(galleryItem);
+                    }
                 };
-                img.onerror = function() {
+                img.onerror = function () {
                     const galleryItem = document.querySelector(`.gallery-item[data-index="${index}"] img`);
-                    if (galleryItem) handleImageError(galleryItem);
+                    if (galleryItem) {
+                        handleImageError(galleryItem);
+                    }
                 };
             });
         }
@@ -2177,7 +2580,7 @@
         window.addEventListener('load', () => {
             const progress = document.getElementById('progress');
             const loader = document.getElementById('loader');
-            
+
             let width = 0;
             const interval = setInterval(() => {
                 if (width >= 100) {
@@ -2231,19 +2634,24 @@
             });
         });
 
-        // Modal Functions
+        // Modal Functions with Enhanced Close Animation
         function openModal(modalName) {
             const modal = document.getElementById(`modal-${modalName}`);
             modal.classList.remove('closing');
             modal.style.display = 'flex';
+
+            // Trigger reflow for animation restart
             void modal.offsetWidth;
+
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
-            
+
+            // Preload gallery images when gallery modal opens
             if (modalName === 'gallery') {
                 setTimeout(preloadGalleryImages, 100);
             }
-            
+
+            // Animate info cards inside modal with stagger
             if (modalName === 'performance') {
                 setTimeout(() => {
                     animateStatBars();
@@ -2256,7 +2664,11 @@
 
         function closeModal(modalName) {
             const modal = document.getElementById(`modal-${modalName}`);
+
+            // Add closing class for slide-out animation
             modal.classList.add('closing');
+
+            // Wait for animation to complete before hiding
             setTimeout(() => {
                 modal.classList.remove('active');
                 modal.classList.remove('closing');
@@ -2275,13 +2687,16 @@
             });
         });
 
-        // Image Viewer Functions
+        // Image Viewer Functions with Animation
         function openImageViewer(index) {
             const viewer = document.getElementById('imageViewer');
             const img = document.getElementById('viewerImage');
+
             viewer.classList.remove('closing');
             viewer.style.display = 'flex';
             img.src = galleryImages[index];
+
+            // Trigger reflow
             void viewer.offsetWidth;
             viewer.classList.add('active');
         }
@@ -2289,6 +2704,7 @@
         function closeImageViewer() {
             const viewer = document.getElementById('imageViewer');
             viewer.classList.add('closing');
+
             setTimeout(() => {
                 viewer.classList.remove('active');
                 viewer.classList.remove('closing');
@@ -2325,16 +2741,19 @@
                 });
             }, observerOptions);
 
+            // Animate glass cards with stagger
             document.querySelectorAll('.glass-card').forEach((card, index) => {
                 setTimeout(() => {
                     card.classList.add('visible');
                 }, 600 + (index * 150));
             });
 
+            // Observe content blocks
             document.querySelectorAll('[data-animate]').forEach(el => {
                 observer.observe(el);
             });
 
+            // Observe quote section
             document.querySelectorAll('.quote-section [data-animate]').forEach(el => {
                 observer.observe(el);
             });
@@ -2350,26 +2769,30 @@
             });
         }
 
+        // Enhanced Stat Bar Animation with Number Counter
         function animateStatBars() {
             const bars = document.querySelectorAll('.stat-bar-fill');
             const containers = document.querySelectorAll('.stat-bar-container');
-            
+
+            // Animate containers first
             containers.forEach((container, index) => {
                 setTimeout(() => {
                     container.classList.add('visible');
                 }, index * 150);
             });
-            
+
+            // Then animate bars
             setTimeout(() => {
                 bars.forEach(bar => {
                     const targetWidth = bar.style.getPropertyValue('--target-width');
                     bar.style.width = '0';
-                    void bar.offsetWidth;
+                    void bar.offsetWidth; // Trigger reflow
                     bar.style.width = targetWidth;
                 });
             }, 400);
         }
 
+        // Animate info cards inside modals
         function animateInfoCardsInModal() {
             const cards = document.querySelectorAll('.modal-body .info-card');
             cards.forEach((card, index) => {
@@ -2379,6 +2802,7 @@
             });
         }
 
+        // Animate info cards on main page
         function animateInfoCards() {
             const cards = document.querySelectorAll('.info-block');
             cards.forEach((card, index) => {
@@ -2388,23 +2812,33 @@
             });
         }
 
+        // Enhanced Scroll to Top with Smooth Animation
         function scrollToTop() {
             const scrollTopBtn = document.getElementById('scrollTop');
+
+            // Add click animation
             scrollTopBtn.style.transform = 'scale(0.9)';
             setTimeout(() => {
                 scrollTopBtn.style.transform = '';
             }, 150);
-            
+
+            // Smooth scroll with easing
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
             });
+
+            // Add a subtle glow pulse on click
+            scrollTopBtn.style.boxShadow = '0 0 40px var(--neon-green), 0 0 80px var(--neon-green)';
+            setTimeout(() => {
+                scrollTopBtn.style.boxShadow = '';
+            }, 300);
         }
 
         // Particle Background System
         const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
-        
+
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -2431,7 +2865,7 @@
                 this.opacity += Math.sin(Date.now() * this.pulse) * 0.002;
                 if (this.opacity > 0.8) this.opacity = 0.8;
                 if (this.opacity < 0.2) this.opacity = 0.2;
-                
+
                 if (this.size > 0.3) this.size -= 0.008;
                 if (this.size <= 0.3) this.size = Math.random() * 2 + 0.5;
 
@@ -2469,20 +2903,47 @@
         initParticles();
         animateParticles();
 
-        // Initialize on resize
-        window.addEventListener('resize', () => {
-            initParticles();
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
         });
 
         // Parallax effect to hero section
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
             const car = document.querySelector('.eclipse-car');
-            
-            if (car && scrolled < window.innerHeight && window.innerWidth > 768) {
+
+            if (hero && car && scrolled < window.innerHeight) {
                 car.style.transform = `translateY(${scrolled * 0.25}px) translateZ(70px)`;
             }
         });
+
+        // Initialize on resize
+        window.addEventListener('resize', () => {
+            initParticles();
+            if (window.innerWidth <= 768) {
+                carContainer.style.transition = 'none';
+                carImg.style.transition = 'none';
+            }
+        });
+
+        // Add hover sound effect hint (visual feedback only)
+        document.querySelectorAll('.btn, .glass-card, .gallery-item, .modal-close, .scroll-top').forEach(el => {
+            el.addEventListener('mouseenter', function () {
+                this.style.cursor = 'pointer';
+            });
+        });
     </script>
 </body>
+
 </html>
