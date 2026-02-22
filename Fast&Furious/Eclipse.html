@@ -1,0 +1,2411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 9 Second Car | Mitsubishi Eclipse</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+    
+    <style>
+        :root {
+            --neon-green: #39ff14;
+            --electric-blue: #00f0ff;
+            --deep-black: #050505;
+            --panel-black: #0a0a0a;
+            --pure-white: #ffffff;
+            --accent-orange: #ff5e00;
+            --glass-bg: rgba(10, 10, 10, 0.85);
+            --glass-border: rgba(57, 255, 20, 0.3);
+            
+            /* Animation timing */
+            --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
+            --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --duration-fast: 0.25s;
+            --duration-normal: 0.45s;
+            --duration-slow: 0.75s;
+            --duration-modal: 0.5s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--deep-black);
+            border-left: 1px solid #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-green);
+            border-radius: 5px;
+            border: 2px solid var(--deep-black);
+            transition: background var(--duration-fast) ease;
+            animation: scrollbarGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes scrollbarGlow {
+            0%, 100% { box-shadow: 0 0 10px var(--neon-green); }
+            50% { box-shadow: 0 0 20px var(--neon-green), 0 0 30px var(--electric-blue); }
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--electric-blue);
+            box-shadow: 0 0 25px var(--electric-blue);
+        }
+
+        ::-webkit-scrollbar-corner {
+            background: var(--deep-black);
+        }
+
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--neon-green) var(--deep-black);
+        }
+
+        body {
+            background-color: var(--deep-black);
+            color: var(--pure-white);
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- Enhanced Animations --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes scaleOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.92); }
+        }
+
+        @keyframes slideOutDown {
+            from { opacity: 1; transform: translateY(0) scale(1); }
+            to { opacity: 0; transform: translateY(20px) scale(0.95); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 10px var(--neon-green); }
+            50% { box-shadow: 0 0 30px var(--neon-green), 0 0 50px var(--neon-green); }
+        }
+
+        @keyframes pulseBlue {
+            0%, 100% { box-shadow: 0 0 10px var(--electric-blue); }
+            50% { box-shadow: 0 0 30px var(--electric-blue), 0 0 50px var(--electric-blue); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px var(--neon-green); }
+            50% { text-shadow: 0 0 30px var(--neon-green), 0 0 50px var(--neon-green); }
+        }
+
+        @keyframes barFill {
+            from { width: 0; }
+            to { width: var(--target-width); }
+        }
+
+        @keyframes barGlow {
+            0%, 100% { box-shadow: 0 0 15px var(--neon-green); }
+            50% { box-shadow: 0 0 25px var(--neon-green), 0 0 35px var(--neon-green); }
+        }
+
+        @keyframes numberCount {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes bouncePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        /* Image Loading Animations */
+        @keyframes skeletonShimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        @keyframes imageFadeIn {
+            0% { opacity: 0; filter: blur(10px); transform: scale(1.05); }
+            100% { opacity: 1; filter: blur(0); transform: scale(1); }
+        }
+
+        @keyframes spinnerRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulseRing {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+
+        .animate-fade { animation: fadeIn var(--duration-slow) var(--ease-smooth) forwards; }
+        .animate-fade-up { animation: fadeInUp var(--duration-slow) var(--ease-smooth) forwards; }
+        .animate-slide-left { animation: slideInLeft var(--duration-slow) var(--ease-smooth) forwards; }
+        .animate-slide-right { animation: slideInRight var(--duration-slow) var(--ease-smooth) forwards; }
+        .animate-scale { animation: scaleIn var(--duration-normal) var(--ease-bounce) forwards; }
+        .animate-scale-out { animation: scaleOut var(--duration-fast) var(--ease-smooth) forwards; }
+        .animate-slide-out { animation: slideOutDown var(--duration-modal) var(--ease-smooth) forwards; }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        .animate-glow { animation: glow 2.5s ease-in-out infinite; }
+        .animate-bar { animation: barFill var(--duration-slow) var(--ease-spring) forwards, barGlow 2s ease-in-out infinite; }
+        .animate-number { animation: numberCount 0.4s var(--ease-smooth) forwards; }
+        .animate-bounce { animation: bounceIn 0.6s var(--ease-bounce) forwards; }
+        .animate-bounce-pulse { animation: bouncePulse 2s ease-in-out infinite; }
+        .animate-skeleton { animation: skeletonShimmer 1.5s infinite linear; }
+        .animate-image-load { animation: imageFadeIn 0.6s var(--ease-smooth) forwards; }
+        .animate-spinner { animation: spinnerRotate 1s linear infinite; }
+
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+        .stagger-5 { animation-delay: 0.5s; }
+        .stagger-6 { animation-delay: 0.6s; }
+
+        /* --- Navbar --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(57, 255, 20, 0.2);
+            transform: translateY(-100%);
+            transition: transform var(--duration-normal) var(--ease-smooth);
+        }
+
+        .navbar.visible {
+            transform: translateY(0);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--neon-green);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-smooth);
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--neon-green);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform var(--duration-fast) var(--ease-smooth);
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .logo:hover {
+            text-shadow: 0 0 25px var(--neon-green);
+            transform: scale(1.03);
+        }
+
+        .logo:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+        }
+
+        .nav-links li {
+            opacity: 0;
+            transform: translateY(-25px);
+            animation: fadeIn var(--duration-fast) var(--ease-smooth) forwards;
+        }
+
+        .nav-links li:nth-child(1) { animation-delay: 0.15s; }
+        .nav-links li:nth-child(2) { animation-delay: 0.25s; }
+        .nav-links li:nth-child(3) { animation-delay: 0.35s; }
+        .nav-links li:nth-child(4) { animation-delay: 0.45s; }
+
+        .nav-links a {
+            color: var(--pure-white);
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding: 8px 0;
+            transition: color var(--duration-fast) var(--ease-smooth);
+            cursor: pointer;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-green);
+            transition: width var(--duration-fast) var(--ease-smooth);
+            box-shadow: 0 0 12px var(--neon-green);
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-green);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            z-index: 1001;
+            padding: 5px;
+        }
+
+        .mobile-menu span {
+            width: 28px;
+            height: 3px;
+            background: var(--neon-green);
+            transition: all var(--duration-fast) var(--ease-smooth);
+            box-shadow: 0 0 8px var(--neon-green);
+            border-radius: 2px;
+        }
+
+        /* --- Background Particles --- */
+        #canvas-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- Loading Screen --- */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--deep-black);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity var(--duration-normal) var(--ease-smooth);
+        }
+
+        .loader-bar {
+            width: 220px;
+            height: 5px;
+            background: #1a1a1a;
+            margin-top: 25px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #333;
+            border-radius: 3px;
+        }
+
+        .loader-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: var(--neon-green);
+            box-shadow: 0 0 20px var(--neon-green);
+            transition: width 0.15s ease-out;
+            border-radius: 3px;
+            animation: barGlow 2s ease-in-out infinite;
+        }
+
+        .loader-text {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-green);
+            letter-spacing: 5px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        /* --- Typography --- */
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            font-style: italic;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            perspective: 1400px;
+            overflow: hidden;
+            padding: 120px 20px 60px;
+        }
+
+.car-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px; /* Aumentado de 900px */
+    height: 600px; /* Aumentado de 500px */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform-style: preserve-3d;
+    z-index: 10;
+    will-change: transform;
+    overflow: visible; /* Permitir que se vea completo */
+}
+
+.eclipse-car {
+    width: 100%;
+    max-width: 1000px;
+    height: 100%; /* AÑADIR ESTO */
+    min-height: 500px; /* AÑADIR ESTO */
+    filter: drop-shadow(0 0 25px rgba(57, 255, 20, 0.5));
+    transform: translateZ(70px);
+    transition: transform 0.08s ease-out;
+    will-change: transform;
+    animation: carEntrance 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards, 
+               float 5s ease-in-out infinite 1.2s;
+    opacity: 0;
+}
+
+/* Nueva animación de entrada */
+@keyframes carEntrance {
+    0% {
+        opacity: 0;
+        transform: translateX(-150%) translateZ(70px) scale(0.8);
+    }
+    60% {
+        opacity: 1;
+        transform: translateX(20px) translateZ(70px) scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) translateZ(70px) scale(1);
+    }
+}
+
+        /* Floating Cards */
+        .glass-card {
+            position: absolute;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-left: 4px solid var(--neon-green);
+            padding: 22px;
+            border-radius: 4px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.9);
+            width: 230px;
+            opacity: 0;
+            transform: translateY(40px) translateZ(0);
+            transition: all 0.7s var(--ease-bounce);
+            cursor: pointer;
+            will-change: transform, opacity;
+        }
+
+        .glass-card.visible {
+            opacity: 1;
+            transform: translateY(0) translateZ(0);
+        }
+
+        .glass-card:hover {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 40px rgba(57, 255, 20, 0.4), 0 25px 50px rgba(0,0,0,0.9);
+            transform: translateY(-8px) !important;
+            transition: all 0.25s var(--ease-smooth);
+        }
+
+        .card-top-left { top: 10%; left: 5%; transform: translateZ(120px); }
+        .card-bottom-right { bottom: 10%; right: 5%; transform: translateZ(100px); }
+        .card-top-right { top: 15%; right: 5%; transform: translateZ(80px); }
+        .card-bottom-left { bottom: 15%; left: 5%; transform: translateZ(90px); }
+
+        .glass-card h3 {
+            color: var(--electric-blue);
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            letter-spacing: 2.5px;
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+        }
+
+        .glass-card p {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--pure-white);
+            line-height: 1.3;
+        }
+
+        .glass-card .label {
+            font-size: 0.65rem;
+            color: #777;
+            text-transform: uppercase;
+            margin-top: 8px;
+            display: block;
+            letter-spacing: 1px;
+        }
+
+        .title-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) translateZ(-120px);
+            text-align: center;
+            z-index: 1;
+            opacity: 0.07;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .title-overlay h1 {
+            font-size: 20vw;
+            color: var(--neon-green);
+            line-height: 0.75;
+            font-weight: 900;
+            letter-spacing: -5px;
+        }
+
+        /* --- Content Sections --- */
+        .content-section {
+            padding: 100px 5%;
+            position: relative;
+            z-index: 20;
+            background: var(--deep-black);
+            border-top: 1px solid #111;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .info-block {
+            background: var(--panel-black);
+            border: 1px solid #222;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.35s var(--ease-smooth);
+            opacity: 0;
+            transform: translateY(40px);
+            will-change: transform, opacity;
+        }
+
+        .info-block.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .info-block:hover {
+            border-color: var(--neon-green);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(57, 255, 20, 0.15);
+        }
+
+        .info-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--neon-green);
+            transition: width 0.3s var(--ease-smooth);
+            box-shadow: 0 0 15px var(--neon-green);
+        }
+
+        .info-block:hover::before {
+            width: 100%;
+            opacity: 0.08;
+        }
+
+        .info-block h2 {
+            color: var(--neon-green);
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+            border-bottom: 1px solid #222;
+            padding-bottom: 12px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            border-bottom: 1px solid #1a1a1a;
+            padding-bottom: 12px;
+            transition: all 0.25s var(--ease-smooth);
+            cursor: default;
+        }
+
+        .stat-row:hover {
+            background: rgba(57, 255, 20, 0.08);
+            margin: 0 -15px 18px -15px;
+            padding: 12px 15px;
+            border-radius: 6px;
+            border-color: var(--glass-border);
+        }
+
+        .stat-label { color: #666; font-weight: 500; letter-spacing: 0.5px; }
+        .stat-value { color: var(--pure-white); font-weight: 700; font-family: 'Orbitron'; text-align: right; }
+        .stat-value.highlight { color: var(--electric-blue); text-shadow: 0 0 10px rgba(0, 240, 255, 0.5); }
+
+        /* Quote Section */
+        .quote-section {
+            text-align: center;
+            padding: 120px 20px;
+            background: radial-gradient(ellipse at center, #0f0f0f 0%, var(--deep-black) 85%);
+            border-top: 1px solid #111;
+            border-bottom: 1px solid #111;
+        }
+
+        .quote-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--pure-white);
+            max-width: 950px;
+            margin: 0 auto 35px;
+            line-height: 1.5;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all var(--duration-slow) var(--ease-smooth);
+        }
+
+        .quote-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .quote-author {
+            color: var(--accent-orange);
+            font-size: 1.1rem;
+            letter-spacing: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            opacity: 0;
+            transition: all var(--duration-slow) 0.2s var(--ease-smooth);
+        }
+
+        .quote-author.visible {
+            opacity: 1;
+        }
+
+        /* Tribute Section */
+        .tribute {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 45px;
+            margin-top: 25px;
+        }
+
+        .tribute-img {
+            flex: 1;
+            min-width: 300px;
+            height: 380px;
+            background: #111;
+            border: 2px solid var(--electric-blue);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s var(--ease-smooth);
+            border-radius: 8px;
+        }
+
+        .tribute-img:hover {
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.4);
+            transform: scale(1.02);
+            border-color: var(--neon-green);
+        }
+        
+        .tribute-img::after {
+            content: 'LEGEND';
+            color: #222;
+            font-family: 'Orbitron';
+            font-size: 4.5rem;
+            font-weight: 900;
+            opacity: 0.4;
+            letter-spacing: 3px;
+        }
+
+        .tribute-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .tribute-text h2 {
+            color: var(--electric-blue);
+            font-size: 2.1rem;
+            margin-bottom: 25px;
+            text-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+        }
+
+        .tribute-text p {
+            line-height: 1.9;
+            color: #b0b0b0;
+            margin-bottom: 25px;
+            font-size: 1.15rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 18px 45px;
+            background: transparent;
+            border: 2px solid var(--neon-green);
+            color: var(--neon-green);
+            font-family: 'Orbitron';
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: all 0.35s var(--ease-smooth);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            animation: pulse 2.5s infinite;
+            border-radius: 4px;
+            letter-spacing: 1.5px;
+            font-size: 0.9rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--neon-green);
+            transition: left 0.35s var(--ease-smooth);
+            z-index: -1;
+        }
+
+        .btn:hover {
+            color: var(--deep-black);
+            box-shadow: 0 0 35px var(--neon-green);
+            animation: none;
+        }
+
+        .btn:hover::before {
+            left: 0;
+        }
+
+        /* --- Modals --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.97);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity var(--duration-modal) var(--ease-smooth);
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-overlay.closing {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .modal-content {
+            background: var(--panel-black);
+            border: 2px solid var(--neon-green);
+            border-radius: 12px;
+            max-width: 950px;
+            width: 92%;
+            max-height: 88vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.85);
+            opacity: 0;
+            transition: transform var(--duration-modal) var(--ease-bounce), opacity var(--duration-fast) var(--ease-smooth);
+            box-shadow: 0 0 60px rgba(57, 255, 20, 0.4), 0 30px 80px rgba(0,0,0,0.9);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .modal-overlay.closing .modal-content {
+            animation: slideOutDown var(--duration-modal) var(--ease-smooth) forwards;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            width: 45px;
+            height: 45px;
+            background: transparent;
+            border: 2px solid var(--neon-green);
+            color: var(--neon-green);
+            font-size: 1.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s var(--ease-smooth);
+            z-index: 10;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .modal-close:hover {
+            background: var(--neon-green);
+            color: var(--deep-black);
+            transform: rotate(90deg) scale(1.15);
+            box-shadow: 0 0 35px var(--neon-green);
+            animation: none;
+        }
+
+        .modal-close:active {
+            transform: rotate(90deg) scale(0.95);
+            transition: transform 0.1s;
+        }
+
+        .modal-header {
+            background: rgba(57, 255, 20, 0.08);
+            padding: 35px 35px 25px;
+            border-bottom: 2px solid var(--neon-green);
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-header h2 {
+            color: var(--neon-green);
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            text-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
+        }
+
+        .modal-header p {
+            color: #888;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+        }
+
+        .modal-body {
+            padding: 30px 35px 40px;
+        }
+
+        /* Gallery Modal Specific with Loading States */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 22px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 2px solid #222;
+            cursor: pointer;
+            transition: all 0.35s var(--ease-smooth);
+            aspect-ratio: 16/9;
+            background: #111;
+        }
+
+        .gallery-item:hover {
+            border-color: var(--neon-green);
+            transform: translateY(-6px);
+            box-shadow: 0 15px 40px rgba(57, 255, 20, 0.25);
+        }
+
+        /* Skeleton Loader for Images */
+        .gallery-skeleton {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+            background-size: 1000px 100%;
+            animation: skeletonShimmer 1.5s infinite linear;
+            z-index: 1;
+        }
+
+        /* Loading Spinner */
+        .gallery-loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(57, 255, 20, 0.2);
+            border-top-color: var(--neon-green);
+            border-radius: 50%;
+            animation: spinnerRotate 0.8s linear infinite;
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
+        }
+
+        .loading-text {
+            color: var(--neon-green);
+            font-size: 0.75rem;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        /* Image Container */
+        .gallery-image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s var(--ease-smooth), opacity 0.4s var(--ease-smooth);
+            display: block;
+            opacity: 0;
+        }
+
+        .gallery-item img.loaded {
+            opacity: 1;
+            animation: imageFadeIn 0.6s var(--ease-smooth) forwards;
+        }
+
+        .gallery-item:hover img.loaded {
+            transform: scale(1.08);
+        }
+
+        .gallery-item .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(5, 5, 5, 0.92);
+            padding: 20px 15px;
+            transform: translateY(100%);
+            transition: transform 0.35s var(--ease-smooth);
+            border-top: 1px solid var(--glass-border);
+            z-index: 3;
+        }
+
+        .gallery-item:hover .overlay {
+            transform: translateY(0);
+        }
+
+        .gallery-item .overlay p {
+            color: var(--neon-green);
+            font-family: 'Orbitron';
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Info Modal Specific */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-top: 25px;
+        }
+
+        .info-card {
+            background: rgba(57, 255, 20, 0.06);
+            border: 1px solid var(--glass-border);
+            padding: 22px;
+            border-radius: 6px;
+            transition: all 0.3s var(--ease-smooth);
+            border-left: 3px solid var(--neon-green);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .info-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .info-card:hover {
+            background: rgba(57, 255, 20, 0.12);
+            transform: translateY(-4px);
+            border-color: var(--neon-green);
+            box-shadow: 0 10px 30px rgba(57, 255, 20, 0.15);
+        }
+
+        .info-card h3 {
+            color: var(--electric-blue);
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .info-card p {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--pure-white);
+            font-family: 'Orbitron';
+        }
+
+        /* Enhanced Stat Bars - Solid Colors Only */
+        .stat-bar-container {
+            margin: 25px 0;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.5s var(--ease-smooth);
+        }
+
+        .stat-bar-container.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .stat-bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .stat-bar-label span:first-child {
+            color: #aaa;
+        }
+
+        .stat-bar-label span:last-child {
+            color: var(--neon-green);
+            font-family: 'Orbitron';
+            font-weight: 700;
+            opacity: 0;
+            transform: translateX(10px);
+            transition: all 0.4s var(--ease-smooth) 0.3s;
+        }
+
+        .stat-bar-container.visible .stat-bar-label span:last-child {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .stat-bar-track {
+            height: 14px;
+            background: #1a1a1a;
+            border-radius: 7px;
+            overflow: hidden;
+            border: 1px solid #333;
+            position: relative;
+        }
+
+        .stat-bar-fill {
+            height: 100%;
+            background: var(--neon-green);
+            border-radius: 7px;
+            width: 0;
+            transition: width 1.4s var(--ease-spring);
+            box-shadow: 0 0 15px var(--neon-green);
+            position: relative;
+            animation: barGlow 2.5s ease-in-out infinite;
+        }
+
+        .stat-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--pure-white);
+            opacity: 0.7;
+            animation: shimmer 1.5s infinite linear;
+            border-radius: 0 7px 7px 0;
+        }
+
+        .stat-bar-fill.blue {
+            background: var(--electric-blue);
+            box-shadow: 0 0 15px var(--electric-blue);
+            animation: pulseBlue 2.5s ease-in-out infinite;
+        }
+
+        .stat-bar-fill.orange {
+            background: var(--accent-orange);
+            box-shadow: 0 0 15px var(--accent-orange);
+        }
+
+        /* Image Viewer Modal */
+        .image-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.99);
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity var(--duration-modal) var(--ease-smooth);
+        }
+
+        .image-viewer.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .image-viewer.closing {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .image-viewer img {
+            max-width: 92%;
+            max-height: 88vh;
+            object-fit: contain;
+            border: 4px solid var(--neon-green);
+            box-shadow: 0 0 60px rgba(57, 255, 20, 0.5);
+            animation: scaleIn 0.45s var(--ease-bounce);
+            border-radius: 8px;
+        }
+
+        .image-viewer-close {
+            position: absolute;
+            top: 35px;
+            right: 35px;
+            width: 55px;
+            height: 55px;
+            background: transparent;
+            border: 3px solid var(--neon-green);
+            color: var(--neon-green);
+            font-size: 2.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.35s var(--ease-smooth);
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.4);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .image-viewer-close:hover {
+            background: var(--neon-green);
+            color: var(--deep-black);
+            transform: rotate(90deg) scale(1.15);
+            box-shadow: 0 0 45px var(--neon-green);
+            animation: none;
+        }
+
+        .image-viewer-close:active {
+            transform: rotate(90deg) scale(0.95);
+        }
+
+        /* Enhanced Scroll to Top Button */
+        .scroll-top {
+            position: fixed;
+            bottom: 35px;
+            right: 35px;
+            width: 60px;
+            height: 60px;
+            background: var(--neon-green);
+            color: var(--deep-black);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            opacity: 0;
+            transform: translateY(40px) scale(0.8);
+            transition: all 0.4s var(--ease-bounce);
+            z-index: 999;
+            box-shadow: 0 0 25px var(--neon-green);
+            font-weight: 900;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            animation: bounceIn 0.6s var(--ease-bounce) forwards, bouncePulse 2.5s ease-in-out 0.6s infinite;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-10px) scale(1.1);
+            box-shadow: 0 10px 50px var(--neon-green), 0 0 80px var(--neon-green);
+            animation: none;
+        }
+
+        .scroll-top:active {
+            transform: translateY(-3px) scale(0.98);
+            transition: transform 0.1s;
+        }
+
+        .scroll-top::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--neon-green);
+            animation: pulse 2s ease-out infinite;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .car-container { height: 420px; }
+            .eclipse-car { width: 85%; }
+            .title-overlay h1 { font-size: 28vw; }
+            .glass-card { width: 200px; padding: 18px; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 75%;
+                height: 100vh;
+                background: rgba(10, 10, 10, 0.99);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 50px;
+                transition: right 0.4s var(--ease-smooth);
+                border-left: 3px solid var(--neon-green);
+                backdrop-filter: blur(20px);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .nav-links a {
+                font-size: 1.1rem;
+                padding: 12px 0;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            .mobile-menu.active span:nth-child(1) {
+                transform: rotate(45deg) translate(6px, 6px);
+            }
+
+            .mobile-menu.active span:nth-child(2) {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            .mobile-menu.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -7px);
+            }
+
+/* Ajustar hero section para más espacio */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    perspective: 1400px;
+    overflow: visible; /* Cambiado de hidden a visible */
+    padding: 120px 20px 60px;
+}
+
+    .car-container {
+        height: 400px; /* Aumentado de 320px */
+        margin-bottom: 50px;
+        transform: none !important;
+    }
+    
+    .eclipse-car {
+        transform: translateZ(0) !important;
+        width: 100%;
+        height: 100%;
+        min-height: 400px; /* AÑADIR */
+        animation: none;
+    }
+
+            .glass-card {
+                position: relative;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+                bottom: auto !important;
+                transform: none !important;
+                width: 100%;
+                margin: 12px 0;
+                border-left: 4px solid var(--neon-green);
+            }
+
+            .title-overlay {
+                top: 42%;
+                opacity: 0.04;
+            }
+
+            .title-overlay h1 {
+                font-size: 35vw;
+                letter-spacing: -8px;
+            }
+
+            .tribute {
+                flex-direction: column;
+            }
+            
+            .tribute-img {
+                width: 100%;
+                height: 280px;
+            }
+
+            .quote-text {
+                font-size: 1.5rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 96%;
+                margin: 15px;
+                max-height: 92vh;
+            }
+
+            .modal-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-loader {
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+
+            .spinner {
+                width: 30px;
+                height: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 15px 4%;
+            }
+            
+            .logo {
+                font-size: 1.3rem;
+                letter-spacing: 2px;
+            }
+
+            .hero {
+                padding: 100px 15px 50px;
+            }
+
+    .car-container {
+        height: 350px; /* Aumentado de 280px */
+    }
+
+    .eclipse-car {
+        width: 100%;
+        height: 100%;
+        min-height: 350px; /* AÑADIR */
+    }
+
+            .glass-card {
+                padding: 18px 15px;
+            }
+
+            .glass-card h3 {
+                font-size: 0.75rem;
+            }
+
+            .glass-card p {
+                font-size: 1.1rem;
+            }
+
+            .content-section {
+                padding: 70px 4%;
+            }
+
+            .info-block {
+                padding: 25px 20px;
+            }
+
+            .info-block h2 {
+                font-size: 1.3rem;
+            }
+
+            .quote-section {
+                padding: 80px 15px;
+            }
+
+            .quote-text {
+                font-size: 1.3rem;
+            }
+
+            .btn {
+                padding: 15px 35px;
+                font-size: 0.85rem;
+            }
+
+            .scroll-top {
+                width: 50px;
+                height: 50px;
+                bottom: 25px;
+                right: 25px;
+                font-size: 1.5rem;
+            }
+
+            .loading-text {
+                font-size: 0.65rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div id="loader">
+        <div class="loader-text">Initializing System...</div>
+        <div class="loader-bar">
+            <div class="loader-progress" id="progress"></div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">ECLIPSE</div>
+        <ul class="nav-links" id="navLinks">
+            <li><a onclick="openModal('specs')">Engine Specs</a></li>
+            <li><a onclick="openModal('performance')">Performance</a></li>
+            <li><a onclick="openModal('gallery')">Gallery</a></li>
+            <li><a onclick="openModal('history')">History</a></li>
+        </ul>
+        <div class="mobile-menu" id="mobileMenu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Background Animation -->
+    <canvas id="canvas-bg"></canvas>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="title-overlay">
+            <h1>ECLIPSE</h1>
+        </div>
+
+        <div class="car-container" id="car-container">
+<!-- Asegúrate de poner la ruta correcta a tu archivo .glb descargado -->
+<model-viewer
+    src="eclipse.glb"
+    alt="Mitsubishi Eclipse 3D"
+    class="eclipse-car"
+    id="car-img"
+    auto-rotate
+    camera-controls
+    camera-orbit="0deg 75deg 4m"
+    field-of-view="30deg"
+    shadow-intensity="1"
+    environment-image="neutral"
+    exposure="1"
+    loading="eager">
+</model-viewer>
+        </div>
+
+        <div class="glass-card card-top-left stagger-1" onclick="openModal('specs')">
+            <h3>Model</h3>
+            <p>1995 Eclipse GSX</p>
+            <span class="label">Click for Details</span>
+        </div>
+
+        <div class="glass-card card-top-right stagger-2" onclick="openModal('performance')">
+            <h3>Engine</h3>
+            <p>2.0L 4G63T</p>
+            <span class="label">Click for Specs</span>
+        </div>
+
+        <div class="glass-card card-bottom-left stagger-3" onclick="openModal('history')">
+            <h3>Driver</h3>
+            <p>Brian O'Conner</p>
+            <span class="label">Click for Story</span>
+        </div>
+
+        <div class="glass-card card-bottom-right stagger-4" onclick="openModal('gallery')">
+            <h3>Gallery</h3>
+            <p>View Images</p>
+            <span class="label">Click to Open</span>
+        </div>
+    </section>
+
+    <!-- Content Section -->
+    <section class="content-section">
+        <div class="grid-container">
+            
+            <div class="info-block" data-animate>
+                <h2>Technical Specifications</h2>
+                <div class="stat-row">
+                    <span class="stat-label">Horsepower</span>
+                    <span class="stat-value highlight">210 HP</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Torque</span>
+                    <span class="stat-value">214 lb-ft</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Transmission</span>
+                    <span class="stat-value">5-Speed Manual</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Drivetrain</span>
+                    <span class="stat-value highlight">AWD</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">0-60 MPH</span>
+                    <span class="stat-value">5.8 Sec</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">NOS System</span>
+                    <span class="stat-value" style="color:var(--accent-orange)">Enabled</span>
+                </div>
+            </div>
+
+            <div class="info-block" data-animate>
+                <h2>The Legend</h2>
+                <p style="margin-bottom: 15px; color: #ccc;">
+                    This wasn't just a car; it was a statement. In <em>The Fast and the Furious (2001)</em>, Brian O'Conner used this vehicle to infiltrate the street racing scene of Los Angeles.
+                </p>
+                <p style="color: #ccc;">
+                    The "9 Second Car" moniker became synonymous with the 4G63 engine's legendary tuning potential. With a shot of NOS, this car could hit 1320 feet in under 9 seconds, beating a Supra on the strip.
+                </p>
+            </div>
+
+            <div class="info-block" data-animate>
+                <h2>Modifications</h2>
+                <div class="stat-row">
+                    <span class="stat-label">Turbo</span>
+                    <span class="stat-value">TD05H-16G</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Exhaust</span>
+                    <span class="stat-value">3" Titanium</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Suspension</span>
+                    <span class="stat-value">Coilovers</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Brakes</span>
+                    <span class="stat-value highlight">Brembo 4-Pot</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Wheels</span>
+                    <span class="stat-value">18" Volk TE37</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Underglow</span>
+                    <span class="stat-value" style="color:var(--neon-green)">Neon Green</span>
+                </div>
+            </div>
+
+            <div class="info-block" data-animate>
+                <h2>Racing Stats</h2>
+                <div class="stat-row">
+                    <span class="stat-label">1/4 Mile</span>
+                    <span class="stat-value highlight">9.8 Sec</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Top Speed</span>
+                    <span class="stat-value">140+ MPH</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Weight</span>
+                    <span class="stat-value">3,150 lbs</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Power/Weight</span>
+                    <span class="stat-value">15:1 Ratio</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">NOS Shot</span>
+                    <span class="stat-value" style="color:var(--accent-orange)">75 HP Boost</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Record</span>
+                    <span class="stat-value highlight">Unbeaten</span>
+                </div>
+            </div>
+
+            <div class="info-block" data-animate style="grid-column: 1 / -1;">
+                <div class="tribute">
+                    <div class="tribute-img"></div>
+                    <div class="tribute-text">
+                        <h2>In Memory of Paul Walker</h2>
+                        <p>
+                            The spirit of Brian O'Conner lives on through this machine. Paul Walker's genuine passion for cars and racing defined a generation of automotive enthusiasts. This page is a tribute to the actor and the character who made the Mitsubishi Eclipse an icon of street culture.
+                        </p>
+                        <p style="color: var(--neon-green); font-weight: 700; font-family: 'Orbitron';">
+                            "I live my life a quarter mile at a time."
+                        </p>
+                        <a href="#" class="btn" onclick="openModal('gallery'); return false;">View Gallery</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quote Section -->
+    <section class="quote-section">
+        <div class="quote-text" data-animate>
+            "You don't turn your back on family, even when they do."
+        </div>
+        <div class="quote-author" data-animate>- DOMINIC TORETTO</div>
+    </section>
+
+    <!-- Modals -->
+
+    <!-- Gallery Modal with Image Loading -->
+    <div class="modal-overlay" id="modal-gallery">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('gallery')">&times;</button>
+            <div class="modal-header">
+                <h2>Gallery</h2>
+                <p style="color: #888;">Mitsubishi Eclipse GSX - The 9 Second Car</p>
+            </div>
+            <div class="modal-body">
+                <div class="gallery-grid">
+                    <div class="gallery-item" onclick="openImageViewer(0)" data-index="0">
+                        <div class="gallery-skeleton"></div>
+                        <div class="gallery-loader">
+                            <div class="spinner"></div>
+                            <span class="loading-text">Loading...</span>
+                        </div>
+                        <div class="gallery-image-wrapper">
+                            <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs_webp/86848396994307.5ebb0138512c7.jpg" alt="Eclipse 1" loading="lazy" onload="handleImageLoad(this)">
+                        </div>
+                        <div class="overlay">
+                            <p>Street Racing</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item" onclick="openImageViewer(1)" data-index="1">
+                        <div class="gallery-skeleton"></div>
+                        <div class="gallery-loader">
+                            <div class="spinner"></div>
+                            <span class="loading-text">Loading...</span>
+                        </div>
+                        <div class="gallery-image-wrapper">
+                            <img src="https://static.wikia.nocookie.net/atodogas/images/c/c7/C48025b7eb1bbd796fe998268f9da8f6.jpg/revision/latest?cb=20220704185617&path-prefix=es" alt="Eclipse 2" loading="lazy" onload="handleImageLoad(this)">
+                        </div>
+                        <div class="overlay">
+                            <p>Neon Lights</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item" onclick="openImageViewer(2)" data-index="2">
+                        <div class="gallery-skeleton"></div>
+                        <div class="gallery-loader">
+                            <div class="spinner"></div>
+                            <span class="loading-text">Loading...</span>
+                        </div>
+                        <div class="gallery-image-wrapper">
+                            <img src="https://i.pinimg.com/564x/b6/39/f3/b639f36b90cb607a3f7ca5c0c93616ae.jpg" alt="Eclipse 3" loading="lazy" onload="handleImageLoad(this)">
+                        </div>
+                        <div class="overlay">
+                            <p>Night Run</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item" onclick="openImageViewer(3)" data-index="3">
+                        <div class="gallery-skeleton"></div>
+                        <div class="gallery-loader">
+                            <div class="spinner"></div>
+                            <span class="loading-text">Loading...</span>
+                        </div>
+                        <div class="gallery-image-wrapper">
+                            <img src="https://i.ytimg.com/vi/1kx45VvtY-o/maxresdefault.jpg" alt="Eclipse 4" loading="lazy" onload="handleImageLoad(this)">
+                        </div>
+                        <div class="overlay">
+                            <p>The Chase</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item" onclick="openImageViewer(4)" data-index="4">
+                        <div class="gallery-skeleton"></div>
+                        <div class="gallery-loader">
+                            <div class="spinner"></div>
+                            <span class="loading-text">Loading...</span>
+                        </div>
+                        <div class="gallery-image-wrapper">
+                            <img src="https://i.ytimg.com/vi/iMgo7Yw-Uu0/maxresdefault.jpg" alt="Eclipse 5" loading="lazy" onload="handleImageLoad(this)">
+                        </div>
+                        <div class="overlay">
+                            <p>Highway</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item" onclick="openImageViewer(5)" data-index="5">
+                        <div class="gallery-skeleton"></div>
+                        <div class="gallery-loader">
+                            <div class="spinner"></div>
+                            <span class="loading-text">Loading...</span>
+                        </div>
+                        <div class="gallery-image-wrapper">
+                            <img src="https://www.todomecanica.com/images/blog/2019/julio/IMG_20190111_150115597.jpg" alt="Eclipse 6" loading="lazy" onload="handleImageLoad(this)">
+                        </div>
+                        <div class="overlay">
+                            <p>Engine Bay</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Specs Modal -->
+    <div class="modal-overlay" id="modal-specs">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('specs')">&times;</button>
+            <div class="modal-header">
+                <h2>Engine Specifications</h2>
+                <p style="color: #888;">Mitsubishi 4G63T Turbocharged Engine</p>
+            </div>
+            <div class="modal-body">
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>Engine Type</h3>
+                        <p>2.0L DOHC 16V I4</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Aspiration</h3>
+                        <p>Turbocharged</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Displacement</h3>
+                        <p>1997 cc</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Bore x Stroke</h3>
+                        <p>85mm x 88mm</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Compression</h3>
+                        <p>8.5:1</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Fuel System</h3>
+                        <p>Multi-Point EFI</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Redline</h3>
+                        <p>7000 RPM</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>NOS System</h3>
+                        <p>2-Stage Shot</p>
+                    </div>
+                </div>
+                <div style="margin-top: 35px; padding: 25px; background: rgba(57, 255, 20, 0.06); border-left: 4px solid var(--neon-green); border-radius: 0 6px 6px 0;">
+                    <h3 style="color: var(--neon-green); margin-bottom: 15px;">Tuning Potential</h3>
+                    <p style="color: #aaa; line-height: 1.7;">
+                        The 4G63T is legendary for its ability to handle extreme power levels. With proper modifications, these engines have been known to produce over 1000 HP while maintaining reliability. The forged internals and robust block design make it one of the most sought-after engines in the tuning community.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Modal -->
+    <div class="modal-overlay" id="modal-performance">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('performance')">&times;</button>
+            <div class="modal-header">
+                <h2>Performance Data</h2>
+                <p style="color: #888;">Stock vs Modified Specifications</p>
+            </div>
+            <div class="modal-body">
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>Stock HP</h3>
+                        <p>210 HP</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Modified HP</h3>
+                        <p>450+ HP</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>0-60 MPH</h3>
+                        <p>5.8 Seconds</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>1/4 Mile</h3>
+                        <p>9.8 Seconds</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Top Speed</h3>
+                        <p>140+ MPH</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Weight</h3>
+                        <p>3150 lbs</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 35px;">
+                    <h3 style="color: var(--electric-blue); margin-bottom: 20px;">Performance Metrics</h3>
+                    
+                    <div class="stat-bar-container">
+                        <div class="stat-bar-label">
+                            <span>Acceleration (0-60)</span>
+                            <span>95%</span>
+                        </div>
+                        <div class="stat-bar-track">
+                            <div class="stat-bar-fill" style="--target-width: 95%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-bar-container">
+                        <div class="stat-bar-label">
+                            <span>Quarter Mile</span>
+                            <span>98%</span>
+                        </div>
+                        <div class="stat-bar-track">
+                            <div class="stat-bar-fill blue" style="--target-width: 98%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-bar-container">
+                        <div class="stat-bar-label">
+                            <span>Handling</span>
+                            <span>88%</span>
+                        </div>
+                        <div class="stat-bar-track">
+                            <div class="stat-bar-fill orange" style="--target-width: 88%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-bar-container">
+                        <div class="stat-bar-label">
+                            <span>Power Output</span>
+                            <span>92%</span>
+                        </div>
+                        <div class="stat-bar-track">
+                            <div class="stat-bar-fill" style="--target-width: 92%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div class="modal-overlay" id="modal-history">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('history')">&times;</button>
+            <div class="modal-header">
+                <h2>History & Legacy</h2>
+                <p style="color: #888;">From the Streets to the Screen</p>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: 35px;">
+                    <h3 style="color: var(--neon-green); margin-bottom: 18px; font-size: 1.4rem;">The Movie Car</h3>
+                    <p style="color: #aaa; line-height: 1.9; margin-bottom: 18px;">
+                        The 1995 Mitsubishi Eclipse GSX became an instant icon after its appearance in The Fast and the Furious (2001). Driven by Brian O'Conner (Paul Walker), this green Eclipse with underglow neon lights became synonymous with the underground street racing culture of early 2000s Los Angeles.
+                    </p>
+                    <p style="color: #aaa; line-height: 1.9;">
+                        The car featured extensive modifications including a turbocharged 2.0L 4G63 engine, all-wheel drive system, and a distinctive green paint job with neon underglow lighting that became a signature look for the franchise.
+                    </p>
+                </div>
+                
+                <div style="margin-bottom: 35px;">
+                    <h3 style="color: var(--electric-blue); margin-bottom: 18px; font-size: 1.4rem;">Real World Impact</h3>
+                    <p style="color: #aaa; line-height: 1.9; margin-bottom: 18px;">
+                        Following the movie's release, Eclipse sales skyrocketed. The car became one of the most popular platforms for modification and tuning. The 4G63 engine's legendary status was cemented, and the Eclipse GSX became a highly sought-after vehicle in the tuner community.
+                    </p>
+                </div>
+
+                <div style="padding: 25px; background: rgba(0, 240, 255, 0.06); border: 1px solid var(--electric-blue); border-radius: 8px;">
+                    <h3 style="color: var(--electric-blue); margin-bottom: 12px;">Did You Know?</h3>
+                    <p style="color: #888; font-size: 0.95rem; line-height: 1.7;">
+                        Multiple Eclipse cars were used during filming. The famous "9 second car" scene required precise timing and multiple takes. The neon underglow system used in the movie actually became a real aftermarket trend, though it was later regulated in many areas.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Viewer Modal -->
+    <div class="image-viewer" id="imageViewer">
+        <button class="image-viewer-close" onclick="closeImageViewer()">&times;</button>
+        <img src="" alt="Gallery Image" id="viewerImage">
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">
+        ↑
+    </button>
+
+    <script>
+        // Gallery Images Array
+        const galleryImages = [
+            "https://mir-s3-cdn-cf.behance.net/project_modules/fs_webp/86848396994307.5ebb0138512c7.jpg",
+            "https://static.wikia.nocookie.net/atodogas/images/c/c7/C48025b7eb1bbd796fe998268f9da8f6.jpg/revision/latest?cb=20220704185617&path-prefix=es",
+            "https://i.pinimg.com/564x/b6/39/f3/b639f36b90cb607a3f7ca5c0c93616ae.jpg",
+            "https://i.ytimg.com/vi/1kx45VvtY-o/maxresdefault.jpg",
+            "https://i.ytimg.com/vi/iMgo7Yw-Uu0/maxresdefault.jpg",
+            "https://www.todomecanica.com/images/blog/2019/julio/IMG_20190111_150115597.jpg"
+        ];
+
+        // Handle Image Load with Animation
+        function handleImageLoad(img) {
+            // Add loaded class for fade-in animation
+            img.classList.add('loaded');
+            
+            // Get parent gallery item
+            const galleryItem = img.closest('.gallery-item');
+            if (galleryItem) {
+                // Hide skeleton and loader with fade out
+                const skeleton = galleryItem.querySelector('.gallery-skeleton');
+                const loader = galleryItem.querySelector('.gallery-loader');
+                
+                if (skeleton) {
+                    skeleton.style.opacity = '0';
+                    skeleton.style.transition = 'opacity 0.4s ease';
+                    setTimeout(() => {
+                        skeleton.style.display = 'none';
+                    }, 400);
+                }
+                
+                if (loader) {
+                    loader.style.opacity = '0';
+                    loader.style.transition = 'opacity 0.4s ease';
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                    }, 400);
+                }
+            }
+        }
+
+        // Handle Image Error
+        function handleImageError(img) {
+            const galleryItem = img.closest('.gallery-item');
+            if (galleryItem) {
+                const skeleton = galleryItem.querySelector('.gallery-skeleton');
+                const loader = galleryItem.querySelector('.gallery-loader');
+                
+                if (loader) {
+                    const loadingText = loader.querySelector('.loading-text');
+                    if (loadingText) {
+                        loadingText.textContent = 'Failed to load';
+                        loadingText.style.color = 'var(--accent-orange)';
+                    }
+                    const spinner = loader.querySelector('.spinner');
+                    if (spinner) {
+                        spinner.style.animation = 'none';
+                        spinner.style.borderColor = 'var(--accent-orange)';
+                        spinner.style.borderTopColor = 'var(--accent-orange)';
+                    }
+                }
+            }
+        }
+
+        // Preload images when modal opens
+        function preloadGalleryImages() {
+            galleryImages.forEach((src, index) => {
+                const img = new Image();
+                img.src = src;
+                img.onload = function() {
+                    // Image loaded successfully
+                    const galleryItem = document.querySelector(`.gallery-item[data-index="${index}"] img`);
+                    if (galleryItem) {
+                        handleImageLoad(galleryItem);
+                    }
+                };
+                img.onerror = function() {
+                    const galleryItem = document.querySelector(`.gallery-item[data-index="${index}"] img`);
+                    if (galleryItem) {
+                        handleImageError(galleryItem);
+                    }
+                };
+            });
+        }
+
+        // Loading Animation
+        window.addEventListener('load', () => {
+            const progress = document.getElementById('progress');
+            const loader = document.getElementById('loader');
+            
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    loader.style.opacity = '0';
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                        initAnimations();
+                        animateInfoCards();
+                    }, 400);
+                } else {
+                    width += Math.random() * 8 + 2;
+                    if (width > 100) width = 100;
+                    progress.style.width = width + '%';
+                }
+            }, 50);
+        });
+
+        // Navbar Scroll Effect
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            const scrollTop = document.getElementById('scrollTop');
+            const currentScroll = window.pageYOffset;
+
+            if (currentScroll > 100) {
+                navbar.classList.add('visible');
+                scrollTop.classList.add('visible');
+            } else {
+                navbar.classList.remove('visible');
+                scrollTop.classList.remove('visible');
+            }
+
+            lastScroll = currentScroll;
+            animateOnScroll();
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenu = document.getElementById('mobileMenu');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileMenu.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Modal Functions with Enhanced Close Animation
+        function openModal(modalName) {
+            const modal = document.getElementById(`modal-${modalName}`);
+            modal.classList.remove('closing');
+            modal.style.display = 'flex';
+            
+            // Trigger reflow for animation restart
+            void modal.offsetWidth;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Preload gallery images when gallery modal opens
+            if (modalName === 'gallery') {
+                setTimeout(preloadGalleryImages, 100);
+            }
+            
+            // Animate info cards inside modal with stagger
+            if (modalName === 'performance') {
+                setTimeout(() => {
+                    animateStatBars();
+                    animateInfoCardsInModal();
+                }, 300);
+            } else if (modalName === 'specs' || modalName === 'history') {
+                setTimeout(animateInfoCardsInModal, 300);
+            }
+        }
+
+        function closeModal(modalName) {
+            const modal = document.getElementById(`modal-${modalName}`);
+            
+            // Add closing class for slide-out animation
+            modal.classList.add('closing');
+            
+            // Wait for animation to complete before hiding
+            setTimeout(() => {
+                modal.classList.remove('active');
+                modal.classList.remove('closing');
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 500);
+        }
+
+        // Close modal when clicking outside
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    const modalName = modal.id.replace('modal-', '');
+                    closeModal(modalName);
+                }
+            });
+        });
+
+        // Image Viewer Functions with Animation
+        function openImageViewer(index) {
+            const viewer = document.getElementById('imageViewer');
+            const img = document.getElementById('viewerImage');
+            
+            viewer.classList.remove('closing');
+            viewer.style.display = 'flex';
+            img.src = galleryImages[index];
+            
+            // Trigger reflow
+            void viewer.offsetWidth;
+            viewer.classList.add('active');
+        }
+
+        function closeImageViewer() {
+            const viewer = document.getElementById('imageViewer');
+            viewer.classList.add('closing');
+            
+            setTimeout(() => {
+                viewer.classList.remove('active');
+                viewer.classList.remove('closing');
+                viewer.style.display = 'none';
+            }, 300);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+                    const modalName = modal.id.replace('modal-', '');
+                    closeModal(modalName);
+                });
+                closeImageViewer();
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Scroll Animations
+        function initAnimations() {
+            const observerOptions = {
+                threshold: 0.15,
+                rootMargin: '0px 0px -30px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add('visible');
+                        }, index * 120);
+                    }
+                });
+            }, observerOptions);
+
+            // Animate glass cards with stagger
+            document.querySelectorAll('.glass-card').forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('visible');
+                }, 600 + (index * 150));
+            });
+
+            // Observe content blocks
+            document.querySelectorAll('[data-animate]').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Observe quote section
+            document.querySelectorAll('.quote-section [data-animate]').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.info-block');
+            elements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 80) {
+                    el.classList.add('visible');
+                }
+            });
+        }
+
+        // Enhanced Stat Bar Animation with Number Counter
+        function animateStatBars() {
+            const bars = document.querySelectorAll('.stat-bar-fill');
+            const containers = document.querySelectorAll('.stat-bar-container');
+            
+            // Animate containers first
+            containers.forEach((container, index) => {
+                setTimeout(() => {
+                    container.classList.add('visible');
+                }, index * 150);
+            });
+            
+            // Then animate bars
+            setTimeout(() => {
+                bars.forEach(bar => {
+                    const targetWidth = bar.style.getPropertyValue('--target-width');
+                    bar.style.width = '0';
+                    void bar.offsetWidth; // Trigger reflow
+                    bar.style.width = targetWidth;
+                });
+            }, 400);
+        }
+
+        // Animate info cards inside modals
+        function animateInfoCardsInModal() {
+            const cards = document.querySelectorAll('.modal-body .info-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('visible');
+                }, index * 100);
+            });
+        }
+
+        // Animate info cards on main page
+        function animateInfoCards() {
+            const cards = document.querySelectorAll('.info-block');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('visible');
+                }, index * 150);
+            });
+        }
+
+        // Enhanced Scroll to Top with Smooth Animation
+        function scrollToTop() {
+            const scrollTopBtn = document.getElementById('scrollTop');
+            
+            // Add click animation
+            scrollTopBtn.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                scrollTopBtn.style.transform = '';
+            }, 150);
+            
+            // Smooth scroll with easing
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            
+            // Add a subtle glow pulse on click
+            scrollTopBtn.style.boxShadow = '0 0 40px var(--neon-green), 0 0 80px var(--neon-green)';
+            setTimeout(() => {
+                scrollTopBtn.style.boxShadow = '';
+            }, 300);
+        }
+
+        // Particle Background System
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        let particlesArray;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2.5;
+                this.speedX = (Math.random() * 0.8) - 0.4;
+                this.speedY = (Math.random() * 0.8) - 0.4;
+                this.color = Math.random() > 0.75 ? '#39ff14' : '#00f0ff';
+                this.opacity = Math.random() * 0.6 + 0.2;
+                this.pulse = Math.random() * 0.02;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.opacity += Math.sin(Date.now() * this.pulse) * 0.002;
+                if (this.opacity > 0.8) this.opacity = 0.8;
+                if (this.opacity < 0.2) this.opacity = 0.2;
+                
+                if (this.size > 0.3) this.size -= 0.008;
+                if (this.size <= 0.3) this.size = Math.random() * 2 + 0.5;
+
+                if (this.x > canvas.width + 10) this.x = -10;
+                if (this.x < -10) this.x = canvas.width + 10;
+                if (this.y > canvas.height + 10) this.y = -10;
+                if (this.y < -10) this.y = canvas.height + 10;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            const count = window.innerWidth < 768 ? 60 : 120;
+            for (let i = 0; i < count; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Parallax effect to hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            const car = document.querySelector('.eclipse-car');
+            
+            if (hero && car && scrolled < window.innerHeight) {
+                car.style.transform = `translateY(${scrolled * 0.25}px) translateZ(70px)`;
+            }
+        });
+
+        // Initialize on resize
+        window.addEventListener('resize', () => {
+            initParticles();
+            if (window.innerWidth <= 768) {
+                carContainer.style.transition = 'none';
+                carImg.style.transition = 'none';
+            }
+        });
+
+        // Add hover sound effect hint (visual feedback only)
+        document.querySelectorAll('.btn, .glass-card, .gallery-item, .modal-close, .scroll-top').forEach(el => {
+            el.addEventListener('mouseenter', function() {
+                this.style.cursor = 'pointer';
+            });
+        });
+    </script>
+</body>
+</html>
