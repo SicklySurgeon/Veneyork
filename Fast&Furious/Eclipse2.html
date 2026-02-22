@@ -1,0 +1,2376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="description" content="The Legendary Mitsubishi Eclipse - Brian O'Conner's Iconic Ride from Fast & Furious">
+<title>The Legendary Eclipse | Fast & Furious Tribute</title>
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+--neon-green: #39FF14;
+--electric-blue: #0080FF;
+--jet-black: #0A0A0A;
+--pure-white: #FFFFFF;
+--orange-accent: #FF6B00;
+--dark-gray: #1a1a1a;
+--medium-gray: #2a2a2a;
+--light-gray: #333333;
+--font-display: 'Orbitron', sans-serif;
+--font-body: 'Rajdhani', sans-serif;
+--transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+--transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+html {
+scroll-behavior: smooth;
+height: 100%;
+}
+body {
+background-color: var(--jet-black);
+color: var(--pure-white);
+font-family: var(--font-body);
+overflow-x: hidden;
+line-height: 1.6;
+width: 100%;
+min-height: 100%;
+}
+/* Lock body scroll when loading */
+body.loading {
+overflow: hidden;
+}
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+width: 10px;
+}
+::-webkit-scrollbar-track {
+background: var(--jet-black);
+border: 1px solid var(--light-gray);
+}
+::-webkit-scrollbar-thumb {
+background: var(--neon-green);
+border: 2px solid var(--jet-black);
+border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+background: var(--electric-blue);
+}
+.container {
+width: 100%;
+max-width: 1400px;
+margin: 0 auto;
+padding: 0 20px;
+}
+.text-neon {
+color: var(--neon-green);
+text-shadow: 0 0 10px rgba(57, 255, 20, 0.6);
+}
+.text-blue {
+color: var(--electric-blue);
+text-shadow: 0 0 10px rgba(0, 128, 255, 0.6);
+}
+.btn {
+display: inline-block;
+padding: 15px 40px;
+background-color: var(--neon-green);
+color: var(--jet-black);
+font-family: var(--font-display);
+font-weight: 700;
+text-transform: uppercase;
+text-decoration: none;
+border: 2px solid var(--neon-green);
+cursor: pointer;
+transition: var(--transition-bounce);
+clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+margin-top: 20px;
+position: relative;
+overflow: hidden;
+font-size: clamp(0.9rem, 2vw, 1rem);
+}
+.btn::before {
+content: '';
+position: absolute;
+top: 0;
+left: -100%;
+width: 100%;
+height: 100%;
+background: var(--pure-white);
+transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+z-index: -1;
+}
+.btn:hover::before {
+left: 0;
+}
+.btn:hover {
+color: var(--neon-green);
+box-shadow: 0 0 30px rgba(57, 255, 20, 0.4);
+transform: translateY(-3px) scale(1.05);
+}
+/* Loader - FULLY RESPONSIVE */
+#loader {
+position: fixed;
+inset: 0;
+width: 100vw;
+height: 100vh;
+background: var(--jet-black);
+z-index: 9999;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+transition: opacity 0.5s, visibility 0.5s;
+touch-action: none;
+padding: 20px;
+}
+#loader.hidden {
+opacity: 0;
+visibility: hidden;
+pointer-events: none;
+}
+.loader-text {
+font-family: var(--font-display);
+font-size: clamp(1.2rem, 5vw, 2rem);
+color: var(--neon-green);
+animation: pulse 1.5s infinite;
+margin-bottom: clamp(20px, 4vw, 30px);
+letter-spacing: 5px;
+text-align: center;
+padding: 0 10px;
+word-break: break-word;
+}
+.loader-bar-container {
+width: clamp(200px, 80vw, 250px);
+height: 4px;
+background: var(--dark-gray);
+border: 1px solid var(--light-gray);
+border-radius: 2px;
+overflow: hidden;
+}
+.loader-progress {
+height: 100%;
+background: var(--neon-green);
+width: 0%;
+animation: loadProgress 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+box-shadow: 0 0 15px var(--neon-green);
+}
+@keyframes loadProgress {
+0% { width: 0%; }
+40% { width: 30%; }
+70% { width: 70%; }
+100% { width: 100%; }
+}
+/* Navigation */
+nav {
+position: fixed;
+top: 0;
+width: 100%;
+padding: 20px 0;
+z-index: 1000;
+background: rgba(10, 10, 10, 0.95);
+backdrop-filter: blur(10px);
+border-bottom: 2px solid var(--neon-green);
+transition: var(--transition-smooth);
+}
+nav.scrolled {
+padding: 10px 0;
+box-shadow: 0 5px 30px rgba(0,0,0,0.8);
+}
+.nav-content {
+display: flex;
+justify-content: space-between;
+align-items: center;
+width: 100%;
+padding: 0 20px;
+}
+.logo {
+font-family: var(--font-display);
+font-size: clamp(1.2rem, 4vw, 1.8rem);
+font-weight: 900;
+color: var(--pure-white);
+text-transform: uppercase;
+letter-spacing: 3px;
+cursor: pointer;
+transition: var(--transition-bounce);
+}
+.logo:hover {
+color: var(--neon-green);
+text-shadow: 0 0 20px var(--neon-green);
+transform: scale(1.05);
+}
+.nav-links {
+display: flex;
+gap: 30px;
+list-style: none;
+margin: 0;
+padding: 0;
+}
+.nav-links a {
+color: var(--pure-white);
+text-decoration: none;
+font-weight: 600;
+text-transform: uppercase;
+font-size: 0.9rem;
+transition: var(--transition-smooth);
+position: relative;
+cursor: pointer;
+padding: 5px 0;
+letter-spacing: 2px;
+}
+.nav-links a::after {
+content: '';
+position: absolute;
+bottom: 0;
+left: 0;
+width: 0;
+height: 2px;
+background: var(--neon-green);
+transition: width 0.3s;
+box-shadow: 0 0 10px var(--neon-green);
+}
+.nav-links a:hover {
+color: var(--neon-green);
+transform: translateY(-2px);
+}
+.nav-links a:hover::after {
+width: 100%;
+}
+.hamburger {
+display: none;
+cursor: pointer;
+color: var(--neon-green);
+font-size: 2rem;
+transition: transform 0.3s;
+z-index: 1001;
+}
+.hamburger:hover {
+transform: scale(1.1);
+}
+.hamburger.active {
+color: var(--pure-white);
+}
+/* MOBILE MENU OVERLAY */
+.mobile-menu-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100vh;
+background: rgba(10, 10, 10, 0.98);
+z-index: 999;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+opacity: 0;
+visibility: hidden;
+transition: opacity 0.4s ease, visibility 0.4s ease;
+backdrop-filter: blur(15px);
+}
+.mobile-menu-overlay.active {
+opacity: 1;
+visibility: visible;
+}
+.mobile-nav-links {
+list-style: none;
+text-align: center;
+display: flex;
+flex-direction: column;
+gap: 30px;
+padding: 0;
+margin: 0;
+width: 100%;
+max-width: 400px;
+}
+.mobile-nav-links li {
+overflow: hidden;
+}
+.mobile-nav-links a {
+display: block;
+color: var(--pure-white);
+font-family: var(--font-display);
+font-size: clamp(1.5rem, 5vw, 2rem);
+font-weight: 700;
+text-transform: uppercase;
+text-decoration: none;
+transform: translateY(100%);
+transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s;
+padding: 10px;
+}
+.mobile-menu-overlay.active .mobile-nav-links a {
+transform: translateY(0);
+}
+.mobile-nav-links a:hover {
+color: var(--neon-green);
+text-shadow: 0 0 15px var(--neon-green);
+}
+.mobile-menu-overlay.active .mobile-nav-links li:nth-child(1) a { transition-delay: 0.1s; }
+.mobile-menu-overlay.active .mobile-nav-links li:nth-child(2) a { transition-delay: 0.2s; }
+.mobile-menu-overlay.active .mobile-nav-links li:nth-child(3) a { transition-delay: 0.3s; }
+.mobile-menu-overlay.active .mobile-nav-links li:nth-child(4) a { transition-delay: 0.4s; }
+.mobile-menu-overlay.active .mobile-nav-links li:nth-child(5) a { transition-delay: 0.5s; }
+.mobile-menu-overlay.active .mobile-nav-links li:nth-child(6) a { transition-delay: 0.6s; }
+.close-menu-btn {
+position: absolute;
+top: 20px;
+right: 20px;
+font-size: clamp(2rem, 6vw, 3rem);
+color: var(--pure-white);
+cursor: pointer;
+transition: transform 0.3s, color 0.3s;
+padding: 10px;
+}
+.close-menu-btn:hover {
+color: var(--neon-green);
+transform: rotate(90deg);
+}
+/* Hero Section */
+.hero {
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+position: relative;
+perspective: 1000px;
+overflow: hidden;
+padding: clamp(80px, 15vw, 120px) 20px clamp(40px, 8vw, 60px);
+width: 100%;
+}
+#particles-canvas {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+z-index: 1;
+}
+.hero-content {
+position: relative;
+z-index: 10;
+text-align: center;
+width: 100%;
+max-width: 1200px;
+}
+.hero-title {
+font-family: var(--font-display);
+font-size: clamp(2rem, 8vw, 6rem);
+line-height: 1.1;
+margin-bottom: 15px;
+text-transform: uppercase;
+letter-spacing: 5px;
+opacity: 0;
+transform: translateY(50px) scale(0.9);
+animation: slideUpScale 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards 0.5s;
+word-break: break-word;
+}
+.hero-subtitle {
+font-size: clamp(0.9rem, 2vw, 1.5rem);
+color: var(--electric-blue);
+margin-bottom: 40px;
+text-transform: uppercase;
+letter-spacing: 5px;
+opacity: 0;
+transform: translateY(50px);
+animation: slideUp 1s cubic-bezier(0.4, 0, 0.2, 1) forwards 0.7s;
+}
+.car-container {
+position: relative;
+width: 100%;
+max-width: 900px;
+height: clamp(250px, 50vw, 400px);
+display: flex;
+justify-content: center;
+align-items: center;
+transform-style: preserve-3d;
+transition: transform 0.1s ease-out;
+opacity: 0;
+animation: fadeIn 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards 0.9s;
+margin: 0 auto;
+}
+.car-image {
+max-width: 100%;
+max-height: 100%;
+object-fit: contain;
+filter: drop-shadow(0 0 30px rgba(57, 255, 20, 0.4));
+animation: float 6s ease-in-out infinite;
+transform: rotateY(-5deg);
+transition: filter 0.4s, transform 0.4s;
+}
+.car-image:hover {
+filter: drop-shadow(0 0 60px rgba(57, 255, 20, 0.8));
+transform: rotateY(0deg) scale(1.05);
+}
+.car-glow {
+position: absolute;
+bottom: 20px;
+width: 60%;
+height: 60px;
+background: var(--neon-green);
+filter: blur(60px);
+opacity: 0.4;
+border-radius: 50%;
+z-index: -1;
+animation: glowPulse 6s ease-in-out infinite;
+}
+/* Stats Section */
+.stats-section {
+padding: clamp(60px, 10vw, 80px) 0;
+background-color: var(--jet-black);
+position: relative;
+width: 100%;
+}
+.stats-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(clamp(200px, 45vw, 250px), 1fr));
+gap: clamp(15px, 3vw, 25px);
+position: relative;
+z-index: 20;
+width: 100%;
+}
+.stat-card {
+background: rgba(20, 20, 20, 0.9);
+border: 2px solid rgba(57, 255, 20, 0.3);
+padding: clamp(20px, 4vw, 30px) clamp(15px, 3vw, 20px);
+text-align: center;
+transition: var(--transition-bounce);
+position: relative;
+overflow: hidden;
+border-radius: 10px;
+opacity: 0;
+transform: translateY(60px) scale(0.9);
+}
+.stat-card.visible {
+opacity: 1;
+transform: translateY(0) scale(1);
+}
+.stat-card:hover {
+transform: translateY(-10px) scale(1.03);
+border-color: var(--neon-green);
+box-shadow: 0 15px 40px rgba(57, 255, 20, 0.2);
+}
+.stat-icon {
+font-size: clamp(2rem, 5vw, 2.5rem);
+margin-bottom: 15px;
+color: var(--neon-green);
+animation: iconFloat 3s ease-in-out infinite;
+}
+@keyframes iconFloat {
+0%, 100% { transform: translateY(0); }
+50% { transform: translateY(-8px); }
+}
+.stat-value {
+font-family: var(--font-display);
+font-size: clamp(1.8rem, 5vw, 3.5rem);
+font-weight: 900;
+color: var(--neon-green);
+display: block;
+margin-bottom: 10px;
+text-shadow: 0 0 20px rgba(57, 255, 20, 0.6);
+}
+.stat-label {
+color: var(--pure-white);
+text-transform: uppercase;
+font-weight: 700;
+letter-spacing: 2px;
+font-size: clamp(0.8rem, 2vw, 1rem);
+margin-bottom: 15px;
+}
+.progress-bar {
+width: 100%;
+height: 6px;
+background: var(--dark-gray);
+border: 1px solid var(--light-gray);
+border-radius: 3px;
+overflow: hidden;
+margin-top: 10px;
+}
+.progress-fill {
+height: 100%;
+background: var(--neon-green);
+width: 0%;
+transition: width 2s cubic-bezier(0.34, 1.56, 0.64, 1);
+box-shadow: 0 0 15px var(--neon-green);
+}
+/* Info Section */
+.info-section {
+padding: clamp(60px, 10vw, 100px) 0;
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: clamp(30px, 5vw, 60px);
+align-items: start;
+width: 100%;
+}
+.info-text h2 {
+font-family: var(--font-display);
+font-size: clamp(1.5rem, 4vw, 3rem);
+margin-bottom: 25px;
+color: var(--pure-white);
+opacity: 0;
+transform: translateX(-50px);
+transition: var(--transition-smooth);
+}
+.info-text h2.visible {
+opacity: 1;
+transform: translateX(0);
+}
+.info-text p {
+margin-bottom: 20px;
+color: #ccc;
+font-size: clamp(1rem, 2vw, 1.1rem);
+opacity: 0;
+transform: translateX(-30px);
+transition: var(--transition-smooth);
+}
+.info-text p.visible {
+opacity: 1;
+transform: translateX(0);
+}
+.quote-box {
+border-left: 4px solid var(--orange-accent);
+padding: clamp(15px, 3vw, 25px) clamp(20px, 4vw, 30px);
+margin: 30px 0;
+font-style: italic;
+font-size: clamp(1rem, 2vw, 1.2rem);
+color: var(--pure-white);
+background: rgba(255, 107, 0, 0.1);
+position: relative;
+overflow: hidden;
+opacity: 0;
+transform: scale(0.95);
+transition: var(--transition-bounce);
+}
+.quote-box.visible {
+opacity: 1;
+transform: scale(1);
+}
+.accordion {
+background: rgba(20, 20, 20, 0.9);
+border: 2px solid rgba(57, 255, 20, 0.3);
+backdrop-filter: blur(10px);
+border-radius: 10px;
+overflow: hidden;
+opacity: 0;
+transform: translateX(50px);
+transition: var(--transition-smooth);
+}
+.accordion.visible {
+opacity: 1;
+transform: translateX(0);
+}
+.accordion-item {
+border-bottom: 1px solid rgba(57, 255, 20, 0.2);
+}
+.accordion-item:last-child {
+border-bottom: none;
+}
+.accordion-header {
+padding: clamp(15px, 3vw, 25px);
+cursor: pointer;
+display: flex;
+justify-content: space-between;
+align-items: center;
+font-family: var(--font-display);
+font-weight: 700;
+transition: var(--transition-smooth);
+color: var(--pure-white);
+font-size: clamp(1rem, 2vw, 1.1rem);
+}
+.accordion-header:hover {
+background: rgba(57, 255, 20, 0.1);
+color: var(--neon-green);
+padding-left: clamp(25px, 5vw, 35px);
+}
+.accordion-header span {
+font-size: 1.5rem;
+transition: transform 0.4s;
+}
+.accordion-header.active span {
+transform: rotate(45deg);
+}
+.accordion-content {
+max-height: 0;
+overflow: hidden;
+transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+background: rgba(0,0,0,0.5);
+}
+.accordion-content p {
+padding: clamp(15px, 3vw, 25px);
+color: #aaa;
+margin: 0;
+font-size: clamp(0.9rem, 2vw, 1rem);
+}
+/* Gallery Grid */
+.gallery {
+padding: clamp(60px, 10vw, 100px) 0;
+background: var(--jet-black);
+width: 100%;
+}
+.gallery h2 {
+font-family: var(--font-display);
+font-size: clamp(1.5rem, 5vw, 3.5rem);
+margin-bottom: 50px;
+text-align: center;
+opacity: 0;
+transform: translateY(30px);
+transition: var(--transition-smooth);
+padding: 0 20px;
+}
+.gallery h2.visible {
+opacity: 1;
+transform: translateY(0);
+}
+.gallery-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(clamp(250px, 45vw, 300px), 1fr));
+gap: clamp(15px, 3vw, 20px);
+max-width: 1200px;
+margin: 0 auto;
+width: 100%;
+padding: 0 20px;
+}
+.gallery-item {
+position: relative;
+height: clamp(200px, 40vw, 300px);
+background-color: var(--dark-gray);
+overflow: hidden;
+border: 2px solid var(--light-gray);
+transition: var(--transition-bounce);
+border-radius: 8px;
+cursor: pointer;
+opacity: 0;
+transform: scale(0.9);
+}
+.gallery-item.visible {
+opacity: 1;
+transform: scale(1);
+}
+.gallery-item:hover {
+border-color: var(--neon-green);
+transform: translateY(-8px) scale(1.02);
+box-shadow: 0 20px 40px rgba(57, 255, 20, 0.2);
+z-index: 10;
+}
+.gallery-item img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+transition: transform 0.6s;
+opacity: 0.8;
+}
+.gallery-item:hover img {
+transform: scale(1.1);
+opacity: 1;
+}
+.gallery-overlay {
+position: absolute;
+bottom: 0;
+left: 0;
+width: 100%;
+padding: clamp(10px, 2vw, 20px);
+background: rgba(0,0,0,0.9);
+color: var(--neon-green);
+font-family: var(--font-display);
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 2px;
+transform: translateY(100%);
+opacity: 0;
+transition: var(--transition-smooth);
+font-size: clamp(0.7rem, 2vw, 0.9rem);
+}
+.gallery-item:hover .gallery-overlay {
+transform: translateY(0);
+opacity: 1;
+}
+/* Image Loading Skeleton */
+.skeleton {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: var(--medium-gray);
+z-index: 1;
+animation: skeleton-pulse 1.5s infinite;
+transition: opacity 0.4s, visibility 0.4s;
+}
+@keyframes skeleton-pulse {
+0%, 100% { opacity: 1; }
+50% { opacity: 0.5; }
+}
+.gallery-item img.loaded + .skeleton,
+.skeleton.loaded {
+opacity: 0;
+visibility: hidden;
+}
+/* Modal Styles */
+.modal {
+display: flex;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0,0,0,0.95);
+z-index: 2000;
+justify-content: center;
+align-items: center;
+opacity: 0;
+visibility: hidden;
+pointer-events: none;
+transition: opacity 0.3s ease, visibility 0.3s ease;
+backdrop-filter: blur(5px);
+padding: 20px;
+}
+.modal.active {
+opacity: 1;
+visibility: visible;
+pointer-events: auto;
+}
+.modal-content {
+position: relative;
+width: 100%;
+max-width: 900px;
+max-height: 90vh;
+transform: scale(0.9);
+opacity: 0;
+transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+.modal.active .modal-content {
+transform: scale(1);
+opacity: 1;
+}
+.modal-image-container {
+position: relative;
+width: 100%;
+max-width: 900px;
+aspect-ratio: 16/9;
+min-height: clamp(200px, 40vw, 300px);
+display: flex;
+align-items: center;
+justify-content: center;
+background: var(--jet-black);
+border-radius: 10px;
+overflow: hidden;
+border: 2px solid var(--light-gray);
+}
+.modal-image {
+width: 100%;
+height: 100%;
+object-fit: contain;
+border-radius: 10px;
+box-shadow: 0 0 50px rgba(57, 255, 20, 0.3);
+border: 3px solid var(--neon-green);
+opacity: 0;
+transition: opacity 0.3s ease;
+display: block;
+}
+.modal-image.loaded {
+opacity: 1;
+}
+.modal-close {
+position: absolute;
+top: clamp(-50px, -8vw, -50px);
+right: 0;
+font-size: clamp(1.5rem, 4vw, 2rem);
+color: var(--pure-white);
+cursor: pointer;
+transition: var(--transition-bounce);
+width: clamp(40px, 8vw, 50px);
+height: clamp(40px, 8vw, 50px);
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 50%;
+background: rgba(57, 255, 20, 0.1);
+border: 2px solid var(--neon-green);
+z-index: 100;
+}
+.modal-close:hover {
+color: var(--jet-black);
+background: var(--neon-green);
+transform: rotate(90deg) scale(1.1);
+box-shadow: 0 0 20px var(--neon-green);
+}
+.modal-caption {
+position: absolute;
+bottom: clamp(-50px, -8vw, -50px);
+left: 0;
+width: 100%;
+text-align: center;
+font-family: var(--font-display);
+font-size: clamp(1rem, 2vw, 1.2rem);
+color: var(--neon-green);
+text-transform: uppercase;
+letter-spacing: 2px;
+opacity: 0;
+transform: translateY(20px);
+transition: all 0.3s ease 0.2s;
+padding: 0 20px;
+}
+.modal.active .modal-caption {
+opacity: 1;
+transform: translateY(0);
+}
+.modal-loading {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+text-align: center;
+z-index: 10;
+transition: opacity 0.2s ease;
+}
+.modal-loading i {
+font-size: clamp(2rem, 5vw, 2.5rem);
+color: var(--neon-green);
+animation: spin 1s linear infinite;
+display: block;
+margin-bottom: 10px;
+}
+.modal-loading span {
+font-family: var(--font-display);
+color: var(--neon-green);
+font-size: clamp(0.8rem, 2vw, 1rem);
+letter-spacing: 2px;
+display: block;
+}
+@keyframes spin {
+from { transform: rotate(0deg); }
+to { transform: rotate(360deg); }
+}
+.modal-nav {
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+font-size: 2rem;
+color: var(--pure-white);
+cursor: pointer;
+transition: var(--transition-bounce);
+width: 50px;
+height: 50px;
+display: flex;
+align-items: center;
+justify-content: center;
+background: rgba(57, 255, 20, 0.2);
+border: 2px solid var(--neon-green);
+border-radius: 50%;
+z-index: 10;
+}
+.modal-nav:hover {
+background: var(--neon-green);
+color: var(--jet-black);
+transform: translateY(-50%) scale(1.1);
+box-shadow: 0 0 20px var(--neon-green);
+}
+.modal-prev { left: clamp(-70px, -10vw, -70px); }
+.modal-next { right: clamp(-70px, -10vw, -70px); }
+/* Info Modal */
+.info-modal .modal-content {
+background: rgba(10, 10, 10, 0.98);
+backdrop-filter: blur(10px);
+border: 3px solid var(--neon-green);
+border-radius: 15px;
+padding: clamp(20px, 4vw, 40px);
+max-width: clamp(90%, 95vw, 1000px);
+max-height: 85vh;
+overflow-y: auto;
+box-shadow: 0 0 50px rgba(57, 255, 20, 0.2);
+}
+.info-modal h3 {
+font-family: var(--font-display);
+font-size: clamp(1.3rem, 4vw, 2rem);
+color: var(--neon-green);
+margin-bottom: 30px;
+text-transform: uppercase;
+text-align: center;
+text-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
+border-bottom: 2px solid var(--neon-green);
+padding-bottom: 15px;
+}
+.info-modal h4 {
+font-family: var(--font-display);
+color: var(--electric-blue);
+margin: 25px 0 15px;
+font-size: clamp(1.1rem, 3vw, 1.4rem);
+text-transform: uppercase;
+letter-spacing: 1px;
+}
+.info-modal p {
+color: #ccc;
+margin-bottom: 15px;
+line-height: 1.7;
+font-size: clamp(0.9rem, 2vw, 1rem);
+text-align: justify;
+}
+.info-modal ul {
+list-style: none;
+padding-left: 0;
+margin: 20px 0;
+}
+.info-modal li {
+padding: 10px 0;
+padding-left: 30px;
+position: relative;
+color: #ddd;
+font-size: clamp(0.9rem, 2vw, 1rem);
+border-bottom: 1px solid rgba(57, 255, 20, 0.1);
+transition: var(--transition-smooth);
+}
+.info-modal li:hover {
+color: var(--neon-green);
+padding-left: 35px;
+}
+.info-modal li::before {
+content: '\f058';
+font-family: 'Font Awesome 6 Free';
+font-weight: 900;
+color: var(--neon-green);
+position: absolute;
+left: 0;
+font-size: 1rem;
+}
+.visual-stats {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(clamp(120px, 25vw, 150px), 1fr));
+gap: clamp(15px, 3vw, 20px);
+margin: 25px 0;
+}
+.visual-stat {
+background: rgba(57, 255, 20, 0.05);
+border: 2px solid rgba(57, 255, 20, 0.2);
+border-radius: 10px;
+padding: clamp(15px, 3vw, 20px);
+text-align: center;
+transition: var(--transition-bounce);
+}
+.visual-stat:hover {
+transform: translateY(-5px);
+border-color: var(--neon-green);
+box-shadow: 0 10px 20px rgba(57, 255, 20, 0.15);
+}
+.circular-progress {
+width: clamp(80px, 15vw, 100px);
+height: clamp(80px, 15vw, 100px);
+margin: 0 auto 12px;
+position: relative;
+}
+.circular-progress svg {
+transform: rotate(-90deg);
+}
+.circular-progress circle {
+fill: none;
+stroke-width: 8;
+}
+.circular-progress .bg {
+stroke: var(--dark-gray);
+}
+.circular-progress .progress {
+stroke: var(--neon-green);
+stroke-linecap: round;
+stroke-dasharray: 283;
+stroke-dashoffset: 283;
+transition: stroke-dashoffset 1s ease-out;
+filter: drop-shadow(0 0 5px var(--neon-green));
+}
+.circular-progress .value {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+font-family: var(--font-display);
+font-size: clamp(1rem, 3vw, 1.4rem);
+font-weight: 700;
+color: var(--neon-green);
+}
+.stat-label-small {
+color: var(--pure-white);
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 1px;
+font-size: clamp(0.7rem, 2vw, 0.8rem);
+}
+.specs-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(clamp(150px, 30vw, 200px), 1fr));
+gap: clamp(15px, 3vw, 20px);
+margin: 30px 0;
+}
+.spec-item {
+background: rgba(57, 255, 20, 0.1);
+padding: clamp(15px, 3vw, 20px);
+border-radius: 10px;
+border-left: 4px solid var(--neon-green);
+transition: var(--transition-bounce);
+border: 1px solid rgba(57, 255, 20, 0.2);
+}
+.spec-item:hover {
+transform: translateY(-5px);
+background: rgba(57, 255, 20, 0.15);
+box-shadow: 0 10px 20px rgba(57, 255, 20, 0.15);
+}
+.spec-label {
+color: var(--neon-green);
+font-weight: 700;
+text-transform: uppercase;
+font-size: clamp(0.7rem, 2vw, 0.8rem);
+margin-bottom: 5px;
+letter-spacing: 1px;
+}
+.spec-value {
+color: var(--pure-white);
+font-size: clamp(1rem, 2vw, 1.2rem);
+font-weight: 600;
+font-family: var(--font-display);
+}
+.tech-table {
+width: 100%;
+margin: 25px 0;
+border-collapse: collapse;
+border: 2px solid var(--light-gray);
+overflow-x: auto;
+display: block;
+}
+.tech-table thead,
+.tech-table tbody {
+display: table;
+width: 100%;
+table-layout: fixed;
+}
+.tech-table th,
+.tech-table td {
+padding: 12px;
+text-align: left;
+border-bottom: 1px solid var(--light-gray);
+}
+.tech-table th {
+color: var(--neon-green);
+font-family: var(--font-display);
+text-transform: uppercase;
+font-weight: 700;
+background: var(--dark-gray);
+}
+.tech-table td {
+color: #ccc;
+}
+.tech-table tr:hover td {
+color: var(--pure-white);
+background: rgba(57, 255, 20, 0.05);
+}
+.performance-bars {
+margin: 25px 0;
+}
+.perf-item {
+margin-bottom: 15px;
+}
+.perf-label {
+display: flex;
+justify-content: space-between;
+margin-bottom: 6px;
+color: var(--pure-white);
+font-weight: 600;
+font-size: clamp(0.8rem, 2vw, 0.9rem);
+flex-wrap: wrap;
+gap: 10px;
+}
+.perf-bar-bg {
+height: 10px;
+background: var(--dark-gray);
+border-radius: 5px;
+overflow: hidden;
+border: 1px solid var(--light-gray);
+}
+.perf-bar-fill {
+height: 100%;
+background: var(--neon-green);
+width: 0%;
+transition: width 1s ease-out;
+box-shadow: 0 0 10px rgba(57, 255, 20, 0.4);
+}
+.back-to-top {
+position: fixed;
+bottom: clamp(20px, 4vw, 30px);
+right: clamp(20px, 4vw, 30px);
+width: clamp(45px, 10vw, 55px);
+height: clamp(45px, 10vw, 55px);
+background: var(--neon-green);
+color: var(--jet-black);
+border: none;
+border-radius: 50%;
+cursor: pointer;
+font-size: clamp(1.2rem, 3vw, 1.5rem);
+display: flex;
+align-items: center;
+justify-content: center;
+opacity: 0;
+visibility: hidden;
+transform: translateY(30px) scale(0.8);
+transition: var(--transition-bounce);
+z-index: 999;
+box-shadow: 0 5px 20px rgba(57, 255, 20, 0.4);
+}
+.back-to-top.visible {
+opacity: 1;
+visibility: visible;
+transform: translateY(0) scale(1);
+}
+.back-to-top:hover {
+transform: translateY(-8px) scale(1.1);
+box-shadow: 0 10px 30px rgba(57, 255, 20, 0.6);
+background: var(--pure-white);
+}
+footer {
+padding: clamp(40px, 8vw, 60px) 0 clamp(20px, 4vw, 30px);
+text-align: center;
+border-top: 2px solid var(--light-gray);
+background: var(--jet-black);
+position: relative;
+width: 100%;
+}
+.footer-logo {
+font-family: var(--font-display);
+font-size: clamp(1.5rem, 5vw, 2.5rem);
+color: var(--pure-white);
+margin-bottom: 20px;
+display: inline-block;
+transition: var(--transition-bounce);
+}
+.footer-logo:hover {
+color: var(--neon-green);
+text-shadow: 0 0 30px var(--neon-green);
+transform: scale(1.05);
+}
+.social-links {
+margin-bottom: 20px;
+display: flex;
+justify-content: center;
+flex-wrap: wrap;
+gap: 10px;
+}
+.social-links a {
+color: var(--pure-white);
+text-decoration: none;
+font-size: clamp(1.2rem, 3vw, 1.5rem);
+transition: var(--transition-bounce);
+display: inline-flex;
+align-items: center;
+justify-content: center;
+width: clamp(40px, 8vw, 50px);
+height: clamp(40px, 8vw, 50px);
+border: 2px solid transparent;
+border-radius: 50%;
+}
+.social-links a:hover {
+color: var(--neon-green);
+border-color: var(--neon-green);
+transform: translateY(-5px) rotate(360deg);
+box-shadow: 0 0 20px rgba(57, 255, 20, 0.4);
+}
+footer p {
+color: #666;
+font-size: clamp(0.75rem, 2vw, 0.85rem);
+padding: 0 20px;
+}
+/* Animations */
+@keyframes float {
+0%, 100% { transform: translateY(0px) rotateY(-5deg); }
+50% { transform: translateY(-20px) rotateY(-5deg); }
+}
+@keyframes glowPulse {
+0%, 100% { opacity: 0.3; transform: scale(1); }
+50% { opacity: 0.6; transform: scale(1.1); }
+}
+@keyframes pulse {
+0%, 100% { opacity: 0.5; transform: scale(1); }
+50% { opacity: 1; transform: scale(1.05); }
+}
+@keyframes slideUp {
+to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideUpScale {
+to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes fadeIn {
+to { opacity: 1; }
+}
+/* Responsive */
+@media (max-width: 968px) {
+.info-section {
+grid-template-columns: 1fr;
+gap: 50px;
+}
+.nav-links {
+display: none;
+}
+.hamburger {
+display: block;
+}
+.car-container {
+height: clamp(200px, 45vw, 300px);
+}
+.specs-grid {
+grid-template-columns: 1fr;
+}
+.gallery-grid {
+grid-template-columns: repeat(2, 1fr);
+}
+.modal-prev { left: 10px; }
+.modal-next { right: 10px; }
+.info-modal .modal-content {
+padding: clamp(20px, 4vw, 30px);
+max-width: 95%;
+}
+.visual-stats {
+grid-template-columns: repeat(2, 1fr);
+}
+.modal-nav {
+width: clamp(35px, 8vw, 45px);
+height: clamp(35px, 8vw, 45px);
+font-size: clamp(1.2rem, 3vw, 1.5rem);
+}
+.modal-close {
+top: 10px;
+right: 10px;
+position: fixed;
+}
+.modal-caption {
+bottom: 10px;
+position: fixed;
+background: rgba(0,0,0,0.8);
+padding: 10px;
+border-radius: 5px;
+}
+}
+@media (max-width: 600px) {
+.hero-title {
+font-size: clamp(1.5rem, 8vw, 2rem);
+letter-spacing: 2px;
+}
+.stats-grid {
+grid-template-columns: 1fr;
+}
+.car-image {
+max-width: 90%;
+}
+.back-to-top {
+bottom: 15px;
+right: 15px;
+width: 45px;
+height: 45px;
+}
+.gallery-grid {
+grid-template-columns: 1fr;
+}
+.visual-stats {
+grid-template-columns: 1fr;
+}
+.modal-close {
+top: 10px;
+right: 10px;
+width: 40px;
+height: 40px;
+font-size: 1.5rem;
+background: rgba(0,0,0,0.8);
+}
+.modal-caption {
+bottom: 10px;
+font-size: clamp(0.8rem, 2vw, 1rem);
+background: rgba(0,0,0,0.7);
+padding: 5px;
+}
+.modal-nav {
+top: 50%;
+}
+.info-modal h3 {
+font-size: clamp(1.2rem, 4vw, 1.5rem);
+}
+.nav-content {
+padding: 0 15px;
+}
+.container {
+padding: 0 15px;
+}
+}
+@media (max-width: 400px) {
+.loader-text {
+font-size: 1rem;
+letter-spacing: 2px;
+}
+.loader-bar-container {
+width: 180px;
+}
+.hero-title {
+font-size: 1.3rem;
+}
+.stat-value {
+font-size: 1.5rem;
+}
+.gallery-item {
+height: 180px;
+}
+}
+</style>
+</head>
+<body class="loading">
+<div id="loader">
+<div class="loader-text">LOADING SYSTEM...</div>
+<div class="loader-bar-container">
+<div class="loader-progress"></div>
+</div>
+</div>
+<nav id="navbar">
+<div class="container nav-content">
+<div class="logo" onclick="showInfoModal('overview')">ECLIPSE <span class="text-neon">GSX</span></div>
+<ul class="nav-links">
+<li><a onclick="showInfoModal('overview')">Overview</a></li>
+<li><a onclick="showInfoModal('engine')">Engine</a></li>
+<li><a onclick="showInfoModal('performance')">Performance</a></li>
+<li><a onclick="showInfoModal('modifications')">Mods</a></li>
+<li><a onclick="showInfoModal('history')">History</a></li>
+<li><a href="#gallery">Gallery</a></li>
+</ul>
+<div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
+</div>
+</nav>
+<!-- MOBILE MENU OVERLAY -->
+<div class="mobile-menu-overlay" id="mobileMenu">
+<div class="close-menu-btn" id="closeMenuBtn"><i class="fas fa-times"></i></div>
+<ul class="mobile-nav-links">
+<li><a onclick="showInfoModal('overview'); toggleMobileMenu()">Overview</a></li>
+<li><a onclick="showInfoModal('engine'); toggleMobileMenu()">Engine</a></li>
+<li><a onclick="showInfoModal('performance'); toggleMobileMenu()">Performance</a></li>
+<li><a onclick="showInfoModal('modifications'); toggleMobileMenu()">Mods</a></li>
+<li><a onclick="showInfoModal('history'); toggleMobileMenu()">History</a></li>
+<li><a href="#gallery" onclick="toggleMobileMenu()">Gallery</a></li>
+</ul>
+</div>
+<section id="hero" class="hero">
+<canvas id="particles-canvas"></canvas>
+<div class="hero-content">
+<h1 class="hero-title">The <span class="text-neon">Legendary</span> Eclipse</h1>
+<p class="hero-subtitle">Brian O'Conner's Iconic Ride</p>
+<div class="car-container" id="carContainer">
+<img src="https://www.pngmart.com/files/16/Mitsubishi-Eclipse-PNG-Image.png"
+alt="Green Mitsubishi Eclipse GSX"
+class="car-image"
+onerror="this.style.display='none'">
+<div class="car-glow"></div>
+</div>
+<div>
+<a href="#stats" class="btn">View Specs</a>
+</div>
+</div>
+</section>
+<section id="stats" class="stats-section">
+<div class="container">
+<div class="stats-grid">
+<div class="stat-card">
+<div class="stat-icon"><i class="fas fa-bolt"></i></div>
+<span class="stat-value" data-target="400" data-suffix="+">0</span>
+<span class="stat-label">Horsepower</span>
+<div class="progress-bar">
+<div class="progress-fill" data-width="85"></div>
+</div>
+</div>
+<div class="stat-card">
+<div class="stat-icon"><i class="fas fa-stopwatch"></i></div>
+<span class="stat-value" data-target="4.2" data-suffix="s" data-decimal="true">0</span>
+<span class="stat-label">0-60 MPH</span>
+<div class="progress-bar">
+<div class="progress-fill" data-width="92"></div>
+</div>
+</div>
+<div class="stat-card">
+<div class="stat-icon"><i class="fas fa-flag-checkered"></i></div>
+<span class="stat-value" data-target="12.4" data-suffix="s" data-decimal="true">0</span>
+<span class="stat-label">1/4 Mile</span>
+<div class="progress-bar">
+<div class="progress-fill" data-width="88"></div>
+</div>
+</div>
+<div class="stat-card">
+<div class="stat-icon"><i class="fas fa-cogs"></i></div>
+<span class="stat-value" data-target="2" data-suffix="JZ">0</span>
+<span class="stat-label">GTE Engine</span>
+<div class="progress-bar">
+<div class="progress-fill" data-width="95"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="movie" class="container info-section">
+<div class="info-text">
+<h2>Fast & Furious <span class="text-blue">(2001)</span></h2>
+<p>Driven by Brian O'Conner (Paul Walker), the 1995 Mitsubishi Eclipse GSX became an instant icon of street racing culture. Its distinctive neon green paint job and massive rear wing made it instantly recognizable.</p>
+<div class="quote-box">
+"I live my life a quarter mile at a time."
+</div>
+<p>While the movie version featured a 2JZ-GTE swap (a Toyota engine), the stock Eclipse came with a 4G63T. This modification allowed Brian to compete with the best on the streets of Los Angeles.</p>
+<div class="btn" onclick="showInfoModal('history')" style="display: inline-block;">Learn More</div>
+</div>
+<div class="accordion">
+<div class="accordion-item">
+<div class="accordion-header">Engine Specs <span><i class="fas fa-plus"></i></span></div>
+<div class="accordion-content">
+<p>Toyota 2JZ-GTE Inline-6 Turbo. Twin-turbo setup with custom intercooler and exhaust. Produces over 400 horsepower with proper tuning.</p>
+</div>
+</div>
+<div class="accordion-item">
+<div class="accordion-header">Chassis & Suspension <span><i class="fas fa-plus"></i></span></div>
+<div class="accordion-content">
+<p>Reinforced chassis with adjustable coilovers, strut tower braces, and Brembo braking system for optimal handling and stopping power.</p>
+</div>
+</div>
+<div class="accordion-item">
+<div class="accordion-header">Aero & Visuals <span><i class="fas fa-plus"></i></span></div>
+<div class="accordion-content">
+<p>Neon Green paint, large rear spoiler, underglow neon lighting system, and 18-inch alloy wheels with performance tires.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="gallery" class="gallery">
+<div class="container">
+<h2>Iconic <span class="text-neon">Scenes</span></h2>
+<div class="gallery-grid">
+<div class="gallery-item" onclick="openModal(0)">
+<div class="skeleton"></div>
+<img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs_webp/86848396994307.5ebb0138512c7.jpg"
+alt="Street Racing Scene"
+loading="lazy"
+onload="this.classList.add('loaded'); this.previousElementSibling.classList.add('loaded')">
+<div class="gallery-overlay">Street Racing</div>
+</div>
+<div class="gallery-item" onclick="openModal(1)">
+<div class="skeleton"></div>
+<img src="https://static.wikia.nocookie.net/atodogas/images/c/c7/C48025b7eb1bbd796fe998268f9da8f6.jpg/revision/latest?cb=20220704185617&path-prefix=es"
+alt="Eclipse Detail"
+loading="lazy"
+onload="this.classList.add('loaded'); this.previousElementSibling.classList.add('loaded')">
+<div class="gallery-overlay">The Beast</div>
+</div>
+<div class="gallery-item" onclick="openModal(2)">
+<div class="skeleton"></div>
+<img src="https://i.pinimg.com/564x/b6/39/f3/b639f36b90cb607a3f7ca5c0c93616ae.jpg"
+alt="Night Run"
+loading="lazy"
+onload="this.classList.add('loaded'); this.previousElementSibling.classList.add('loaded')">
+<div class="gallery-overlay">Night Run</div>
+</div>
+<div class="gallery-item" onclick="openModal(3)">
+<div class="skeleton"></div>
+<img src="https://i.ytimg.com/vi/1kx45VvtY-o/maxresdefault.jpg"
+alt="Engine Bay"
+loading="lazy"
+onload="this.classList.add('loaded'); this.previousElementSibling.classList.add('loaded')">
+<div class="gallery-overlay">Engine Bay</div>
+</div>
+<div class="gallery-item" onclick="openModal(4)">
+<div class="skeleton"></div>
+<img src="https://i.ytimg.com/vi/iMgo7Yw-Uu0/maxresdefault.jpg"
+alt="Race Scene"
+loading="lazy"
+onload="this.classList.add('loaded'); this.previousElementSibling.classList.add('loaded')">
+<div class="gallery-overlay">The Race</div>
+</div>
+<div class="gallery-item" onclick="openModal(5)">
+<div class="skeleton"></div>
+<img src="https://www.todomecanica.com/images/blog/2019/julio/IMG_20190111_150115597.jpg"
+alt="Garage Scene"
+loading="lazy"
+onload="this.classList.add('loaded'); this.previousElementSibling.classList.add('loaded')">
+<div class="gallery-overlay">Garage Life</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Gallery Modal -->
+<div id="galleryModal" class="modal" onclick="closeModalOnOverlay(event)">
+<div class="modal-content">
+<span class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></span>
+<div class="modal-nav modal-prev" onclick="changeImage(-1, event)"><i class="fas fa-chevron-left"></i></div>
+<div class="modal-image-container">
+<div id="modalLoading" class="modal-loading">
+<i class="fas fa-spinner"></i>
+<span>Loading...</span>
+</div>
+<img id="modalImage" class="modal-image" src="" alt="Gallery Image">
+</div>
+<div class="modal-nav modal-next" onclick="changeImage(1, event)"><i class="fas fa-chevron-right"></i></div>
+<div id="modalCaption" class="modal-caption"></div>
+</div>
+</div>
+<!-- Info Modal -->
+<div id="infoModal" class="modal info-modal" onclick="closeInfoModalOnOverlay(event)">
+<div class="modal-content">
+<span class="modal-close" onclick="closeInfoModal()"><i class="fas fa-times"></i></span>
+<h3 id="infoModalTitle">Car Information</h3>
+<div id="infoModalBody"></div>
+</div>
+</div>
+<button class="back-to-top" onclick="scrollToTop()" id="backToTop"><i class="fas fa-arrow-up"></i></button>
+<footer>
+<div class="container">
+<div class="footer-logo">ECLIPSE <span class="text-neon">GSX</span></div>
+<div class="social-links">
+<a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+<a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+<a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+<a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+</div>
+<p>&copy; 2024 Fan Tribute. Not affiliated with Universal Pictures.</p>
+</div>
+</footer>
+<script>
+// Gallery Images Data
+const galleryImages = [
+{ src: 'https://mir-s3-cdn-cf.behance.net/project_modules/fs_webp/86848396994307.5ebb0138512c7.jpg', caption: 'Street Racing - Downtown Los Angeles' },
+{ src: 'https://static.wikia.nocookie.net/atodogas/images/c/c7/C48025b7eb1bbd796fe998268f9da8f6.jpg/revision/latest?cb=20220704185617&path-prefix=es', caption: 'The Legendary Green Eclipse GSX' },
+{ src: 'https://i.pinimg.com/564x/b6/39/f3/b639f36b90cb607a3f7ca5c0c93616ae.jpg', caption: 'Night Run - Neon Lights' },
+{ src: 'https://i.ytimg.com/vi/1kx45VvtY-o/maxresdefault.jpg', caption: '2JZ-GTE Engine Bay Detail' },
+{ src: 'https://i.ytimg.com/vi/iMgo7Yw-Uu0/maxresdefault.jpg', caption: 'Quarter Mile Race Scene' },
+{ src: 'https://www.todomecanica.com/images/blog/2019/julio/IMG_20190111_150115597.jpg', caption: 'Garage Setup and Maintenance' }
+];
+let currentImageIndex = 0;
+let isModalOpen = false;
+// Pre-calculate SVG stroke offsets
+const CIRCUMFERENCE = 2 * Math.PI * 45;
+const precalculatedOffsets = {};
+[95, 88, 92, 100, 85, 90, 98].forEach(percent => {
+precalculatedOffsets[percent] = CIRCUMFERENCE - (percent / 100) * CIRCUMFERENCE;
+});
+// Detailed Info Modal Content
+const infoContent = {
+overview: {
+title: '1995 Mitsubishi Eclipse GSX - Complete Overview',
+content: `
+<h4>Vehicle Introduction</h4>
+<p>The second-generation Mitsubishi Eclipse GSX (1995-1999) represents one of the most iconic tuner cars of the 1990s. Featured prominently in the groundbreaking film "The Fast and the Furious" (2001), this particular vehicle became synonymous with street racing culture and helped launch the import tuning scene into mainstream popularity.</p>
+<p>Brian O'Conner's Eclipse, driven by the late Paul Walker, was more than just a movie car - it was a statement. The neon green paint scheme, aggressive stance, and that massive rear wing created an instantly recognizable silhouette that has been imitated countless times in the two decades since.</p>
+<div class="visual-stats">
+<div class="visual-stat">
+<div class="circular-progress">
+<svg width="100" height="100">
+<circle class="bg" cx="50" cy="50" r="45"></circle>
+<circle class="progress" cx="50" cy="50" r="45" data-percent="95"></circle>
+</svg>
+<div class="value">95%</div>
+</div>
+<div class="stat-label-small">Build Quality</div>
+</div>
+<div class="visual-stat">
+<div class="circular-progress">
+<svg width="100" height="100">
+<circle class="bg" cx="50" cy="50" r="45"></circle>
+<circle class="progress" cx="50" cy="50" r="45" data-percent="88"></circle>
+</svg>
+<div class="value">88%</div>
+</div>
+<div class="stat-label-small">Performance</div>
+</div>
+<div class="visual-stat">
+<div class="circular-progress">
+<svg width="100" height="100">
+<circle class="bg" cx="50" cy="50" r="45"></circle>
+<circle class="progress" cx="50" cy="50" r="45" data-percent="92"></circle>
+</svg>
+<div class="value">92%</div>
+</div>
+<div class="stat-label-small">Handling</div>
+</div>
+<div class="visual-stat">
+<div class="circular-progress">
+<svg width="100" height="100">
+<circle class="bg" cx="50" cy="50" r="45"></circle>
+<circle class="progress" cx="50" cy="50" r="45" data-percent="100"></circle>
+</svg>
+<div class="value">100%</div>
+</div>
+<div class="stat-label-small">Icon Status</div>
+</div>
+</div>
+<div class="specs-grid">
+<div class="spec-item">
+<div class="spec-label"><i class="fas fa-calendar"></i> Production Year</div>
+<div class="spec-value">1995</div>
+</div>
+<div class="spec-item">
+<div class="spec-label"><i class="fas fa-layer-group"></i> Generation</div>
+<div class="spec-value">2nd Gen (2G)</div>
+</div>
+<div class="spec-item">
+<div class="spec-label"><i class="fas fa-car"></i> Trim Level</div>
+<div class="spec-value">GSX (AWD)</div>
+</div>
+<div class="spec-item">
+<div class="spec-label"><i class="fas fa-palette"></i> Original Color</div>
+<div class="spec-value">Neon Green</div>
+</div>
+<div class="spec-item">
+<div class="spec-label"><i class="fas fa-cogs"></i> Drivetrain</div>
+<div class="spec-value">All-Wheel Drive</div>
+</div>
+<div class="spec-item">
+<div class="spec-label"><i class="fas fa-exchange-alt"></i> Transmission</div>
+<div class="spec-value">5-Speed Manual</div>
+</div>
+</div>
+<h4>Factory Specifications</h4>
+<table class="tech-table">
+<thead>
+<tr>
+<th>Specification</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Engine (Stock)</td>
+<td>4G63T 2.0L Turbo I4</td>
+</tr>
+<tr>
+<td>Power (Stock)</td>
+<td>210 HP @ 6000 RPM</td>
+</tr>
+<tr>
+<td>Torque (Stock)</td>
+<td>214 lb-ft @ 3000 RPM</td>
+</tr>
+<tr>
+<td>Curb Weight</td>
+<td>3,395 lbs</td>
+</tr>
+<tr>
+<td>Wheelbase</td>
+<td>99.4 inches</td>
+</tr>
+<tr>
+<td>Length</td>
+<td>177.8 inches</td>
+</tr>
+</tbody>
+</table>
+<h4>Design Philosophy</h4>
+<p>The Eclipse GSX was designed as a sport compact that could compete with European sports cars at a fraction of the price. Mitsubishi's engineering team focused on creating a balanced platform with excellent weight distribution, a rigid chassis, and the legendary 4G63T engine that had already proven itself in rally competition through the Lancer Evolution.</p>
+`
+},
+engine: {
+title: '2JZ-GTE Engine - Technical Specifications',
+content: `
+<h4>Engine Swap Details</h4>
+<p>While the stock Eclipse came equipped with Mitsubishi's capable 4G63T turbocharged inline-4, the movie version featured one of the most legendary engine swaps in tuner history: the Toyota 2JZ-GTE. This 3.0-liter twin-turbo inline-6 engine is renowned for its incredible strength and tuning potential.</p>
+<div class="performance-bars">
+<div class="perf-item">
+<div class="perf-label">
+<span>Horsepower Output</span>
+<span>400+ HP</span>
+</div>
+<div class="perf-bar-bg">
+<div class="perf-bar-fill" data-width="85"></div>
+</div>
+</div>
+<div class="perf-item">
+<div class="perf-label">
+<span>Torque Delivery</span>
+<span>450 lb-ft</span>
+</div>
+<div class="perf-bar-bg">
+<div class="perf-bar-fill" data-width="90"></div>
+</div>
+</div>
+<div class="perf-item">
+<div class="perf-label">
+<span>Reliability Rating</span>
+<span>95%</span>
+</div>
+<div class="perf-bar-bg">
+<div class="perf-bar-fill" data-width="95"></div>
+</div>
+</div>
+<div class="perf-item">
+<div class="perf-label">
+<span>Tuning Potential</span>
+<span>1000+ HP</span>
+</div>
+<div class="perf-bar-bg">
+<div class="perf-bar-fill" data-width="98"></div>
+</div>
+</div>
+</div>
+<div class="specs-grid">
+<div class="spec-item">
+<div class="spec-label"><i class="fas fa-code"></i> Engine Code</div>
+<div class="spec-value">2JZ-GTE</div>
+</div>
+<div class="spec-item">
+<div class="spec-label"><i class="fas fa-cog"></i> Configuration</div>
+<div class="spec-value">Inline-6, DOHC</div>
+</div>
+<div class="spec-item">
+<div class="spec-label"><i class="fas fa-tachometer-alt"></i> Displacement</div>
+<div class="spec-value">2,997 cc (3.0L)</div>
+</div>
+<div class="spec-item">
+<div class="spec-label"><i class="fas fa-ruler-combined"></i> Bore x Stroke</div>
+<div class="spec-value">86mm x 86mm</div>
+</div>
+<div class="spec-item">
+<div class="spec-label"><i class="fas fa-compress-arrows-alt"></i> Compression Ratio</div>
+<div class="spec-value">8.5:1</div>
+</div>
+<div class="spec-item">
+<div class="spec-label"><i class="fas fa-wind"></i> Turbochargers</div>
+<div class="spec-value">Sequential CT26</div>
+</div>
+</div>
+<h4>Performance Modifications</h4>
+<ul>
+<li><strong>Turbocharger Upgrade:</strong> Upgraded from stock sequential CT26 turbos to larger single turbo setup or parallel twins for increased boost capacity and reduced lag</li>
+<li><strong>Fuel System:</strong> Upgraded fuel injectors (1000cc+), high-flow fuel pump, and adjustable fuel pressure regulator to support increased power output</li>
+<li><strong>Engine Management:</strong> Standalone ECU (AEM, Haltech, or Link) allowing precise control over fuel, ignition, and boost maps</li>
+<li><strong>Intercooler:</strong> Large front-mount intercooler with custom piping to reduce intake air temperatures and increase air density</li>
+<li><strong>Exhaust System:</strong> 3-inch or larger turbo-back exhaust with high-flow catalytic converter or test pipe for maximum flow</li>
+<li><strong>Internals:</strong> Forged pistons, connecting rods, and upgraded head studs to handle increased cylinder pressures</li>
+<li><strong>Oil System:</strong> Upgraded oil pump, oil cooler, and baffled oil pan to ensure proper lubrication under high G-forces</li>
+</ul>
+<h4>Power Output</h4>
+<p>With proper tuning and supporting modifications, the 2JZ-GTE in the Eclipse produces approximately <strong>400-450 horsepower at the wheels</strong> (approximately 475-525 crank horsepower), with torque figures exceeding <strong>450 lb-ft</strong>. The engine is capable of much more with additional modifications, with built 2JZ engines regularly exceeding 1000 horsepower.</p>
+<h4>Why the 2JZ?</h4>
+<p>The 2JZ-GTE was chosen for several reasons: its iron block provides exceptional strength, the closed-deck design handles high boost pressures, and the sequential turbo system provides excellent low-end response while maintaining top-end power. The engine's ability to reliably handle 20+ PSI of boost on stock internals made it the perfect choice for a street-driven performance car.</p>
+`
+},
+performance: {
+title: 'Performance Specifications and Capabilities',
+content: `
+<h4>Acceleration Testing</h4>
+<p>The modified Eclipse GSX with 2JZ-GTE powerplant delivers impressive acceleration figures that rival modern sports cars costing three times as much. Here are the detailed performance metrics:</p>
+<div class="performance-bars">
+<div class="perf-item">
+<div class="perf-label">
+<span>0-60 MPH Acceleration</span>
+<span>4.2 seconds</span>
+</div>
+<div class="perf-bar-bg">
+<div class="perf-bar-fill" data-width="92"></div>
+</div>
+</div>
+<div class="perf-item">
+<div class="perf-label">
+<span>0-100 MPH</span>
+<span>9.8 seconds</span>
+</div>
+<div class="perf-bar-bg">
+<div class="perf-bar-fill" data-width="88"></div>
+</div>
+</div>
+<div class="perf-item">
+<div class="perf-label">
+<span>Quarter Mile Time</span>
+<span>12.4 @ 115 MPH</span>
+</div>
+<div class="perf-bar-bg">
+<div class="perf-bar-fill" data-width="90"></div>
+</div>
+</div>
+<div class="perf-item">
+<div class="perf-label">
+<span>Braking 60-0 MPH</span>
+<span>108 feet</span>
+</div>
+<div class="perf-bar-bg">
+<div class="perf-bar-fill" data-width="85"></div>
+</div>
+</div>
+</div>
+<div class="specs-grid">
+<div class="spec-item">
+<div class="spec-label"><i class="fas fa-stopwatch"></i> 0-60 MPH</div>
+<div class="spec-value">4.2 seconds</div>
+</div>
+<div class="spec-item">
+<div class="spec-label"><i class="fas fa-tachometer-alt"></i> 0-100 MPH</div>
+<div class="spec-value">9.8 seconds</div>
+</div>
+<div class="spec-item">
+<div class="spec-label"><i class="fas fa-flag-checkered"></i> Quarter Mile</div>
+<div class="spec-value">12.4 @ 115 MPH</div>
+</div>
+<div class="spec-item">
+<div class="spec-label"><i class="fas fa-road"></i> Eighth Mile</div>
+<div class="spec-value">7.8 @ 92 MPH</div>
+</div>
+<div class="spec-item">
+<div class="spec-label"><i class="fas fa-gauge-high"></i> Top Speed</div>
+<div class="spec-value">155+ MPH</div>
+</div>
+<div class="spec-item">
+<div class="spec-label"><i class="fas fa-weight-hanging"></i> Power-to-Weight</div>
+<div class="spec-value">8.5 lbs/HP</div>
+</div>
+</div>
+<h4>Handling Dynamics</h4>
+<ul>
+<li><strong>All-Wheel Drive System:</strong> The Eclipse GSX features Mitsubishi's sophisticated viscous coupling AWD system that automatically distributes torque between the front and rear axles based on traction conditions. Under normal driving, the system sends approximately 50% of power to each axle, but can shift up to 100% to either end as needed.</li>
+<li><strong>Active Torque Split:</strong> The ATS system monitors wheel speed, throttle position, and steering angle to proactively distribute power for optimal handling and traction.</li>
+<li><strong>Suspension Setup:</strong>
+<br>- Front: MacPherson struts with coil springs, gas-pressurized shock absorbers, and stabilizer bar
+<br>- Rear: Multi-link independent suspension with coil springs and stabilizer bar
+<br>- Aftermarket: Adjustable coilovers (BC Racing, Tein, or KW) for optimized ride height and damping
+</li>
+<li><strong>Braking System:</strong>
+<br>- Front: 11.6-inch ventilated discs with 4-piston calipers
+<br>- Rear: 11.0-inch ventilated discs with single-piston calipers
+<br>- Upgraded: Brembo or Wilwood big brake kits with slotted/drilled rotors for improved heat dissipation
+</li>
+<li><strong>Steering:</strong> Power-assisted rack-and-pinion with 2.9 turns lock-to-lock</li>
+</ul>
+<h4>Traction and Launch Control</h4>
+<p>The combination of AWD, sticky performance tires (typically 245/40R18 or 255/35R18), and proper launch technique allows the Eclipse to achieve remarkable traction off the line. The car can consistently launch with minimal wheelspin, translating power to the pavement efficiently.</p>
+<h4>Braking Performance</h4>
+<ul>
+<li><strong>60-0 MPH:</strong> 108 feet</li>
+<li><strong>80-0 MPH:</strong> 195 feet</li>
+<li><strong>Brake Fade Resistance:</strong> Excellent with upgraded brake fluid (Motul RBF600 or similar) and performance pads</li>
+</ul>
+`
+},
+modifications: {
+title: 'Complete Modifications and Upgrades',
+content: `
+<h4>Exterior Modifications</h4>
+<ul>
+<li><strong>Paint:</strong> Custom neon green (PPG or House of Kolor) with clear coat and UV protection. The exact shade matches the iconic movie car, requiring multiple layers and careful color matching.</li>
+<li><strong>Body Kit:</strong>
+<br>- Front bumper with larger air intakes for improved cooling
+<br>- Side skirts extending the visual length of the car
+<br>- Rear bumper with diffuser-style lower section
+<br>- Fender flares to accommodate wider wheels
+</li>
+<li><strong>Rear Wing:</strong> Massive carbon fiber or fiberglass rear spoiler mounted on tall risers, providing significant downforce at high speeds while creating the iconic silhouette</li>
+<li><strong>Lighting:</strong>
+<br>- Underglow neon lighting system (blue/green) installed beneath the chassis
+<br>- LED interior lighting
+<br>- Smoked or clear tail lights
+<br>- HID or LED headlights for improved nighttime visibility
+</li>
+<li><strong>Wheels and Tires:</strong>
+<br>- 18-inch chrome or polished alloy wheels (Work Meister, Volk Racing, or similar)
+<br>- Staggered setup: 18x8.5 front, 18x9.5 rear
+<br>- Performance summer tires (Toyo Proxes, Michelin Pilot Sport, or Nitto NT555)
+<br>- Wheel spacers for aggressive stance
+</li>
+<li><strong>Windows:</strong> 20% tint on front windows, 5% on rear for privacy and heat reduction</li>
+</ul>
+<h4>Performance Upgrades</h4>
+<ul>
+<li><strong>Engine:</strong> 2JZ-GTE swap with all supporting modifications as detailed in Engine section</li>
+<li><strong>Transmission:</strong>
+<br>- Getrag 5-speed manual transmission (stronger than stock)
+<br>- Lightweight flywheel for improved throttle response
+<br>- Short-throw shifter for quicker gear changes
+<br>- Upgraded clutch (twin-disc or ceramic for high torque capacity)
+</li>
+<li><strong>Drivetrain:</strong>
+<br>- Upgraded axles to handle increased torque
+<br>- Limited-slip differential (LSD) for improved traction
+<br>- Strengthened engine and transmission mounts
+</li>
+<li><strong>Fuel System:</strong>
+<br>- 1000cc or larger fuel injectors
+<br>- Walbro 255 LPH or higher fuel pump
+<br>- Adjustable fuel pressure regulator
+<br>- Upgraded fuel lines (braided stainless steel)
+</li>
+<li><strong>Exhaust:</strong>
+<br>- 3-inch or larger downpipe
+<br>- High-flow catalytic converter or test pipe
+<br>- 3-inch cat-back exhaust system
+<br>- Titanium or stainless steel muffler
+</li>
+<li><strong>Cooling:</strong>
+<br>- Large aluminum radiator
+<br>- Oil cooler with thermostat
+<br>- Transmission cooler
+<br>- Upgraded electric fans
+</li>
+</ul>
+<h4>Interior Modifications</h4>
+<ul>
+<li><strong>Seats:</strong> Recaro SPG or similar bucket seats with 4-point or 5-point harnesses</li>
+<li><strong>Roll Cage:</strong> 6-point or 8-point roll cage (TIG welded, DOM tubing) for safety and chassis rigidity</li>
+<li><strong>Steering Wheel:</strong> MOMO or Nardi deep-dish steering wheel with quick-release hub</li>
+<li><strong>Gauges:</strong> Additional gauges for boost, oil pressure, oil temperature, AFR (air/fuel ratio), and EGT (exhaust gas temperature)</li>
+<li><strong>Nitrous System:</strong> 100-150 shot nitrous oxide system with window switch and progressive controller (optional)</li>
+<li><strong>Audio:</strong> Stripped interior for weight reduction, or high-end audio system with subwoofers</li>
+<li><strong>Pedals:</strong> Aluminum or carbon fiber pedal set</li>
+</ul>
+<h4>Suspension and Chassis</h4>
+<ul>
+<li><strong>Coilovers:</strong> Fully adjustable coilover system (BC Racing BR Series, Tein Flex, or KW V3)</li>
+<li><strong>Sway Bars:</strong> Upgraded front and rear anti-roll bars (28mm front, 24mm rear)</li>
+<li><strong>Strut Tower Braces:</strong> Front and rear strut tower bars for improved chassis rigidity</li>
+<li><strong>Bushings:</strong> Polyurethane bushings throughout for improved response and reduced deflection</li>
+<li><strong>Camber Plates:</strong> Adjustable camber plates for alignment optimization</li>
+<li><strong>Traction Bars:</strong> Rear traction bars to prevent wheel hop under hard acceleration</li>
+</ul>
+`
+},
+history: {
+title: 'History and Cultural Impact',
+content: `
+<h4>Film History</h4>
+<p>The green Mitsubishi Eclipse GSX made its cinematic debut in "The Fast and the Furious," released on June 22, 2001. Directed by Rob Cohen, the film introduced audiences to the underground world of street racing in Los Angeles and launched one of the most successful film franchises in history.</p>
+<p>Brian O'Conner, played by Paul Walker, was an undercover LAPD officer tasked with infiltrating the street racing scene to investigate a series of truck hijackings. His Eclipse served as both his daily driver and his racing weapon, helping him gain credibility with Dominic Toretto (Vin Diesel) and his crew.</p>
+<h4>Iconic Movie Scenes</h4>
+<ul>
+<li><strong>Opening Race:</strong> The film's opening sequence features Brian's Eclipse racing against Dom's 1970 Dodge Charger R/T through the streets of Los Angeles. Despite the Charger's superior power, Brian's AWD Eclipse keeps him competitive through the corners.</li>
+<li><strong>Quarter Mile:</strong> The famous "I live my life a quarter mile at a time" scene showcases the Eclipse's acceleration capabilities in a drag racing context.</li>
+<li><strong>Street Racing:</strong> Multiple scenes show the Eclipse navigating through traffic at high speeds, demonstrating both the car's handling and Brian's driving skill.</li>
+<li><strong>The Jump:</strong> In a memorable scene, the Eclipse performs a dramatic jump over train tracks, showcasing the car's durability (and Hollywood physics).</li>
+</ul>
+<h4>The Actual Movie Cars</h4>
+<p>Universal Pictures used multiple Eclipse GSX cars during production:</p>
+<ul>
+<li><strong>Hero Car:</strong> The primary car used for close-up shots and beauty rolls, featuring the complete neon green paint job and all modifications</li>
+<li><strong>Stunt Cars:</strong> Several backup cars used for racing scenes, jumps, and any sequences that might damage the vehicle</li>
+<li><strong>Picture Car:</strong> Used for stationary shots and scenes where the car is parked</li>
+</ul>
+<h4>Cultural Impact</h4>
+<p>The Eclipse's appearance in Fast and Furious had a profound impact on automotive culture:</p>
+<ul>
+<li><strong>Import Tuner Boom:</strong> The film helped launch the import tuner scene into mainstream consciousness, leading to increased sales of Mitsubishi Eclipses, Honda Civics, Nissan Skylines, and Toyota Supras throughout the early 2000s.</li>
+<li><strong>Aftermarket Industry Growth:</strong> Companies specializing in import performance parts saw explosive growth as enthusiasts sought to replicate the movie car looks and performance.</li>
+<li><strong>Car Meets and Events:</strong> The popularity of street racing culture depicted in the film led to the growth of car meets, import shows, and legal racing events across North America.</li>
+<li><strong>Video Games:</strong> The Eclipse became a staple in racing video games, allowing precise control over fuel, ignition, and boost maps</li>
+<li><strong>Fashion and Lifestyle:</strong> The car became associated with a broader lifestyle including specific fashion choices, music preferences, and automotive enthusiasm.</li>
+</ul>
+<h4>Legacy</h4>
+<p>More than two decades after the film's release, the green Eclipse remains one of the most recognizable movie cars of all time. While the Fast and Furious franchise has evolved to feature supercars, tanks, and even trips to space, fans still look back fondly on the relatively grounded street racing roots represented by Brian's Eclipse.</p>
+<p>The car's legacy extends beyond just being a prop - it inspired a generation of gearheads, helped establish the tuner car market, and remains a symbol of early 2000s car culture. Even today, well-maintained Eclipse GSX models command premium prices, and replicas of the movie car are popular projects among enthusiasts.</p>
+<h4>Paul Walker's Legacy</h4>
+<p>Following Paul Walker's tragic death in 2013, his Eclipse and other cars from the Fast and Furious films have taken on additional significance. They serve as reminders of his passion for cars and his role in bringing tuner culture to mainstream audiences. The cars are often displayed at automotive events and museums as tributes to both the actor and the culture he helped popularize.</p>
+`
+}
+};
+
+// Loader Removal - FIXED (Removed forceResponsiveLayout)
+function removeLoader() {
+const loader = document.getElementById('loader');
+const body = document.body;
+if (loader && !loader.classList.contains('hidden')) {
+loader.classList.add('hidden');
+body.classList.remove('loading');
+setTimeout(() => {
+loader.style.display = 'none';
+}, 500);
+}
+}
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', function() {
+// REMOVED forceResponsiveLayout() - This was breaking responsiveness
+if (document.readyState === 'complete') {
+removeLoader();
+} else {
+window.addEventListener('load', removeLoader);
+}
+setTimeout(removeLoader, 3000);
+initParticles();
+animateParticles();
+});
+
+// Particle System
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+let particlesArray = [];
+let animationId;
+function resizeCanvas() {
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+}
+resizeCanvas();
+class Particle {
+constructor() {
+this.x = Math.random() * canvas.width;
+this.y = Math.random() * canvas.height;
+this.size = Math.random() * 3 + 1;
+this.speedX = (Math.random() * 1) - 0.5;
+this.speedY = (Math.random() * 1) - 0.5;
+this.color = Math.random() > 0.5 ? '#39FF14' : '#0080FF';
+}
+update() {
+this.x += this.speedX;
+this.y += this.speedY;
+if (this.x > canvas.width) this.x = 0;
+if (this.x < 0) this.x = canvas.width;
+if (this.y > canvas.height) this.y = 0;
+if (this.y < 0) this.y = canvas.height;
+}
+draw() {
+ctx.fillStyle = this.color;
+ctx.globalAlpha = 0.6;
+ctx.beginPath();
+ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+ctx.fill();
+ctx.globalAlpha = 1;
+}
+}
+function initParticles() {
+particlesArray = [];
+const numberOfParticles = Math.min(80, (canvas.width * canvas.height) / 18000);
+for (let i = 0; i < numberOfParticles; i++) {
+particlesArray.push(new Particle());
+}
+}
+function animateParticles() {
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+for (let i = 0; i < particlesArray.length; i++) {
+particlesArray[i].update();
+particlesArray[i].draw();
+}
+animationId = requestAnimationFrame(animateParticles);
+}
+window.addEventListener('resize', () => {
+resizeCanvas();
+initParticles();
+});
+
+// 3D Tilt Effect
+const carContainer = document.getElementById('carContainer');
+document.addEventListener('mousemove', (e) => {
+if (window.innerWidth > 768 && carContainer) {
+const xAxis = (window.innerWidth / 2 - e.pageX) / 30;
+const yAxis = (window.innerHeight / 2 - e.pageY) / 30;
+carContainer.style.transform = 'rotateY(' + xAxis + 'deg) rotateX(' + yAxis + 'deg)';
+}
+});
+document.addEventListener('mouseleave', () => {
+if (carContainer) {
+carContainer.style.transform = 'rotateY(0deg) rotateX(0deg)';
+}
+});
+
+// Stats Counter Animation
+const statsSection = document.getElementById('stats');
+const statCards = document.querySelectorAll('.stat-card');
+const progressBars = document.querySelectorAll('.progress-fill');
+let statsStarted = false;
+const animateCounter = (counter) => {
+const target = parseFloat(counter.getAttribute('data-target'));
+const suffix = counter.getAttribute('data-suffix') || '';
+const prefix = counter.getAttribute('data-prefix') || '';
+const isDecimal = counter.hasAttribute('data-decimal');
+const duration = 2000;
+const startTime = performance.now();
+const updateCounter = (currentTime) => {
+const elapsed = currentTime - startTime;
+const progress = Math.min(elapsed / duration, 1);
+const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+const current = target * easeOutQuart;
+if (isDecimal) {
+counter.textContent = prefix + current.toFixed(1) + suffix;
+} else {
+counter.textContent = prefix + Math.floor(current) + suffix;
+}
+if (progress < 1) {
+requestAnimationFrame(updateCounter);
+} else {
+if (isDecimal) {
+counter.textContent = prefix + target.toFixed(1) + suffix;
+} else {
+counter.textContent = prefix + target + suffix;
+}
+}
+};
+requestAnimationFrame(updateCounter);
+};
+const statsObserver = new IntersectionObserver((entries) => {
+if(entries[0].isIntersecting && !statsStarted) {
+statCards.forEach((card, index) => {
+setTimeout(() => {
+card.classList.add('visible');
+}, index * 100);
+});
+const counters = document.querySelectorAll('.stat-value');
+counters.forEach((counter, index) => {
+setTimeout(() => {
+animateCounter(counter);
+}, index * 80);
+});
+setTimeout(() => {
+progressBars.forEach((bar, index) => {
+setTimeout(() => {
+const width = bar.getAttribute('data-width');
+bar.style.width = width + '%';
+}, index * 100);
+});
+}, 400);
+statsStarted = true;
+}
+}, { threshold: 0.3 });
+if (statsSection) {
+statsObserver.observe(statsSection);
+}
+
+// Scroll Animations for Info Section
+const infoElements = document.querySelectorAll('.info-text h2, .info-text p, .quote-box, .accordion');
+const infoObserver = new IntersectionObserver((entries) => {
+entries.forEach((entry, index) => {
+if (entry.isIntersecting) {
+setTimeout(() => {
+entry.target.classList.add('visible');
+}, index * 80);
+}
+});
+}, { threshold: 0.2 });
+infoElements.forEach(el => infoObserver.observe(el));
+
+// Gallery Animations
+const galleryItems = document.querySelectorAll('.gallery-item');
+const galleryTitle = document.querySelector('.gallery h2');
+const galleryObserver = new IntersectionObserver((entries) => {
+entries.forEach((entry, index) => {
+if (entry.isIntersecting) {
+setTimeout(() => {
+entry.target.classList.add('visible');
+}, index * 100);
+}
+});
+}, { threshold: 0.1 });
+if (galleryTitle) galleryObserver.observe(galleryTitle);
+galleryItems.forEach(item => galleryObserver.observe(item));
+
+// Modal Functions
+function openModal(index) {
+currentImageIndex = index;
+const modal = document.getElementById('galleryModal');
+const modalImage = document.getElementById('modalImage');
+const modalCaption = document.getElementById('modalCaption');
+const modalLoading = document.getElementById('modalLoading');
+isModalOpen = true;
+modalImage.classList.remove('loaded');
+modalImage.style.opacity = '0';
+modalLoading.style.opacity = '1';
+modalLoading.style.display = 'block';
+modalImage.src = '';
+modalCaption.textContent = galleryImages[index].caption;
+modal.classList.add('active');
+document.body.style.overflow = 'hidden';
+const img = new Image();
+img.onload = function() {
+modalImage.src = galleryImages[index].src;
+imageLoaded();
+};
+img.onerror = function() {
+modalLoading.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Error</span>';
+};
+img.src = galleryImages[index].src;
+}
+function imageLoaded() {
+const modalLoading = document.getElementById('modalLoading');
+const modalImage = document.getElementById('modalImage');
+setTimeout(() => {
+modalLoading.style.opacity = '0';
+setTimeout(() => {
+modalLoading.style.display = 'none';
+modalLoading.style.opacity = '1';
+modalImage.classList.add('loaded');
+}, 200);
+}, 300);
+}
+function closeModal() {
+const modal = document.getElementById('galleryModal');
+const modalImage = document.getElementById('modalImage');
+modal.classList.remove('active');
+modalImage.classList.remove('loaded');
+isModalOpen = false;
+setTimeout(() => {
+document.body.style.overflow = 'auto';
+}, 350);
+}
+function closeModalOnOverlay(event) {
+if (event.target.id === 'galleryModal') {
+closeModal();
+}
+}
+function changeImage(direction, event) {
+if (event) event.stopPropagation();
+if (!isModalOpen) return;
+const modalImage = document.getElementById('modalImage');
+const modalLoading = document.getElementById('modalLoading');
+modalImage.style.opacity = '0';
+setTimeout(() => {
+currentImageIndex += direction;
+if (currentImageIndex < 0) {
+currentImageIndex = galleryImages.length - 1;
+} else if (currentImageIndex >= galleryImages.length) {
+currentImageIndex = 0;
+}
+modalLoading.style.display = 'block';
+modalLoading.style.opacity = '1';
+modalImage.classList.remove('loaded');
+const modalCaption = document.getElementById('modalCaption');
+modalCaption.textContent = galleryImages[currentImageIndex].caption;
+const img = new Image();
+img.onload = function() {
+modalImage.src = galleryImages[currentImageIndex].src;
+setTimeout(() => {
+modalImage.style.opacity = '1';
+modalLoading.style.display = 'none';
+}, 100);
+};
+img.onerror = function() {
+modalLoading.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Error</span>';
+};
+img.src = galleryImages[currentImageIndex].src;
+}, 250);
+}
+function showInfoModal(type) {
+const modal = document.getElementById('infoModal');
+const title = document.getElementById('infoModalTitle');
+const body = document.getElementById('infoModalBody');
+if (infoContent[type]) {
+title.textContent = infoContent[type].title;
+body.innerHTML = infoContent[type].content;
+modal.classList.add('active');
+document.body.style.overflow = 'hidden';
+setTimeout(() => {
+animateModalProgress();
+}, 350);
+}
+}
+function animateModalProgress() {
+const modal = document.getElementById('infoModal');
+if (!modal.classList.contains('active')) return;
+const circles = modal.querySelectorAll('.circular-progress circle.progress');
+circles.forEach(circle => {
+const percent = parseInt(circle.getAttribute('data-percent'));
+const offset = precalculatedOffsets[percent] || 0;
+circle.style.strokeDashoffset = offset;
+});
+const perfBars = modal.querySelectorAll('.perf-bar-fill');
+perfBars.forEach((bar, index) => {
+setTimeout(() => {
+const width = bar.getAttribute('data-width');
+bar.style.width = width + '%';
+}, index * 80);
+});
+}
+function closeInfoModal() {
+const modal = document.getElementById('infoModal');
+modal.classList.remove('active');
+setTimeout(() => {
+document.body.style.overflow = 'auto';
+}, 350);
+}
+function closeInfoModalOnOverlay(event) {
+if (event.target.id === 'infoModal') {
+closeInfoModal();
+}
+}
+document.addEventListener('keydown', (e) => {
+if (e.key === 'Escape') {
+if (isModalOpen) {
+closeModal();
+} else {
+closeInfoModal();
+}
+}
+});
+
+// Accordion
+const accordions = document.querySelectorAll('.accordion-header');
+accordions.forEach(acc => {
+acc.addEventListener('click', function() {
+const content = this.nextElementSibling;
+const isActive = this.classList.contains('active');
+accordions.forEach(a => {
+a.classList.remove('active');
+a.nextElementSibling.style.maxHeight = null;
+});
+if (!isActive) {
+this.classList.add('active');
+content.style.maxHeight = content.scrollHeight + "px";
+}
+});
+});
+
+// MOBILE MENU
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+const closeMenuBtn = document.getElementById('closeMenuBtn');
+function toggleMobileMenu() {
+mobileMenu.classList.toggle('active');
+hamburger.classList.toggle('active');
+if (mobileMenu.classList.contains('active')) {
+hamburger.innerHTML = '<i class="fas fa-times"></i>';
+document.body.style.overflow = 'hidden';
+} else {
+hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+document.body.style.overflow = 'auto';
+}
+}
+hamburger.addEventListener('click', toggleMobileMenu);
+closeMenuBtn.addEventListener('click', toggleMobileMenu);
+
+// Navbar Scroll Effect
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+if (window.scrollY > 100) {
+navbar.classList.add('scrolled');
+} else {
+navbar.classList.remove('scrolled');
+}
+});
+
+// Back to Top Button
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+if (window.scrollY > 500) {
+backToTop.classList.add('visible');
+} else {
+backToTop.classList.remove('visible');
+}
+});
+function scrollToTop() {
+window.scrollTo({
+top: 0,
+behavior: 'smooth'
+});
+}
+
+// Smooth Scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+anchor.addEventListener('click', function (e) {
+e.preventDefault();
+const target = document.querySelector(this.getAttribute('href'));
+if (target) {
+target.scrollIntoView({
+behavior: 'smooth',
+block: 'start'
+});
+}
+});
+});
+
+// Cleanup
+window.addEventListener('beforeunload', () => {
+if (animationId) {
+cancelAnimationFrame(animationId);
+}
+});
+</script>
+</body>
+</html>
