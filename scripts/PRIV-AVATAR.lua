@@ -1989,4 +1989,4 @@ connect(skinGridLayout:GetPropertyChangedSignal("AbsoluteContentSize"), updateSk
 
 lastMorphTime = loadCooldown()
 loadFavorites()
-sendNotification("?? Morph Avatar Pro", "By @sickly255 (SAGE)  v2.1.3 | 6 Temas", "")
+sendNotification("?? Morph Avatar Pro", "By @sickly255 (SAGE) ? v2.1.3 | 6 Temas", "")
