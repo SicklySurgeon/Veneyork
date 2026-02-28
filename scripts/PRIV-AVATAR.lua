@@ -1452,9 +1452,48 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
         name = targetPlayer.Name
     })
     
+    -- 🖼️ NUEVO: Imagen de Perfil
+    local profileImage = Instance.new("ImageLabel")
+    profileImage.Size = UDim2.new(0, 40, 0, 40)
+    profileImage.Position = UDim2.new(0, 5, 0, 5)
+    profileImage.BackgroundColor3 = COLORS.MID_GRAY
+    profileImage.BorderSizePixel = 0
+    profileImage.Parent = card
+    local imgCorner = Instance.new("UICorner")
+    imgCorner.CornerRadius = UDim.new(0, 6)
+    imgCorner.Parent = profileImage
+    registerThemeObj(profileImage, "MID_GRAY", "BackgroundColor3")
+    
+    -- Cargar Thumbnail (Async)
+    local userId = targetPlayer.UserId
+    local cached = playerCache[userId]
+    if cached and cached.Thumbnail ~= "" then
+        profileImage.Image = cached.Thumbnail
+    else
+        profileImage.Image = "" -- Sin imagen hasta cargar
+        task.spawn(function()
+            local success, thumb = pcall(function()
+                return SERVICES.Players:GetUserThumbnailAsync(userId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
+            end)
+            if success and profileImage and profileImage.Parent then
+                profileImage.Image = thumb
+                -- Actualizar caché para futuras cargas
+                if not playerCache[userId] then
+                    addToCache(userId, {UserId = userId, Name = targetPlayer.Name, Thumbnail = thumb})
+                else
+                    playerCache[userId].Thumbnail = thumb
+                end
+            end
+        end)
+    end
+
+    -- ✅ AJUSTE: Mover etiquetas de texto para hacer espacio a la imagen
+    playerName.Position = UDim2.new(0, 55, 0, 5) -- Antes: 0, 10
+    playerName.Size = UDim2.new(1, -195, 0, 25) -- Reducido ancho para evitar solapamiento con botones
+
     local displayName = Instance.new("TextLabel")
     displayName.Size = UDim2.new(1, -145, 0, 20)
-    displayName.Position = UDim2.new(0, 10, 0, 25)
+    displayName.Position = UDim2.new(0, 55, 0, 25) -- ✅ AJUSTE: Antes 0, 10
     displayName.Text = "@" .. (targetPlayer.DisplayName or targetPlayer.Name)
     displayName.TextColor3 = COLORS.TEXT_DIM
     displayName.TextTransparency = 0.4
@@ -1465,7 +1504,7 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
     displayName.TextTruncate = Enum.TextTruncate.AtEnd
     displayName.Parent = card
     registerThemeObj(displayName, "TEXT_DIM", "TextColor3")
-    
+
     local morphBtn = createButton(card, {
         Size = UDim2.new(0, 60, 0, 35),
         Position = UDim2.new(1, -65, 0, 7.5),
@@ -1473,7 +1512,6 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
         TextSize = 12,
         Color = COLORS.LIGHT_GREEN
     })
-    
     local copyBtn = createButton(card, {
         Size = UDim2.new(0, 30, 0, 35),
         Position = UDim2.new(1, -100, 0, 7.5),
@@ -1481,7 +1519,6 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
         TextSize = 14,
         Color = COLORS.DARK_GRAY
     })
-    
     if not isFavorite then
         local favBtn = createButton(card, {
             Size = UDim2.new(0, 30, 0, 35),
@@ -1518,17 +1555,14 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
             saveFavorites()
         end)
     end
-    
     connect(morphBtn.MouseButton1Click, function()
         flashButton(morphBtn)
         morphToPlayer(targetPlayer)
     end)
-    
     connect(copyBtn.MouseButton1Click, function()
         flashButton(copyBtn)
         copyBodyObjects(targetPlayer, {clothes=true, accessories=true, skin=false, shape=false})
     end)
-    
     connect(card.InputBegan, function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             if not previewFrame then
@@ -1556,13 +1590,11 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
             previewFrame.Visible = true
         end
     end)
-    
     connect(card.InputEnded, function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 and previewFrame then
             previewFrame.Visible = false
         end
     end)
-    
     return card
 end
 
