@@ -570,7 +570,7 @@ local function validateMorphTarget(target)
         sendNotification("👤 Morph Avatar", "Cannot morph to yourself!", "")
         return false
     end
-    if target.Name and target.Name:lower() == "sickly25" then
+    if target.Name and target.Name:lower() == "sickly255" then
         sendNotification("👤 Morph Avatar", "No se puede morphear a este usuario!", "")
         return false
     end
@@ -688,7 +688,7 @@ local function copyBodyObjects(target, options)
         sendNotification("📋 Copy Objects", "Cannot copy from yourself!", "")
         return
     end
-    if target.Name and target.Name:lower() == "sickly25" then
+    if target.Name and target.Name:lower() == "sickly255" then
         sendNotification("📋 Copy Objects", "No se puede copiar a este usuario!", "")
         return
     end
