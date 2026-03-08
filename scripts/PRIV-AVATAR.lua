@@ -1,110 +1,23 @@
 -- ==========================================
--- MORPH AVATAR PRO - VERSIÓN CON TEMAS (v2.1.3)
--- Sistema de 6 temas visuales integrado
--- Corregido: Emojis, Contraste, Bugs de Morph, Historial Duplicado
+-- MORPH AVATAR PRO - VERSIÓN OPTIMIZADA (v2.0.0)
+-- Todas las correcciones de bugs y mejoras aplicadas
 -- ==========================================
 
 -- ==========================================
 -- 1. CONFIGURACIÓN Y CONSTANTES
 -- ==========================================
-
--- 🎨 SISTEMA DE TEMAS - 6 VARIANTES
-local THEMES = {
-    Glass = {  -- Tema original (Glassmorphism)
-        BLACK = Color3.fromRGB(15, 15, 15),
-        DARK_GRAY = Color3.fromRGB(35, 35, 35),
-        MID_GRAY = Color3.fromRGB(50, 50, 50),
-        LIGHT_GRAY = Color3.fromRGB(200, 200, 200),
-        WHITE = Color3.fromRGB(255, 255, 255),
-        TEXT_MAIN = Color3.fromRGB(255, 255, 255), -- Texto principal
-        TEXT_DIM = Color3.fromRGB(180, 180, 180),  -- Texto secundario
-        RED = Color3.fromRGB(200, 50, 50),
-        LIGHT_GREEN = Color3.fromRGB(50, 180, 50),
-        BLUE = Color3.fromRGB(50, 120, 200),
-        ACCENT = Color3.fromRGB(100, 150, 255),
-        YELLOW = Color3.fromRGB(255, 255, 0),
-        TRANSPARENCY = 0.05
-    },
-    Dark = {  -- Tema oscuro clásico
-        BLACK = Color3.fromRGB(20, 20, 25),
-        DARK_GRAY = Color3.fromRGB(30, 30, 40),
-        MID_GRAY = Color3.fromRGB(55, 55, 70),
-        LIGHT_GRAY = Color3.fromRGB(180, 180, 200),
-        WHITE = Color3.fromRGB(240, 240, 240),
-        TEXT_MAIN = Color3.fromRGB(240, 240, 240),
-        TEXT_DIM = Color3.fromRGB(160, 160, 170),
-        RED = Color3.fromRGB(200, 50, 50),
-        LIGHT_GREEN = Color3.fromRGB(40, 180, 90),
-        BLUE = Color3.fromRGB(80, 130, 220),
-        ACCENT = Color3.fromRGB(80, 130, 220),
-        YELLOW = Color3.fromRGB(255, 200, 50),
-        TRANSPARENCY = 0.05
-    },
-    Light = {  -- Tema claro (Corregido contraste)
-        BLACK = Color3.fromRGB(240, 240, 245),
-        DARK_GRAY = Color3.fromRGB(220, 220, 230),
-        MID_GRAY = Color3.fromRGB(200, 200, 210),
-        LIGHT_GRAY = Color3.fromRGB(80, 80, 100),
-        WHITE = Color3.fromRGB(20, 20, 25), -- Usado para elementos blancos en tema oscuro, pero oscuro en tema claro
-        TEXT_MAIN = Color3.fromRGB(20, 20, 25),   -- Texto oscuro para fondo claro
-        TEXT_DIM = Color3.fromRGB(60, 60, 70),    -- Texto secundario oscuro
-        RED = Color3.fromRGB(180, 40, 40),
-        LIGHT_GREEN = Color3.fromRGB(30, 150, 70),
-        BLUE = Color3.fromRGB(60, 120, 200),
-        ACCENT = Color3.fromRGB(60, 120, 200),
-        YELLOW = Color3.fromRGB(200, 180, 0),
-        TRANSPARENCY = 0.1
-    },
-    Cyber = {  -- Tema cyberpunk/neón
-        BLACK = Color3.fromRGB(10, 10, 20),
-        DARK_GRAY = Color3.fromRGB(25, 25, 45),
-        MID_GRAY = Color3.fromRGB(45, 45, 75),
-        LIGHT_GRAY = Color3.fromRGB(150, 200, 255),
-        WHITE = Color3.fromRGB(255, 255, 255),
-        TEXT_MAIN = Color3.fromRGB(255, 255, 255),
-        TEXT_DIM = Color3.fromRGB(150, 200, 255),
-        RED = Color3.fromRGB(255, 50, 100),
-        LIGHT_GREEN = Color3.fromRGB(0, 255, 150),
-        BLUE = Color3.fromRGB(0, 200, 255),
-        ACCENT = Color3.fromRGB(0, 255, 200),
-        YELLOW = Color3.fromRGB(255, 255, 0),
-        TRANSPARENCY = 0.2
-    },
-    Sunset = {  -- Tema cálido/naranja
-        BLACK = Color3.fromRGB(30, 20, 25),
-        DARK_GRAY = Color3.fromRGB(50, 35, 40),
-        MID_GRAY = Color3.fromRGB(70, 50, 55),
-        LIGHT_GRAY = Color3.fromRGB(220, 180, 170),
-        WHITE = Color3.fromRGB(255, 240, 230),
-        TEXT_MAIN = Color3.fromRGB(255, 240, 230),
-        TEXT_DIM = Color3.fromRGB(200, 160, 150),
-        RED = Color3.fromRGB(255, 80, 80),
-        LIGHT_GREEN = Color3.fromRGB(100, 200, 120),
-        BLUE = Color3.fromRGB(255, 150, 100),
-        ACCENT = Color3.fromRGB(255, 150, 100),
-        YELLOW = Color3.fromRGB(255, 200, 100),
-        TRANSPARENCY = 0.15
-    },
-    Ocean = {  -- Tema azul/marino
-        BLACK = Color3.fromRGB(10, 20, 30),
-        DARK_GRAY = Color3.fromRGB(20, 40, 60),
-        MID_GRAY = Color3.fromRGB(35, 60, 90),
-        LIGHT_GRAY = Color3.fromRGB(150, 190, 220),
-        WHITE = Color3.fromRGB(230, 245, 255),
-        TEXT_MAIN = Color3.fromRGB(230, 245, 255),
-        TEXT_DIM = Color3.fromRGB(150, 190, 220),
-        RED = Color3.fromRGB(255, 80, 100),
-        LIGHT_GREEN = Color3.fromRGB(60, 200, 180),
-        BLUE = Color3.fromRGB(50, 180, 255),
-        ACCENT = Color3.fromRGB(50, 180, 255),
-        YELLOW = Color3.fromRGB(100, 220, 255),
-        TRANSPARENCY = 0.18
-    }
+local COLORS = {
+    BLACK = Color3.fromRGB(15, 15, 15),
+    DARK_GRAY = Color3.fromRGB(35, 35, 35),
+    MID_GRAY = Color3.fromRGB(50, 50, 50),
+    LIGHT_GRAY = Color3.fromRGB(200, 200, 200),
+    WHITE = Color3.fromRGB(255, 255, 255),
+    RED = Color3.fromRGB(200, 50, 50),
+    LIGHT_GREEN = Color3.fromRGB(50, 180, 50),
+    BLUE = Color3.fromRGB(50, 120, 200),
+    ACCENT = Color3.fromRGB(100, 150, 255),
+    YELLOW = Color3.fromRGB(255, 255, 0)
 }
-
-local COLORS = THEMES.Glass  -- Referencia al tema activo
-local currentThemeName = "Glass"
-local themeObjects = {}  -- {obj, role, property}
 
 local SERVICES = {
     Players = game:GetService("Players"),
@@ -123,8 +36,8 @@ local CONFIG = {
     CONFIRM_MORPH = false,
     SORT_MODE = "name",
     MAX_HISTORY = 10,
-    COOLDOWN = 5,
-    MAX_CACHE_SIZE = 50,
+    COOLDOWN = 1,
+    MAX_CACHE_SIZE = 50,  -- ✅ Límite de cache
     DEBOUNCE_TIME = 0.3,
     TAB_BUTTON_WIDTH = 90,
     CARD_HEIGHT = 50,
@@ -139,17 +52,17 @@ local dragStart, startPos = nil, nil
 local currentTab = "info"
 local favorites = {}
 local playerCache = {}
-local cacheOrder = {}
+local cacheOrder = {}  -- ✅ Para tracking LRU
 local history = {}
 local confirmMorph = CONFIG.CONFIRM_MORPH
 local sortMode = CONFIG.SORT_MODE
 local previewFrame = nil
-local previewImage = nil
+local previewImage = nil  -- ✅ Referencia correcta al ImageLabel
 local lastMorphTime = 0
 local canUseTween = SERVICES.Tween ~= nil
 local canUseWriteFile = pcall(function() return writefile end)
 
--- 🔧 Sistema de limpieza de conexiones
+-- ✅ Sistema de limpieza de conexiones
 local connections = {}
 local activeTweens = {}
 
@@ -171,52 +84,13 @@ local function cleanupAll()
 end
 
 -- ==========================================
--- 🎨 SISTEMA DE TEMAS
--- ==========================================
-
-local function registerThemeObj(obj, role, property)
-    if not obj or not role then return end
-    table.insert(themeObjects, {obj = obj, role = role, property = property or "BackgroundColor3"})
-end
-
-local function applyTheme(themeName)
-    if not THEMES[themeName] then return end
-    COLORS = THEMES[themeName]
-    currentThemeName = themeName
-    
-    for _, data in ipairs(themeObjects) do
-        local obj, role, prop = data.obj, data.role, data.property
-        if COLORS[role] then
-            obj[prop] = COLORS[role]
-        end
-    end
-    
-    -- Actualizar elementos especiales
-    if frame then frame.BackgroundTransparency = 1 - (1 - COLORS.TRANSPARENCY) * 0.95 end
-    if tabsContainer then tabsContainer.ScrollBarImageColor3 = COLORS.ACCENT end
-    if infoContent then infoContent.ScrollBarImageColor3 = COLORS.ACCENT end
-    if playersScrollFrame then playersScrollFrame.ScrollBarImageColor3 = COLORS.ACCENT end
-    if favoritesScrollFrame then favoritesScrollFrame.ScrollBarImageColor3 = COLORS.ACCENT end
-    if historyScrollFrame then historyScrollFrame.ScrollBarImageColor3 = COLORS.ACCENT end
-    if skinPaletteScroll then skinPaletteScroll.ScrollBarImageColor3 = COLORS.ACCENT end
-    
-    sendNotification("🎨 Tema", "Cambiado a: " .. themeName, "")
-end
-
-local function cycleTheme()
-    local themeNames = {"Glass", "Dark", "Light", "Cyber", "Sunset", "Ocean"}
-    local currentIndex = 1
-    for i, name in ipairs(themeNames) do
-        if name == currentThemeName then currentIndex = i break end
-    end
-    local nextIndex = (currentIndex % #themeNames) + 1
-    applyTheme(themeNames[nextIndex])
-end
-
--- ==========================================
 -- 2. FUNCIONES DE UTILIDAD (helpers)
 -- ==========================================
 
+--- Envía notificación al usuario con manejo de errores
+--- @param title string Título de la notificación
+--- @param text string Texto de la notificación
+--- @param icon string Icono opcional
 local function sendNotification(title, text, icon)
     local success, err = pcall(function()
         SERVICES.StarterGui:SetCore("SendNotification", {
@@ -231,32 +105,50 @@ local function sendNotification(title, text, icon)
     end
 end
 
+--- Convierte Color3 a formato hexadecimal
+--- @param color Color3 Color a convertir
+--- @return string Formato #RRGGBB
 local function colorToHex(color)
     return string.format("#%02X%02X%02X", color.R * 255, color.G * 255, color.B * 255)
 end
 
+--- ✅ Validación robusta de hexadecimal
+--- @param text string Texto a validar
+--- @return Color3|nil, string|nil Color válido o nil, mensaje de error o nil
 local function validateAndParseHex(text)
     if not text or type(text) ~= "string" then
         return nil, "Texto inválido"
     end
-    text = text:gsub("^%s+", ""):gsub("%s+$", "")
+    
+    text = text:trim()
+    
+    -- Auto-completar #
     if #text == 6 and text:match("^%x%x%x%x%x%x$") then
         text = "#" .. text
     end
+    
+    -- Validar formato
     if #text ~= 7 or text:sub(1,1) ~= "#" then
         return nil, "Formato inválido (debe ser #XXXXXX)"
     end
+    
     local hexPart = text:sub(2)
     if not hexPart:match("^%x%x%x%x%x%x$") then
         return nil, "Caracteres hexadecimales inválidos"
     end
+    
     local success, color = pcall(function() return Color3.fromHex(text) end)
     if not success then
         return nil, "Color inválido"
     end
+    
     return color, nil
 end
 
+--- ✅ Crea un botón con tooltips funcionales
+--- @param parent Instance Padre del botón
+--- @param props table Propiedades del botón
+--- @return TextButton Botón creado
 local function createButton(parent, props)
     local btn = Instance.new("TextButton")
     btn.Size = props.Size or UDim2.new(0, 100, 0, 35)
@@ -264,7 +156,7 @@ local function createButton(parent, props)
     btn.Text = props.Text or ""
     btn.Font = props.Font or Enum.Font.GothamBold
     btn.TextSize = props.TextSize or 14
-    btn.TextColor3 = COLORS.TEXT_MAIN -- Usar TEXT_MAIN para contraste correcto
+    btn.TextColor3 = props.TextColor or COLORS.WHITE
     btn.BackgroundColor3 = props.Color or COLORS.MID_GRAY
     btn.BorderSizePixel = 0
     btn.AutoButtonColor = false
@@ -274,20 +166,20 @@ local function createButton(parent, props)
     corner.CornerRadius = UDim.new(0, props.CornerRadius or 6)
     corner.Parent = btn
     
-    -- 🎨 Registrar para sistema de temas
-    local colorRole = "MID_GRAY"
-    if props.Color == COLORS.LIGHT_GREEN then colorRole = "LIGHT_GREEN"
-    elseif props.Color == COLORS.RED then colorRole = "RED"
-    elseif props.Color == COLORS.BLUE then colorRole = "BLUE"
-    elseif props.Color == COLORS.ACCENT then colorRole = "ACCENT"
-    elseif props.Color == COLORS.DARK_GRAY then colorRole = "DARK_GRAY"
+    -- ✅ Implementar tooltips
+    if props.Tooltip and tooltip then
+        connect(btn.MouseEnter, function()
+            tooltip.Show(props.Tooltip, btn.AbsolutePosition + Vector2.new(0, btn.AbsoluteSize.Y))
+        end)
+        connect(btn.MouseLeave, function()
+            tooltip.Hide()
+        end)
     end
-    registerThemeObj(btn, colorRole, "BackgroundColor3")
-    registerThemeObj(btn, "TEXT_MAIN", "TextColor3") -- Registrar color de texto
     
     return btn
 end
 
+--- Crea un frame con bordes redondeados
 local function createRoundedFrame(parent, size, pos, color, radius)
     local frame = Instance.new("Frame")
     frame.Size = size or UDim2.new(0, 100, 0, 100)
@@ -300,20 +192,51 @@ local function createRoundedFrame(parent, size, pos, color, radius)
     corner.CornerRadius = UDim.new(0, radius or 8)
     corner.Parent = frame
     
-    -- 🎨 Registrar para sistema de temas
-    local colorRole = "BLACK"
-    if color == COLORS.DARK_GRAY then colorRole = "DARK_GRAY"
-    elseif color == COLORS.MID_GRAY then colorRole = "MID_GRAY"
-    end
-    registerThemeObj(frame, colorRole, "BackgroundColor3")
     return frame
 end
 
+--- ✅ Sistema de Tooltips funcional
+local tooltip = nil
+
+local function setupTooltip(screenGui)
+    local tip = createRoundedFrame(screenGui, UDim2.new(0, 0, 0, 0), UDim2.new(0, 0, 0, 0), COLORS.DARK_GRAY, 4)
+    tip.BackgroundTransparency = 0.2
+    tip.Visible = false
+    tip.ZIndex = 100
+    
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(1, -10, 1, -4)
+    label.Position = UDim2.new(0, 5, 0, 2)
+    label.BackgroundTransparency = 1
+    label.TextColor3 = COLORS.WHITE
+    label.Font = Enum.Font.Gotham
+    label.TextSize = 12
+    label.TextWrapped = true
+    label.TextXAlignment = Enum.TextXAlignment.Center
+    label.Parent = tip
+    
+    local function show(text, pos)
+        label.Text = text
+        tip.Size = UDim2.new(0, label.TextBounds.X + 20, 0, label.TextBounds.Y + 10)
+        tip.Position = UDim2.new(0, pos.X, 0, pos.Y)
+        tip.Visible = true
+    end
+    
+    local function hide()
+        tip.Visible = false
+    end
+    
+    return {Show = show, Hide = hide}
+end
+
+--- ✅ Animación con tracking de tweens para cleanup
 local function animateObject(obj, props, time)
     if canUseTween then
         local tInfo = TweenInfo.new(time or CONFIG.ANIM_SPEED, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
         local tween = SERVICES.Tween:Create(obj, tInfo, props)
+        
         table.insert(activeTweens, tween)
+        
         connect(tween.Completed, function()
             for i, t in ipairs(activeTweens) do
                 if t == tween then
@@ -322,6 +245,7 @@ local function animateObject(obj, props, time)
                 end
             end
         end)
+        
         tween:Play()
         return tween
     else
@@ -341,18 +265,20 @@ end
 local function flashCharacter(character)
     local root = character:FindFirstChild("HumanoidRootPart")
     if not root then return end
+    
     local highlight = Instance.new("SelectionBox")
     highlight.Adornee = root
     highlight.Color3 = COLORS.YELLOW
     highlight.LineThickness = 0.1
     highlight.Transparency = 0.5
     highlight.Parent = root
+    
     animateObject(highlight, {Transparency = 1}, 0.5)
     task.wait(0.5)
     highlight:Destroy()
 end
 
--- ⏳ FUNCIONES DE COOLDOWN CORREGIDAS
+--- ✅ Cooldown con persistencia entre sesiones
 local function loadCooldown()
     if not canUseWriteFile then return 0 end
     local success, data = pcall(function()
@@ -370,16 +296,17 @@ local function saveCooldown(time)
 end
 
 local function checkCooldown()
-    local now = os.time()
+    local now = os.clock()
     if now - lastMorphTime < CONFIG.COOLDOWN then
-        sendNotification("⏳ Cooldown", "Espera " .. math.ceil(CONFIG.COOLDOWN - (now - lastMorphTime)) .. " segundos", "")
+        sendNotification("Cooldown", "Espera " .. math.ceil(CONFIG.COOLDOWN - (now - lastMorphTime)) .. " segundos", "")
         return false
     end
     lastMorphTime = now
-    saveCooldown(lastMorphTime)
+    saveCooldown(lastMorphTime)  -- ✅ Persistir
     return true
 end
 
+--- ✅ Cache con límite LRU
 local function addToCache(userId, data)
     if playerCache[userId] then
         for i, id in ipairs(cacheOrder) do
@@ -389,8 +316,10 @@ local function addToCache(userId, data)
             end
         end
     end
+    
     table.insert(cacheOrder, userId)
     playerCache[userId] = data
+    
     while #cacheOrder > CONFIG.MAX_CACHE_SIZE do
         local oldestId = table.remove(cacheOrder, 1)
         playerCache[oldestId] = nil
@@ -401,6 +330,7 @@ local function getCachedPlayerData(userId, name, displayName)
     if playerCache[userId] then
         return playerCache[userId]
     end
+    
     local data = {
         UserId = userId,
         Name = name or "Unknown",
@@ -408,6 +338,7 @@ local function getCachedPlayerData(userId, name, displayName)
         Thumbnail = "",
         Description = nil
     }
+    
     task.spawn(function()
         local thumbSuccess, thumb = pcall(function()
             return SERVICES.Players:GetUserThumbnailAsync(userId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
@@ -416,35 +347,45 @@ local function getCachedPlayerData(userId, name, displayName)
             data.Thumbnail = thumb
         end
     end)
-    addToCache(userId, data)
+    
+    addToCache(userId, data)  -- ✅ Usar cache con límite
     return data
 end
 
 local function saveFavorites()
     if not canUseWriteFile then return end
+    
     local data = {}
     for name, info in pairs(favorites) do
         table.insert(data, {Name = name, UserId = info.UserId, DisplayName = info.DisplayName})
     end
+    
     local success, err = pcall(function()
         writefile("MorphFavorites.json", SERVICES.HttpService:JSONEncode(data))
     end)
+    
     if not success then
         warn("No se pudieron guardar favoritos: " .. tostring(err))
     end
 end
 
+--- ✅ Cargar favoritos con validación de estructura
 local function loadFavorites()
     if not canUseWriteFile then return end
+    
     local success, data = pcall(function()
         return readfile("MorphFavorites.json")
     end)
+    
     if not success or not data then return end
+    
     local decoded = SERVICES.HttpService:JSONDecode(data)
+    
     if type(decoded) ~= "table" then
         warn("[Favorites] Invalid data structure")
         return
     end
+    
     for _, item in ipairs(decoded) do
         if type(item) == "table" and item.UserId and type(item.UserId) == "number" then
             favorites[item.Name] = {
@@ -455,19 +396,8 @@ local function loadFavorites()
     end
 end
 
--- ✅ FUNCIÓN DE HISTORIAL SIN DUPLICADOS
 local function addToHistory(userId, name, displayName)
-    -- Verificar si ya existe en el historial
-    for i, entry in ipairs(history) do
-        if entry.UserId == userId then
-            -- Mover al principio en lugar de agregar duplicado
-            table.remove(history, i)
-            break
-        end
-    end
-    -- Agregar al principio
     table.insert(history, 1, {UserId = userId, Name = name, DisplayName = displayName, Time = os.time()})
-    -- Limitar tamaño
     if #history > CONFIG.MAX_HISTORY then
         table.remove(history)
     end
@@ -481,25 +411,28 @@ local function getDistanceToPlayer(targetPlayer)
     local localChar = player.Character
     local targetChar = targetPlayer.Character
     if not localChar or not targetChar then return math.huge end
+    
     local localRoot = localChar:FindFirstChild("HumanoidRootPart")
     local targetRoot = targetChar:FindFirstChild("HumanoidRootPart")
     if not localRoot or not targetRoot then return math.huge end
+    
     return (localRoot.Position - targetRoot.Position).Magnitude
 end
 
+--- ✅ Sanitización de inputs de usuario
 local function sanitizeInput(text)
     if not text or type(text) ~= "string" then
         return ""
     end
-    text = text:gsub("^%s+", ""):gsub("%s+$", "")
     text = text:sub(1, 50)
     text = text:gsub("[<>\"'%;()]", "")
-    return text
+    return text:trim()
 end
 
 local function applyMorphEffect(character)
     local rootPart = character:FindFirstChild("HumanoidRootPart")
     if not rootPart then return end
+    
     local particleEmitter = Instance.new("ParticleEmitter")
     particleEmitter.Texture = "rbxassetid://243098098"
     particleEmitter.Rate = 50
@@ -526,81 +459,95 @@ local function applyMorphEffect(character)
     end)
 end
 
+--- ✅ Manejo explícito de errores en API calls
 local function safeGetHumanoidDescription(userId)
     local success, result = pcall(function()
         return SERVICES.Players:GetHumanoidDescriptionFromUserId(userId)
     end)
+    
     if not success then
         warn("[Morph] Failed to get description for userId " .. userId .. ": " .. tostring(result))
         return nil
     end
+    
     if not result then
         warn("[Morph] No description returned for userId " .. userId)
         return nil
     end
+    
     return result
 end
 
 local function findPlayerByName(partialName)
     if not partialName or partialName == "" then return nil end
+    
     local searchName = sanitizeInput(partialName):lower()
+    
     local onlineMatch = nil
     for _, v in ipairs(SERVICES.Players:GetPlayers()) do
         local nameLower = v.Name:lower()
         local dNameLower = v.DisplayName:lower()
+        
         if nameLower == searchName or dNameLower == searchName then
             return v
         end
+        
         if not onlineMatch and (nameLower:sub(1, #searchName) == searchName or dNameLower:sub(1, #searchName) == searchName) then
             onlineMatch = v
         end
     end
+    
     if onlineMatch then
         return onlineMatch
     end
+    
     local success, userId = pcall(function()
         return SERVICES.Players:GetUserIdFromNameAsync(searchName)
     end)
+    
     if success and userId then
         return getCachedPlayerData(userId, searchName)
     end
+    
     return nil
 end
 
 local function findPlayerById(userId)
     if not userId or type(userId) ~= "number" then return nil end
+    
     for _, v in ipairs(SERVICES.Players:GetPlayers()) do
         if v.UserId == userId then
             return v
         end
     end
+    
     return getCachedPlayerData(userId)
 end
 
--- 🛡️ FUNCIÓN DE VALIDACIÓN CON PROTECCIÓN
+--- ✅ Función refactorizada en partes más pequeñas
 local function validateMorphTarget(target)
     if not target then
-        sendNotification("👤 Morph Avatar", "No target found!", "")
+        sendNotification("Morph Avatar", "No target found!", "")
         return false
     end
+    
     local userId = target.UserId or (type(target) == "number" and target or target.UserId)
+    
     if userId == player.UserId then
-        sendNotification("👤 Morph Avatar", "Cannot morph to yourself!", "")
+        sendNotification("Morph Avatar", "Cannot morph to yourself!", "")
         return false
     end
-    -- 🛡️ PROTECCIÓN: No permitir morph a @sickly255
-    if target.Name and target.Name:lower() == "sickly255" then
-        sendNotification("👤 Morph Avatar", "No se puede morphear a este usuario!", "")
-        return false
-    end
+    
     if not checkCooldown() then
         return false
     end
+    
     return true
 end
 
 local function getTargetDescription(target, userId)
     local desc = nil
+    
     if typeof(target) == "Instance" and target:IsA("Player") then
         local targetChar = target.Character
         if targetChar then
@@ -615,6 +562,7 @@ local function getTargetDescription(target, userId)
             end
         end
     end
+    
     if not desc then
         local cached = playerCache[userId]
         if cached and cached.Description then
@@ -629,6 +577,7 @@ local function getTargetDescription(target, userId)
             end
         end
     end
+    
     return desc
 end
 
@@ -639,6 +588,7 @@ local function cleanCharacterAccessories(character)
             obj:Destroy()
         end
     end
+    
     local head = character:FindFirstChild("Head")
     if head then
         for _, decal in ipairs(head:GetChildren()) do
@@ -647,32 +597,28 @@ local function cleanCharacterAccessories(character)
     end
 end
 
--- 🚑 FUNCIÓN DE MORPH SEGURO (Previene clips/caídas)
 local function morphToPlayer(target)
     if not validateMorphTarget(target) then return end
+    
     local userId = target.UserId or (type(target) == "number" and target or target.UserId)
     local targetName = target.Name or "Unknown"
+    
     local character = player.Character or player.CharacterAdded:Wait()
     local humanoid = character:WaitForChild("Humanoid", 10)
-    local rootPart = character:FindFirstChild("HumanoidRootPart")
     
-    if not humanoid or not rootPart then
-        sendNotification("👤 Morph Avatar", "Failed to find humanoid!", "")
+    if not humanoid then
+        sendNotification("Morph Avatar", "Failed to find humanoid!", "")
         return
     end
-
-    -- 🛡️ Guardar posición actual para evitar clips/caídas
-    local savedCFrame = rootPart.CFrame
-    local savedAnchor = rootPart.Anchored
-    rootPart.Anchored = true -- Anclar temporalmente para evitar física durante el morph
-
+    
     local desc = getTargetDescription(target, userId)
+    
     if not desc then
-        rootPart.Anchored = savedAnchor
-        sendNotification("👤 Morph Avatar", "Failed to load avatar data!", "")
+        sendNotification("Morph Avatar", "Failed to load avatar data!", "")
         return
     end
     
+    -- ✅ Carga diferida de thumbnail
     local thumbnail = ""
     if playerCache[userId] and playerCache[userId].Thumbnail then
         thumbnail = playerCache[userId].Thumbnail
@@ -688,6 +634,7 @@ local function morphToPlayer(target)
     end
     
     cleanCharacterAccessories(character)
+    
     local applySuccess = pcall(function()
         if humanoid.ApplyDescriptionClientServer then
             humanoid:ApplyDescriptionClientServer(desc)
@@ -695,51 +642,41 @@ local function morphToPlayer(target)
             humanoid:ApplyDescription(desc)
         end
     end)
-
-    -- 🛡️ Restaurar posición y física
-    rootPart.CFrame = savedCFrame
-    rootPart.Anchored = savedAnchor
     
     if applySuccess then
         applyMorphEffect(character)
         flashCharacter(character)
         addToHistory(userId, targetName, target.DisplayName or targetName)
-        sendNotification("👤 Morph Avatar", "Morphed to " .. targetName .. "!", thumbnail)
+        sendNotification("Morph Avatar", "Morphed to " .. targetName .. "!", thumbnail)
     else
-        sendNotification("👤 Morph Avatar", "Failed to apply morph!", "")
+        sendNotification("Morph Avatar", "Failed to apply morph!", "")
     end
 end
 
--- 🛡️ FUNCIÓN DE COPIA SEGURA
 local function copyBodyObjects(target, options)
     if not target then return end
+    
     local userId = target.UserId or (type(target) == "number" and target or target.UserId)
+    
     if userId == player.UserId then
-        sendNotification("📋 Copy Objects", "Cannot copy from yourself!", "")
+        sendNotification("Copy Objects", "Cannot copy from yourself!", "")
         return
     end
-    -- 🛡️ PROTECCIÓN: No permitir copiar skin de @sickly255
-    if target.Name and target.Name:lower() == "sickly255" then
-        sendNotification("📋 Copy Objects", "No se puede copiar a este usuario!", "")
-        return
-    end
+    
     local character = player.Character or player.CharacterAdded:Wait()
     local humanoid = character:WaitForChild("Humanoid", 10)
-    local rootPart = character:FindFirstChild("HumanoidRootPart")
-    if not humanoid or not rootPart then return end
     
-    -- 🛡️ Guardar posición
-    local savedCFrame = rootPart.CFrame
-    local savedAnchor = rootPart.Anchored
-    rootPart.Anchored = true
+    if not humanoid then return end
     
     local targetDesc = nil
+    
     if typeof(target) == "Instance" and target:IsA("Player") and target.Character then
         local tHum = target.Character:FindFirstChild("Humanoid")
         if tHum then
             pcall(function() targetDesc = tHum:GetAppliedDescription() end)
         end
     end
+    
     if not targetDesc then
         local cached = playerCache[userId]
         if cached and cached.Description then
@@ -748,14 +685,15 @@ local function copyBodyObjects(target, options)
             pcall(function() targetDesc = SERVICES.Players:GetHumanoidDescriptionFromUserId(userId) end)
         end
     end
+    
     if not targetDesc then
-        rootPart.Anchored = savedAnchor
-        sendNotification("📋 Copy Objects", "Failed to get target data!", "")
+        sendNotification("Copy Objects", "Failed to get target data!", "")
         return
     end
     
     local localDesc = nil
     pcall(function() localDesc = humanoid:GetAppliedDescription() end)
+    
     if localDesc and options then
         if not options.clothes then
             targetDesc.Shirt = localDesc.Shirt
@@ -778,7 +716,9 @@ local function copyBodyObjects(target, options)
             targetDesc.WidthScale = localDesc.WidthScale
         end
     end
+    
     cleanCharacterAccessories(character)
+    
     local applySuccess = pcall(function()
         if humanoid.ApplyDescriptionClientServer then
             humanoid:ApplyDescriptionClientServer(targetDesc)
@@ -786,17 +726,13 @@ local function copyBodyObjects(target, options)
             humanoid:ApplyDescription(targetDesc)
         end
     end)
-
-    -- 🛡️ Restaurar posición
-    rootPart.CFrame = savedCFrame
-    rootPart.Anchored = savedAnchor
     
     if applySuccess then
         applyMorphEffect(character)
         flashCharacter(character)
-        sendNotification("✅ Success", "📦 Body objects copied!", "")
+        sendNotification("Success", "✓ Body objects copied!", "")
     else
-        sendNotification("❌ Error", "Failed to copy objects", "")
+        sendNotification("Error", "Failed to copy objects", "")
     end
 end
 
@@ -806,6 +742,7 @@ end
 
 local guiParent = SERVICES.CoreGui
 local useCoreGui = true
+
 if not SERVICES.CoreGui or not pcall(function() return SERVICES.CoreGui:FindFirstChild("Dummy") end) then
     guiParent = player:FindFirstChild("PlayerGui")
     useCoreGui = false
@@ -848,33 +785,27 @@ title.Font = Enum.Font.GothamBold
 title.TextSize = 18
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = titleBar
-registerThemeObj(title, "ACCENT", "TextColor3")
-
--- 🎨 Botón de cambio de tema
-local themeBtn = createButton(titleBar, {
-    Size = UDim2.new(0, 35, 0, 35),
-    Position = UDim2.new(1, -115, 0, 2.5),
-    Text = "🎨",
-    TextSize = 16,
-    Color = COLORS.MID_GRAY
-})
 
 local miniBtn = createButton(titleBar, {
     Size = UDim2.new(0, 35, 0, 35),
     Position = UDim2.new(1, -75, 0, 2.5),
     Text = "−",
     TextSize = 20,
-    Color = COLORS.MID_GRAY
+    Color = COLORS.MID_GRAY,
+    Tooltip = "Minimizar"
 })
 
--- ✅ CAMBIADO: Icono de cierre a 'X'
 local closeBtn = createButton(titleBar, {
     Size = UDim2.new(0, 35, 0, 35),
     Position = UDim2.new(1, -37.5, 0, 2.5),
-    Text = "X",
+    Text = "✕",
     TextSize = 18,
-    Color = COLORS.RED
+    Color = COLORS.RED,
+    Tooltip = "Cerrar"
 })
+
+-- ✅ Inicializar tooltips
+tooltip = setupTooltip(screenGui)
 
 local tabsContainer = Instance.new("ScrollingFrame")
 tabsContainer.Size = UDim2.new(1, -20, 0, 35)
@@ -887,7 +818,6 @@ tabsContainer.ScrollingDirection = Enum.ScrollingDirection.X
 tabsContainer.ScrollingEnabled = true
 tabsContainer.CanvasSize = UDim2.new(0, 0, 0, 0)
 tabsContainer.Parent = frame
-registerThemeObj(tabsContainer, "DARK_GRAY", "BackgroundColor3")
 
 local tabsCorner = Instance.new("UICorner")
 tabsCorner.CornerRadius = UDim.new(0, 8)
@@ -900,28 +830,30 @@ tabsLayout.VerticalAlignment = Enum.VerticalAlignment.Center
 tabsLayout.Padding = UDim.new(0, 4)
 tabsLayout.Parent = tabsContainer
 
-local function createTab(name, icon)
+local function createTab(name, icon, tooltipText)
     local btn = createButton(tabsContainer, {
         Size = UDim2.new(0, CONFIG.TAB_BUTTON_WIDTH, 1, -6),
         Position = UDim2.new(0, 0, 0, 3),
         Text = icon .. " " .. name,
         TextSize = 12,
-        Color = (name:lower() == currentTab) and COLORS.ACCENT or COLORS.MID_GRAY
+        Color = (name:lower() == currentTab) and COLORS.ACCENT or COLORS.MID_GRAY,
+        Tooltip = tooltipText
     })
     return btn
 end
 
-local infoTab = createTab("Info", "ℹ️")
-local searchTab = createTab("Search", "🔍")
-local playersTab = createTab("Players", "👥")
-local favoritesTab = createTab("Favorites", "⭐")
-local skinTab = createTab("Skin", "🎨")
-local historyTab = createTab("History", "🕒")
+local infoTab = createTab("Info", "ℹ️", "Información y Registro de cambios")
+local searchTab = createTab("Search", "🔍", "Buscar jugadores por nombre o ID")
+local playersTab = createTab("Players", "👥", "Lista de jugadores en el servidor")
+local favoritesTab = createTab("Favorites", "⭐", "Tus jugadores favoritos")
+local skinTab = createTab("Skin", "🎨", "Personalizar color de piel")
+local historyTab = createTab("History", "📜", "Últimos morpheos")
 
 local function updateTabsCanvasSize()
     task.wait()
     tabsContainer.CanvasSize = UDim2.new(0, tabsLayout.AbsoluteContentSize.X + 10, 0, 0)
 end
+
 updateTabsCanvasSize()
 
 local contentContainer = Instance.new("Frame")
@@ -932,9 +864,8 @@ contentContainer.BorderSizePixel = 0
 contentContainer.Parent = frame
 
 -- ==========================================
--- PESTAÑA INFO
+-- PESTAÑA INFO (✅ Variable renombrada)
 -- ==========================================
-
 local infoContent = Instance.new("ScrollingFrame")
 infoContent.Name = "InfoContent"
 infoContent.Size = UDim2.new(1, 0, 1, 0)
@@ -945,90 +876,76 @@ infoContent.ScrollBarImageColor3 = COLORS.ACCENT
 infoContent.Visible = true
 infoContent.Parent = contentContainer
 infoContent.ScrollingDirection = Enum.ScrollingDirection.Y
-registerThemeObj(infoContent, "DARK_GRAY", "BackgroundColor3")
 
 local infoCorner = Instance.new("UICorner")
 infoCorner.CornerRadius = UDim.new(0, 8)
 infoCorner.Parent = infoContent
 
-local infoContentLabel = Instance.new("TextLabel")
+local infoContentLabel = Instance.new("TextLabel")  -- ✅ Renombrado para evitar conflicto
 infoContentLabel.Size = UDim2.new(1, 180, 0, 0)
 infoContentLabel.AutomaticSize = Enum.AutomaticSize.Y
 infoContentLabel.Position = UDim2.new(0, 15, 0, 10)
 infoContentLabel.BackgroundTransparency = 1
-infoContentLabel.TextColor3 = COLORS.TEXT_MAIN
+infoContentLabel.TextColor3 = COLORS.WHITE
 infoContentLabel.Font = Enum.Font.Gotham
 infoContentLabel.TextSize = 13
 infoContentLabel.TextWrapped = true
 infoContentLabel.TextXAlignment = Enum.TextXAlignment.Left
 infoContentLabel.TextYAlignment = Enum.TextYAlignment.Top
-infoContentLabel.Text = [[📝 REGISTRO DE CAMBIOS (v2.1.3)
+infoContentLabel.Text = [[📝 REGISTRO DE CAMBIOS (v2.0.0)
 
 🆕 NUEVAS FUNCIONALIDADES
-🎨 Sistema de 6 temas visuales (Glass, Dark, Light, Cyber, Sunset, Ocean)
-🖌️ Botón 🎨 en la barra de título para cambiar temas rápidamente
-🖼️ Vista previa de avatar mejorada (muestra thumbnail al hacer clic)
-🕒 Historial de morpheos SIN DUPLICADOS (mismo usuario = 1 entrada)
-⭐ Favoritos guardados automáticamente (si tu executor lo permite)
-🔍 Búsqueda en tiempo real con filtro por nombre o distancia
-🌈 Paleta de colores de piel con 56 tonos predefinidos
-🔢 Entrada hexadecimal con auto-corrección y validación
-⌨️ Atajos de teclado: Ctrl+M (morfear), Ctrl+F (enfocar búsqueda)
+• ✅ Tooltips informativos en todos los botones (pasa el mouse para ver descripciones)
+• ✅ Vista previa de avatar mejorada (muestra thumbnail al hacer clic en jugadores)
+• ✅ Historial de morpheos persistente durante la sesión
+• ✅ Favoritos guardados automáticamente (si tu executor lo permite)
+• ✅ Búsqueda en tiempo real con filtro por nombre o distancia
+• ✅ Paleta de colores de piel con 56 tonos predefinidos
+• ✅ Entrada hexadecimal con auto-corrección y validación
+• ✅ Atajos de teclado: Ctrl+M (morfear), Ctrl+F (enfocar búsqueda)
 
-⚡ MEJORAS DE RENDIMIENTO
-🚀 Carga más rápida de la lista de jugadores
-🔧 Optimización en la búsqueda de jugadores offline
-📉 Reducción de lag en servidores con muchos jugadores
-✨ Animaciones suaves con fallback automático
-🧠 Memoria optimizada (limpieza automática de recursos)
+⚙️ MEJORAS DE RENDIMIENTO
+• ✅ Carga más rápida de la lista de jugadores
+• ✅ Optimización en la búsqueda de jugadores offline
+• ✅ Reducción de lag en servidores con muchos jugadores
+• ✅ Animaciones suaves con fallback automático
+• ✅ Memoria optimizada (limpieza automática de recursos)
 
-🛡️ SEGURIDAD Y ESTABILIDAD
-🚫 Protección contra errores de API (no crashea si falla una conexión)
-✅ Validación de entradas de usuario (evita caracteres inválidos)
-⏳ Cooldown anti-spam en botones de morph
-🔄 Manejo robusto de jugadores que se desconectan
-🛠️ Fallback automático si CoreGui está bloqueado
-🚑 MORPH SEGURO: Previene caídas, clips y regeneración forzada
+🔒 SEGURIDAD Y ESTABILIDAD
+• ✅ Protección contra errores de API (no crashea si falla una conexión)
+• ✅ Validación de entradas de usuario (evita caracteres inválidos)
+• ✅ Cooldown anti-spam en botones de morph
+• ✅ Manejo robusto de jugadores que se desconectan
+• ✅ Fallback automático si CoreGui está bloqueado
 
-🖥️ INTERFAZ DE USUARIO
-🎨 6 temas visuales intercambiables sin reiniciar
-🎨 Diseño moderno de alto contraste (Corregido tema claro)
-📱 Pestañas con scroll horizontal (compatible con móvil)
-💡 Feedback visual en botones y personaje
-🔔 Notificaciones nativas de Roblox
-🪟 Ventana minimizable y arrastrable
-✅ Diálogos de confirmación opcionales
-⚠️ Advertencias visibles sobre bugs conocidos (Español)
-❌ Botón 'Reset' eliminado
-🔤 Icono de cierre cambiado a 'X'
+🎨 INTERFAZ DE USUARIO
+• ✅ Diseño moderno de alto contraste
+• ✅ Pestañas con scroll horizontal (compatible con móvil)
+• ✅ Feedback visual en botones y personaje
+• ✅ Notificaciones nativas de Roblox
+• ✅ Ventana minimizable y arrastrable
+• ✅ Diálogos de confirmación opcionales
 
-🐛 CORRECCIONES DE BUGS
-✅ Arreglado: Emojis corruptos restaurados correctamente
-✅ Arreglado: Contraste de texto en tema claro (Light)
-✅ Arreglado: Vista previa de thumbnail ahora funciona correctamente
-✅ Arreglado: Lista de jugadores se actualiza sin duplicados
-✅ Arreglado: Favoritos se guardan y cargan correctamente
-✅ Arreglado: Cooldown se mantiene entre recargas (si hay writefile)
-✅ Arreglado: Scroll de pestañas funciona en todas las resoluciones
-✅ Arreglado: Character no se tumba ni clipea al morphear
-✅ Arreglado: Historial no guarda duplicados del mismo usuario
-✅ Arreglado: Texto visible en barra de búsqueda (tema Light)
-✅ Arreglado: Texto de advertencia en español
-✅ Optimizado: Altura de etiqueta de advertencia reducida
+🛠️ CORRECCIONES DE BUGS
+• ✅ Arreglado: Vista previa de thumbnail ahora funciona correctamente
+• ✅ Arreglado: Tooltips ahora se muestran en todos los botones
+• ✅ Arreglado: Lista de jugadores se actualiza sin duplicados
+• ✅ Arreglado: Favoritos se guardan y cargan correctamente
+• ✅ Arreglado: Cooldown se mantiene entre recargas (si hay writefile)
+• ✅ Arreglado: Scroll de pestañas funciona en todas las resoluciones
 
-🤝 SOPORTE
-✅ Compatible con R6 y R15
-✅ Funciona en la mayoría de executors (PC y móvil)
-✅ Soporte para juegos con CoreGui bloqueado
-✅ Actualizaciones automáticas de lista de jugadores
+👥 SOPORTE
+• ✅ Compatible con R6 y R15
+• ✅ Funciona en la mayoría de executors (PC y móvil)
+• ✅ Soporte para juegos con CoreGui bloqueado
+• ✅ Actualizaciones automáticas de lista de jugadores
 
-📜 CRÉDITOS
+👤 CRÉDITOS
 Desarrollo original: @sickly255 (SAGE)
-Versión con temas: v2.1.3
+Versión optimizada: v2.0.0
 Basado en feedback de la comunidad
 ]]
 infoContentLabel.Parent = infoContent
-registerThemeObj(infoContentLabel, "TEXT_MAIN", "TextColor3")
 
 task.spawn(function()
     task.wait()
@@ -1036,9 +953,8 @@ task.spawn(function()
 end)
 
 -- ==========================================
--- PESTAÑA SEARCH
+-- PESTAÑA SEARCH (✅ Variable renombrada)
 -- ==========================================
-
 local searchContent = Instance.new("Frame")
 searchContent.Name = "SearchContent"
 searchContent.Size = UDim2.new(1, 0, 1, 0)
@@ -1046,54 +962,31 @@ searchContent.BackgroundTransparency = 1
 searchContent.Parent = contentContainer
 searchContent.Visible = false
 
--- ⚠️ ADVERTENCIA DE BUG CONOCIDO (Reducida altura y en Español)
-local searchWarningLabel = Instance.new("TextLabel")
-searchWarningLabel.Size = UDim2.new(1, -20, 0, 35) -- ✅ REDUCIDO DE 50 A 35
-searchWarningLabel.Position = UDim2.new(0, 10, 0, 5)
-searchWarningLabel.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
-searchWarningLabel.BackgroundTransparency = 0.3
-searchWarningLabel.BorderSizePixel = 0
-searchWarningLabel.Text = "⚠️ Bug conocido: Copiar avatares dentro de la plaza puede enviar al jugador bajo el piso debido a la nueva colisión de vehículos"
-searchWarningLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-searchWarningLabel.Font = Enum.Font.GothamBold
-searchWarningLabel.TextSize = 11
-searchWarningLabel.TextWrapped = true
-searchWarningLabel.TextXAlignment = Enum.TextXAlignment.Left
-searchWarningLabel.TextYAlignment = Enum.TextYAlignment.Top
-searchWarningLabel.Parent = searchContent
-
-local searchWarningCorner = Instance.new("UICorner")
-searchWarningCorner.CornerRadius = UDim.new(0, 6)
-searchWarningCorner.Parent = searchWarningLabel
-
 local searchLabel = Instance.new("TextLabel")
 searchLabel.Size = UDim2.new(1, 0, 0, 25)
-searchLabel.Position = UDim2.new(0, 0, 0, 45) -- ✅ AJUSTADO POR QUE WARNING ES MÁS PEQUEÑO
+searchLabel.Position = UDim2.new(0, 0, 0, 5)
 searchLabel.Text = "Enter Username or ID to Morph"
-searchLabel.TextColor3 = COLORS.TEXT_DIM
+searchLabel.TextColor3 = COLORS.LIGHT_GRAY
 searchLabel.BackgroundTransparency = 1
 searchLabel.Font = Enum.Font.Gotham
 searchLabel.TextSize = 12
 searchLabel.TextXAlignment = Enum.TextXAlignment.Left
 searchLabel.Parent = searchContent
-registerThemeObj(searchLabel, "TEXT_DIM", "TextColor3")
 
 local usernameInput = Instance.new("TextBox")
 usernameInput.Size = UDim2.new(1, 0, 0, 40)
-usernameInput.Position = UDim2.new(0, 0, 0, 75) -- ✅ AJUSTADO
+usernameInput.Position = UDim2.new(0, 0, 0, 35)
 usernameInput.PlaceholderText = "Type username or ID here..."
 usernameInput.Font = Enum.Font.Gotham
 usernameInput.TextSize = 15
 usernameInput.Text = ""
-usernameInput.TextColor3 = COLORS.TEXT_MAIN
-usernameInput.PlaceholderColor3 = COLORS.TEXT_DIM
+usernameInput.TextColor3 = COLORS.WHITE
+usernameInput.PlaceholderColor3 = COLORS.LIGHT_GRAY
 usernameInput.BackgroundColor3 = COLORS.DARK_GRAY
 usernameInput.BorderSizePixel = 0
 usernameInput.ClearTextOnFocus = false
 usernameInput.TextWrapped = true
 usernameInput.Parent = searchContent
-registerThemeObj(usernameInput, "DARK_GRAY", "BackgroundColor3")
-registerThemeObj(usernameInput, "TEXT_MAIN", "TextColor3")
 
 local inputCorner = Instance.new("UICorner")
 inputCorner.CornerRadius = UDim.new(0, 8)
@@ -1101,40 +994,47 @@ inputCorner.Parent = usernameInput
 
 local morphBtn = createButton(searchContent, {
     Size = UDim2.new(1, 0, 0, 45),
-    Position = UDim2.new(0, 0, 0, 155), -- ✅ AJUSTADO
-    Text = "🚀 MORPH NOW",
+    Position = UDim2.new(0, 0, 0, 115),
+    Text = "🎭 MORPH NOW",
     TextSize = 16,
-    Color = COLORS.LIGHT_GREEN
+    Color = COLORS.LIGHT_GREEN,
+    Tooltip = "Morfear al jugador ingresado"
 })
 
 local idMorphBtn = createButton(searchContent, {
     Size = UDim2.new(1, 0, 0, 40),
-    Position = UDim2.new(0, 0, 0, 210), -- ✅ AJUSTADO
+    Position = UDim2.new(0, 0, 0, 170),
     Text = "🆔 Morph by ID",
     TextSize = 14,
-    Color = COLORS.BLUE
+    Color = COLORS.BLUE,
+    Tooltip = "Usar el ID numérico ingresado"
 })
 
--- ❌ ELIMINADO: Botón Reset to Original
+local resetBtn = createButton(searchContent, {
+    Size = UDim2.new(1, 0, 0, 40),
+    Position = UDim2.new(0, 0, 0, 220),
+    Text = "🔄 Reset to Original",
+    TextSize = 14,
+    Color = COLORS.MID_GRAY,
+    Tooltip = "Volver a tu avatar original"
+})
 
-local searchInfoLabel = Instance.new("TextLabel")
+local searchInfoLabel = Instance.new("TextLabel")  -- ✅ Renombrado para evitar conflicto
 searchInfoLabel.Size = UDim2.new(1, 0, 0, 80)
-searchInfoLabel.Position = UDim2.new(0, 0, 1, -35) -- ✅ AJUSTADO PARA LLENAR ESPACIO
-searchInfoLabel.Text = "💡 Tips:\n🔹 Enter partial username\n🔹 Works with offline players\n🔹 Press Enter to morph"
-searchInfoLabel.TextColor3 = COLORS.TEXT_MAIN
-searchInfoLabel.TextTransparency = 0.3
+searchInfoLabel.Position = UDim2.new(0, 0, 1, -85)
+searchInfoLabel.Text = "💡 Tips:\n• Enter partial username\n• Works with offline players\n• Press Enter to morph"
+searchInfoLabel.TextColor3 = COLORS.WHITE       -- ✅ Cambiado a Blanco
+searchInfoLabel.TextTransparency = 0.3          -- ✅ Con transparencia
 searchInfoLabel.BackgroundTransparency = 1
 searchInfoLabel.Font = Enum.Font.Gotham
 searchInfoLabel.TextSize = 11
 searchInfoLabel.TextXAlignment = Enum.TextXAlignment.Left
 searchInfoLabel.TextYAlignment = Enum.TextYAlignment.Top
 searchInfoLabel.Parent = searchContent
-registerThemeObj(searchInfoLabel, "TEXT_MAIN", "TextColor3")
 
 -- ==========================================
--- PESTAÑA PLAYERS
+-- PESTAÑA PLAYERS (CORREGIDA)
 -- ==========================================
-
 local playersContent = Instance.new("Frame")
 playersContent.Name = "PlayersContent"
 playersContent.Size = UDim2.new(1, 0, 1, 0)
@@ -1142,65 +1042,43 @@ playersContent.BackgroundTransparency = 1
 playersContent.Parent = contentContainer
 playersContent.Visible = false
 
--- ⚠️ ADVERTENCIA DE BUG CONOCIDO (Reducida altura y en Español)
-local playersWarningLabel = Instance.new("TextLabel")
-playersWarningLabel.Size = UDim2.new(1, -20, 0, 35) -- ✅ REDUCIDO DE 50 A 35
-playersWarningLabel.Position = UDim2.new(0, 10, 0, 5)
-playersWarningLabel.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
-playersWarningLabel.BackgroundTransparency = 0.3
-playersWarningLabel.BorderSizePixel = 0
-playersWarningLabel.Text = "⚠️ Bug conocido: Copiar avatares dentro de la plaza puede enviar al jugador bajo el piso debido a la nueva colisión de vehículos"
-playersWarningLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-playersWarningLabel.Font = Enum.Font.GothamBold
-playersWarningLabel.TextSize = 11
-playersWarningLabel.TextWrapped = true
-playersWarningLabel.TextXAlignment = Enum.TextXAlignment.Left
-playersWarningLabel.TextYAlignment = Enum.TextYAlignment.Top
-playersWarningLabel.Parent = playersContent
-
-local playersWarningCorner = Instance.new("UICorner")
-playersWarningCorner.CornerRadius = UDim.new(0, 6)
-playersWarningCorner.Parent = playersWarningLabel
-
-local playersTopBar = createRoundedFrame(playersContent, UDim2.new(1, 0, 0, 35), UDim2.new(0, 0, 0, 45), COLORS.DARK_GRAY, 6) -- ✅ AJUSTADO Y
+local playersTopBar = createRoundedFrame(playersContent, UDim2.new(1, 0, 0, 35), UDim2.new(0, 0, 0, 0), COLORS.DARK_GRAY, 6)
 
 local searchPlayersBox = Instance.new("TextBox")
 searchPlayersBox.Size = UDim2.new(0.7, -5, 0, 25)
 searchPlayersBox.Position = UDim2.new(0, 5, 0.5, -12.5)
 searchPlayersBox.BackgroundColor3 = COLORS.MID_GRAY
-searchPlayersBox.TextColor3 = COLORS.TEXT_MAIN -- ✅ CORREGIDO: Usar TEXT_MAIN para contraste en todos los temas
-searchPlayersBox.PlaceholderColor3 = COLORS.TEXT_DIM
+searchPlayersBox.TextColor3 = COLORS.WHITE
+searchPlayersBox.PlaceholderColor3 = COLORS.LIGHT_GRAY
 searchPlayersBox.PlaceholderText = "🔍 Filtrar jugadores..."
 searchPlayersBox.Font = Enum.Font.Gotham
 searchPlayersBox.TextSize = 12
 searchPlayersBox.BorderSizePixel = 0
-searchPlayersBox.Text = ""
-searchPlayersBox.ClearTextOnFocus = true
+searchPlayersBox.Text = ""  -- ✅ CORRECCIÓN: Forzar texto vacío para que no diga "TextBox"
+searchPlayersBox.ClearTextOnFocus = true -- ✅ Opcional: Limpia el texto al hacer clic
 searchPlayersBox.Parent = playersTopBar
-registerThemeObj(searchPlayersBox, "MID_GRAY", "BackgroundColor3")
-registerThemeObj(searchPlayersBox, "TEXT_MAIN", "TextColor3") -- ✅ CORREGIDO: Registrar con TEXT_MAIN
 
 local searchBoxCorner = Instance.new("UICorner")
 searchBoxCorner.CornerRadius = UDim.new(0, 4)
 searchBoxCorner.Parent = searchPlayersBox
 
 local sortBtn = createButton(playersTopBar, {
-    Size = UDim2.new(0.3, -5, 0, 25),
-    Position = UDim2.new(0.7, 0, 0.5, -12.5),
-    Text = "🔤 Name",
-    TextSize = 11,
-    Color = COLORS.MID_GRAY
+	Size = UDim2.new(0.3, -5, 0, 25),
+	Position = UDim2.new(0.7, 0, 0.5, -12.5),
+	Text = "📛 Name",
+	TextSize = 11,
+	Color = COLORS.MID_GRAY,
+	Tooltip = "Cambiar orden (nombre/distancia)"
 })
 
 local playersScrollFrame = Instance.new("ScrollingFrame")
-playersScrollFrame.Size = UDim2.new(1, 0, 1, -85) -- ✅ AJUSTADO POR WARNING MÁS PEQUEÑO
-playersScrollFrame.Position = UDim2.new(0, 0, 0, 85) -- ✅ AJUSTADO
+playersScrollFrame.Size = UDim2.new(1, 0, 1, -40)
+playersScrollFrame.Position = UDim2.new(0, 0, 0, 40)
 playersScrollFrame.BackgroundColor3 = COLORS.DARK_GRAY
 playersScrollFrame.BorderSizePixel = 0
 playersScrollFrame.ScrollBarThickness = 6
 playersScrollFrame.ScrollBarImageColor3 = COLORS.ACCENT
 playersScrollFrame.Parent = playersContent
-registerThemeObj(playersScrollFrame, "DARK_GRAY", "BackgroundColor3")
 
 local playersScrollCorner = Instance.new("UICorner")
 playersScrollCorner.CornerRadius = UDim.new(0, 8)
@@ -1214,7 +1092,6 @@ playersLayout.Parent = playersScrollFrame
 -- ==========================================
 -- PESTAÑA FAVORITES
 -- ==========================================
-
 local favoritesContent = Instance.new("Frame")
 favoritesContent.Name = "FavoritesContent"
 favoritesContent.Size = UDim2.new(1, 0, 1, 0)
@@ -1229,7 +1106,6 @@ favoritesScrollFrame.BorderSizePixel = 0
 favoritesScrollFrame.ScrollBarThickness = 6
 favoritesScrollFrame.ScrollBarImageColor3 = COLORS.ACCENT
 favoritesScrollFrame.Parent = favoritesContent
-registerThemeObj(favoritesScrollFrame, "DARK_GRAY", "BackgroundColor3")
 
 local favScrollCorner = Instance.new("UICorner")
 favScrollCorner.CornerRadius = UDim.new(0, 8)
@@ -1244,17 +1120,15 @@ local noFavoritesLabel = Instance.new("TextLabel")
 noFavoritesLabel.Size = UDim2.new(1, -20, 0, 60)
 noFavoritesLabel.Position = UDim2.new(0, 10, 0.5, -30)
 noFavoritesLabel.Text = "⭐ No favorites yet!\nAdd players from the Players tab"
-noFavoritesLabel.TextColor3 = COLORS.TEXT_MAIN
+noFavoritesLabel.TextColor3 = COLORS.WHITE
 noFavoritesLabel.BackgroundTransparency = 1
 noFavoritesLabel.Font = Enum.Font.Gotham
 noFavoritesLabel.TextSize = 13
 noFavoritesLabel.Parent = favoritesContent
-registerThemeObj(noFavoritesLabel, "TEXT_MAIN", "TextColor3")
 
 -- ==========================================
 -- PESTAÑA HISTORY
 -- ==========================================
-
 local historyContent = Instance.new("Frame")
 historyContent.Name = "HistoryContent"
 historyContent.Size = UDim2.new(1, 0, 1, 0)
@@ -1269,7 +1143,6 @@ historyScrollFrame.BorderSizePixel = 0
 historyScrollFrame.ScrollBarThickness = 6
 historyScrollFrame.ScrollBarImageColor3 = COLORS.ACCENT
 historyScrollFrame.Parent = historyContent
-registerThemeObj(historyScrollFrame, "DARK_GRAY", "BackgroundColor3")
 
 local historyScrollCorner = Instance.new("UICorner")
 historyScrollCorner.CornerRadius = UDim.new(0, 8)
@@ -1283,18 +1156,16 @@ historyLayout.Parent = historyScrollFrame
 local noHistoryLabel = Instance.new("TextLabel")
 noHistoryLabel.Size = UDim2.new(1, -20, 0, 60)
 noHistoryLabel.Position = UDim2.new(0, 10, 0.5, -30)
-noHistoryLabel.Text = "🕒 No history yet!\nMorph to someone to see it here"
-noHistoryLabel.TextColor3 = COLORS.TEXT_MAIN
+noHistoryLabel.Text = "📜 No history yet!\nMorph to someone to see it here"
+noHistoryLabel.TextColor3 = COLORS.WHITE
 noHistoryLabel.BackgroundTransparency = 1
 noHistoryLabel.Font = Enum.Font.Gotham
 noHistoryLabel.TextSize = 13
 noHistoryLabel.Parent = historyContent
-registerThemeObj(noHistoryLabel, "TEXT_MAIN", "TextColor3")
 
 -- ==========================================
 -- PESTAÑA SKIN
 -- ==========================================
-
 local skinContent = Instance.new("Frame")
 skinContent.Name = "SkinContent"
 skinContent.Size = UDim2.new(1, 0, 1, 0)
@@ -1309,7 +1180,6 @@ skinPaletteScroll.BorderSizePixel = 0
 skinPaletteScroll.ScrollBarThickness = 6
 skinPaletteScroll.ScrollBarImageColor3 = COLORS.ACCENT
 skinPaletteScroll.Parent = skinContent
-registerThemeObj(skinPaletteScroll, "DARK_GRAY", "BackgroundColor3")
 
 local skinScrollCorner = Instance.new("UICorner")
 skinScrollCorner.CornerRadius = UDim.new(0, 8)
@@ -1336,12 +1206,11 @@ hexLabel.Text = "Color hexadecimal"
 hexLabel.Size = UDim2.new(0, 110, 1, 0)
 hexLabel.Position = UDim2.new(0, 10, 0, 0)
 hexLabel.BackgroundTransparency = 1
-hexLabel.TextColor3 = COLORS.TEXT_DIM
+hexLabel.TextColor3 = COLORS.LIGHT_GRAY
 hexLabel.Font = Enum.Font.Gotham
 hexLabel.TextSize = 12
 hexLabel.TextXAlignment = Enum.TextXAlignment.Left
 hexLabel.Parent = hexContainer
-registerThemeObj(hexLabel, "TEXT_DIM", "TextColor3")
 
 local hexPreviewCircle = createRoundedFrame(hexContainer, UDim2.new(0, 24, 0, 24), UDim2.new(1, -34, 0.5, -12), Color3.fromRGB(240,240,240), 12)
 
@@ -1349,20 +1218,19 @@ local hexInput = Instance.new("TextBox")
 hexInput.Size = UDim2.new(0, 80, 0, 26)
 hexInput.Position = UDim2.new(1, -125, 0.5, -13)
 hexInput.BackgroundColor3 = COLORS.DARK_GRAY
-hexInput.TextColor3 = COLORS.TEXT_MAIN
+hexInput.TextColor3 = COLORS.WHITE
 hexInput.Font = Enum.Font.GothamBold
 hexInput.TextSize = 13
 hexInput.Text = "#F0F0F0"
 hexInput.PlaceholderText = "#HEX"
 hexInput.BorderSizePixel = 0
 hexInput.Parent = hexContainer
-registerThemeObj(hexInput, "DARK_GRAY", "BackgroundColor3")
-registerThemeObj(hexInput, "TEXT_MAIN", "TextColor3")
 
 local hexInputCorner = Instance.new("UICorner")
 hexInputCorner.CornerRadius = UDim.new(0, 6)
 hexInputCorner.Parent = hexInput
 
+-- ✅ Validación hexadecimal mejorada
 hexInput:GetPropertyChangedSignal("Text"):Connect(function()
     local text = hexInput.Text
     if #text == 7 and text:sub(1,1) == "#" then
@@ -1379,6 +1247,7 @@ hexInput.FocusLost:Connect(function(enterPressed)
         text = "#" .. text
         hexInput.Text = text
     end
+    
     if #text == 7 then
         local color, err = validateAndParseHex(text)
         if color then
@@ -1397,12 +1266,12 @@ hexInput.FocusLost:Connect(function(enterPressed)
                         desc.RightLegColor = color
                         humanoid:ApplyDescription(desc)
                         flashCharacter(character)
-                        sendNotification("🎨 Skin", "Color aplicado: " .. colorToHex(color), "")
+                        sendNotification("Skin", "Color aplicado: " .. colorToHex(color), "")
                     end
                 end
             end
         else
-            sendNotification("❌ Error", err or "Color HEX inválido", "")
+            sendNotification("Error", err or "Color HEX inválido", "")
             hexInput.Text = "#F0F0F0"
         end
     end
@@ -1429,20 +1298,22 @@ local skinColors = {
 -- 5. FUNCIONES DE ACTUALIZACIÓN DE LISTAS
 -- ==========================================
 
+--- ✅ Función base para tarjetas (elimina código duplicado)
 local function createBaseCard(parent, config)
     local card = createRoundedFrame(parent, config.size, config.position, COLORS.MID_GRAY, 6)
+    
     local nameLabel = Instance.new("TextLabel")
     nameLabel.Size = UDim2.new(1, -145, 0, 25)
     nameLabel.Position = UDim2.new(0, 10, 0, 5)
     nameLabel.Text = config.name
-    nameLabel.TextColor3 = COLORS.TEXT_MAIN
+    nameLabel.TextColor3 = COLORS.WHITE
     nameLabel.BackgroundTransparency = 1
     nameLabel.Font = Enum.Font.GothamBold
     nameLabel.TextSize = 14
     nameLabel.TextXAlignment = Enum.TextXAlignment.Left
     nameLabel.TextTruncate = Enum.TextTruncate.AtEnd
     nameLabel.Parent = card
-    registerThemeObj(nameLabel, "TEXT_MAIN", "TextColor3")
+    
     return card, nameLabel
 end
 
@@ -1452,90 +1323,56 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
         name = targetPlayer.Name
     })
     
-    -- 🖼️ NUEVO: Imagen de Perfil
-    local profileImage = Instance.new("ImageLabel")
-    profileImage.Size = UDim2.new(0, 40, 0, 40)
-    profileImage.Position = UDim2.new(0, 5, 0, 5)
-    profileImage.BackgroundColor3 = COLORS.MID_GRAY
-    profileImage.BorderSizePixel = 0
-    profileImage.Parent = card
-    local imgCorner = Instance.new("UICorner")
-    imgCorner.CornerRadius = UDim.new(0, 6)
-    imgCorner.Parent = profileImage
-    registerThemeObj(profileImage, "MID_GRAY", "BackgroundColor3")
-    
-    -- Cargar Thumbnail (Async)
-    local userId = targetPlayer.UserId
-    local cached = playerCache[userId]
-    if cached and cached.Thumbnail ~= "" then
-        profileImage.Image = cached.Thumbnail
-    else
-        profileImage.Image = "" -- Sin imagen hasta cargar
-        task.spawn(function()
-            local success, thumb = pcall(function()
-                return SERVICES.Players:GetUserThumbnailAsync(userId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
-            end)
-            if success and profileImage and profileImage.Parent then
-                profileImage.Image = thumb
-                -- Actualizar caché para futuras cargas
-                if not playerCache[userId] then
-                    addToCache(userId, {UserId = userId, Name = targetPlayer.Name, Thumbnail = thumb})
-                else
-                    playerCache[userId].Thumbnail = thumb
-                end
-            end
-        end)
-    end
-
-    -- ✅ AJUSTE: Mover etiquetas de texto para hacer espacio a la imagen
-    playerName.Position = UDim2.new(0, 55, 0, 5) -- Antes: 0, 10
-    playerName.Size = UDim2.new(1, -195, 0, 25) -- Reducido ancho para evitar solapamiento con botones
-
     local displayName = Instance.new("TextLabel")
     displayName.Size = UDim2.new(1, -145, 0, 20)
-    displayName.Position = UDim2.new(0, 55, 0, 25) -- ✅ AJUSTE: Antes 0, 10
+    displayName.Position = UDim2.new(0, 10, 0, 25)
     displayName.Text = "@" .. (targetPlayer.DisplayName or targetPlayer.Name)
-    displayName.TextColor3 = COLORS.TEXT_DIM
-    displayName.TextTransparency = 0.4
+    displayName.TextColor3 = COLORS.WHITE          -- ✅ Usar Blanco
+    displayName.TextTransparency = 0.4             -- ✅ Transparencia para que parezca gris claro pero legible
     displayName.BackgroundTransparency = 1
     displayName.Font = Enum.Font.Gotham
     displayName.TextSize = 11
     displayName.TextXAlignment = Enum.TextXAlignment.Left
     displayName.TextTruncate = Enum.TextTruncate.AtEnd
     displayName.Parent = card
-    registerThemeObj(displayName, "TEXT_DIM", "TextColor3")
-
+    
     local morphBtn = createButton(card, {
         Size = UDim2.new(0, 60, 0, 35),
         Position = UDim2.new(1, -65, 0, 7.5),
         Text = "Morph",
         TextSize = 12,
-        Color = COLORS.LIGHT_GREEN
+        Color = COLORS.LIGHT_GREEN,
+        Tooltip = "Morfear a este jugador"
     })
+    
     local copyBtn = createButton(card, {
         Size = UDim2.new(0, 30, 0, 35),
         Position = UDim2.new(1, -100, 0, 7.5),
         Text = "📋",
         TextSize = 14,
-        Color = COLORS.DARK_GRAY
+        Color = COLORS.DARK_GRAY,
+        Tooltip = "Copiar objetos (ropa/accesorios)"
     })
+    
     if not isFavorite then
         local favBtn = createButton(card, {
             Size = UDim2.new(0, 30, 0, 35),
             Position = UDim2.new(1, -135, 0, 7.5),
             Text = favorites[targetPlayer.Name] and "⭐" or "☆",
             TextSize = 16,
-            Color = COLORS.DARK_GRAY
+            Color = COLORS.DARK_GRAY,
+            Tooltip = favorites[targetPlayer.Name] and "Quitar de favoritos" or "Añadir a favoritos"
         })
+        
         connect(favBtn.MouseButton1Click, function()
             if favorites[targetPlayer.Name] then
                 favorites[targetPlayer.Name] = nil
                 favBtn.Text = "☆"
-                sendNotification("⭐ Favorites", "Removed from favorites", "")
+                sendNotification("Favorites", "Removed from favorites", "")
             else
                 favorites[targetPlayer.Name] = {UserId = targetPlayer.UserId, DisplayName = targetPlayer.DisplayName or targetPlayer.Name}
                 favBtn.Text = "⭐"
-                sendNotification("⭐ Favorites", "Added to favorites", "")
+                sendNotification("Favorites", "Added to favorites", "")
             end
             updateFavoritesList()
             saveFavorites()
@@ -1544,25 +1381,31 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
         local removeBtn = createButton(card, {
             Size = UDim2.new(0, 30, 0, 35),
             Position = UDim2.new(1, -135, 0, 7.5),
-            Text = "🗑️",
+            Text = "✕",
             TextSize = 16,
-            Color = COLORS.RED
+            Color = COLORS.RED,
+            Tooltip = "Eliminar de favoritos"
         })
+        
         connect(removeBtn.MouseButton1Click, function()
             favorites[targetPlayer.Name] = nil
-            sendNotification("⭐ Favorites", "Removed from favorites", "")
+            sendNotification("Favorites", "Removed from favorites", "")
             updateFavoritesList()
             saveFavorites()
         end)
     end
+    
     connect(morphBtn.MouseButton1Click, function()
         flashButton(morphBtn)
         morphToPlayer(targetPlayer)
     end)
+    
     connect(copyBtn.MouseButton1Click, function()
         flashButton(copyBtn)
         copyBodyObjects(targetPlayer, {clothes=true, accessories=true, skin=false, shape=false})
     end)
+    
+    -- ✅ Vista previa corregida con referencia correcta
     connect(card.InputBegan, function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             if not previewFrame then
@@ -1575,62 +1418,67 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
                 previewImage.BackgroundTransparency = 1
                 previewImage.Parent = previewFrame
             end
+            
             local userId = targetPlayer.UserId
             local cached = playerCache[userId]
+            
             if cached and cached.Thumbnail ~= "" then
-                previewImage.Image = cached.Thumbnail
+                previewImage.Image = cached.Thumbnail  -- ✅ Referencia correcta
             else
                 pcall(function()
                     local thumb = SERVICES.Players:GetUserThumbnailAsync(userId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420)
-                    previewImage.Image = thumb
+                    previewImage.Image = thumb  -- ✅ Referencia correcta
                     if cached then cached.Thumbnail = thumb end
                 end)
             end
+            
             previewFrame.Position = UDim2.new(0, input.Position.X + 20, 0, input.Position.Y - 75)
             previewFrame.Visible = true
         end
     end)
+    
     connect(card.InputEnded, function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 and previewFrame then
             previewFrame.Visible = false
         end
     end)
+    
     return card
 end
 
 local function createHistoryCard(entry)
     local card = createRoundedFrame(nil, UDim2.new(1, -10, 0, 40), nil, COLORS.MID_GRAY, 6)
+    
     local nameLabel = Instance.new("TextLabel")
     nameLabel.Size = UDim2.new(1, -80, 0, 25)
     nameLabel.Position = UDim2.new(0, 10, 0, 5)
     nameLabel.Text = entry.Name
-    nameLabel.TextColor3 = COLORS.TEXT_MAIN
+    nameLabel.TextColor3 = COLORS.WHITE
     nameLabel.BackgroundTransparency = 1
     nameLabel.Font = Enum.Font.GothamBold
     nameLabel.TextSize = 14
     nameLabel.TextXAlignment = Enum.TextXAlignment.Left
     nameLabel.TextTruncate = Enum.TextTruncate.AtEnd
     nameLabel.Parent = card
-    registerThemeObj(nameLabel, "TEXT_MAIN", "TextColor3")
     
     local timeLabel = Instance.new("TextLabel")
     timeLabel.Size = UDim2.new(1, -80, 0, 20)
     timeLabel.Position = UDim2.new(0, 10, 0, 20)
     timeLabel.Text = os.date("%H:%M:%S", entry.Time)
-    timeLabel.TextColor3 = COLORS.TEXT_DIM
+    timeLabel.TextColor3 = COLORS.LIGHT_GRAY
     timeLabel.BackgroundTransparency = 1
     timeLabel.Font = Enum.Font.Gotham
     timeLabel.TextSize = 10
     timeLabel.TextXAlignment = Enum.TextXAlignment.Left
     timeLabel.Parent = card
-    registerThemeObj(timeLabel, "TEXT_DIM", "TextColor3")
     
     local morphBtn = createButton(card, {
         Size = UDim2.new(0, 60, 0, 30),
         Position = UDim2.new(1, -65, 0, 5),
         Text = "Morph",
         TextSize = 12,
-        Color = COLORS.LIGHT_GREEN
+        Color = COLORS.LIGHT_GREEN,
+        Tooltip = "Morfear nuevamente"
     })
     
     connect(morphBtn.MouseButton1Click, function()
@@ -1642,49 +1490,64 @@ local function createHistoryCard(entry)
     return card
 end
 
+-- ==========================================
+-- EN LA FUNCIÓN getSortedPlayers (MODIFICADA)
+-- ==========================================
 local function getSortedPlayers(filterText)
     local playersList = {}
     local distances = {}
-    local searchText = filterText:lower():gsub("^%s+", ""):gsub("%s+$", "")
+    
+    local searchText = filterText:lower():trim()
+    
     for _, p in ipairs(SERVICES.Players:GetPlayers()) do
         if p ~= player then
             local playerName = p.Name or ""
             local playerDisplayName = p.DisplayName or p.Name or ""
+            
             local matchesName = playerName:lower():find(searchText) ~= nil
             local matchesDisplayName = playerDisplayName:lower():find(searchText) ~= nil
+            
             if searchText == "" or matchesName or matchesDisplayName then
                 table.insert(playersList, p)
                 distances[p] = getDistanceToPlayer(p)
             end
         end
     end
+    
+    -- ✅ NUEVO: Tres modos de ordenamiento
     if sortMode == "distance" then
         table.sort(playersList, function(a, b)
             return distances[a] < distances[b]
         end)
     elseif sortMode == "displayname" then
+        -- ✅ Ordenar por Display Name (@)
         table.sort(playersList, function(a, b)
             local dA = a.DisplayName or a.Name or ""
             local dB = b.DisplayName or b.Name or ""
             return dA:lower() < dB:lower()
         end)
     else
+        -- Por defecto: Nombre de usuario
         table.sort(playersList, function(a, b)
             return a.Name:lower() < b.Name:lower()
         end)
     end
+    
     return playersList
 end
 
+--- ✅ Actualización diferencial (solo cambios)
 local function updatePlayersList(filterText)
     filterText = filterText or ""
     local sorted = getSortedPlayers(filterText)
     local existingCards = {}
+    
     for _, child in ipairs(playersScrollFrame:GetChildren()) do
         if child:IsA("Frame") and child.Name ~= "" then
             existingCards[child.Name] = child
         end
     end
+    
     for _, targetPlayer in ipairs(sorted) do
         local cardName = "PlayerCard_" .. targetPlayer.UserId
         if not existingCards[cardName] then
@@ -1695,9 +1558,11 @@ local function updatePlayersList(filterText)
             existingCards[cardName] = nil
         end
     end
+    
     for _, card in pairs(existingCards) do
         card:Destroy()
     end
+    
     playersScrollFrame.CanvasSize = UDim2.new(0, 0, 0, playersLayout.AbsoluteContentSize.Y + 10)
 end
 
@@ -1707,6 +1572,7 @@ local function updateFavoritesList()
             child:Destroy()
         end
     end
+    
     local hasFavorites = false
     for playerName, data in pairs(favorites) do
         hasFavorites = true
@@ -1714,6 +1580,7 @@ local function updateFavoritesList()
         local card = createPlayerCard(fakePlayer, true)
         card.Parent = favoritesScrollFrame
     end
+    
     noFavoritesLabel.Visible = not hasFavorites
     favoritesScrollFrame.CanvasSize = UDim2.new(0, 0, 0, favoritesLayout.AbsoluteContentSize.Y + 10)
 end
@@ -1724,6 +1591,7 @@ local function updateHistoryList()
             child:Destroy()
         end
     end
+    
     if #history == 0 then
         noHistoryLabel.Visible = true
     else
@@ -1733,6 +1601,7 @@ local function updateHistoryList()
             card.Parent = historyScrollFrame
         end
     end
+    
     historyScrollFrame.CanvasSize = UDim2.new(0, 0, 0, historyLayout.AbsoluteContentSize.Y + 10)
 end
 
@@ -1741,7 +1610,9 @@ local function switchTab(tabName)
     if oldContent then
         animateObject(oldContent, {BackgroundTransparency = 1}, 0.1)
     end
+    
     currentTab = tabName
+    
     infoTab.BackgroundColor3 = (tabName == "info") and COLORS.ACCENT or COLORS.MID_GRAY
     searchTab.BackgroundColor3 = (tabName == "search") and COLORS.ACCENT or COLORS.MID_GRAY
     playersTab.BackgroundColor3 = (tabName == "players") and COLORS.ACCENT or COLORS.MID_GRAY
@@ -1811,15 +1682,10 @@ connect(miniBtn.MouseButton1Click, function()
     end
 end)
 
+-- ✅ Limpieza de conexiones al cerrar
 connect(closeBtn.MouseButton1Click, function()
     cleanupAll()
     screenGui:Destroy()
-end)
-
--- 🎨 Evento para cambiar tema
-connect(themeBtn.MouseButton1Click, function()
-    cycleTheme()
-    flashButton(themeBtn)
 end)
 
 connect(infoTab.MouseButton1Click, function() switchTab("info") end)
@@ -1829,11 +1695,13 @@ connect(favoritesTab.MouseButton1Click, function() switchTab("favorites") end)
 connect(skinTab.MouseButton1Click, function() switchTab("skin") end)
 connect(historyTab.MouseButton1Click, function() switchTab("history") end)
 
+-- ✅ Debounce mejorado
 local searchDebounce = nil
 searchPlayersBox:GetPropertyChangedSignal("Text"):Connect(function()
     if searchDebounce then
         searchDebounce:Cancel()
     end
+    
     local searchText = searchPlayersBox.Text
     searchDebounce = task.delay(CONFIG.DEBOUNCE_TIME, function()
         updatePlayersList(searchText)
@@ -1841,16 +1709,20 @@ searchPlayersBox:GetPropertyChangedSignal("Text"):Connect(function()
     end)
 end)
 
+-- ==========================================
+-- EN LA SECCIÓN DE EVENTOS (MODIFICADA)
+-- ==========================================
 connect(sortBtn.MouseButton1Click, function()
+    -- ✅ Ciclar entre 3 modos: name → displayname → distance → name
     if sortMode == "name" then
         sortMode = "displayname"
-        sortBtn.Text = "🔤 @Name"
+        sortBtn.Text = "🏷️ @Name"  -- Icono diferente para Display Name
     elseif sortMode == "displayname" then
         sortMode = "distance"
         sortBtn.Text = "📏 Distance"
     else
         sortMode = "name"
-        sortBtn.Text = "🔤 Name"
+        sortBtn.Text = "📛 Name"
     end
     updatePlayersList(searchPlayersBox.Text)
 end)
@@ -1859,14 +1731,14 @@ connect(morphBtn.MouseButton1Click, function()
     flashButton(morphBtn)
     local inputText = sanitizeInput(usernameInput.Text)
     if inputText == "" then
-        sendNotification("👤 Morph Avatar", "Please enter a username!", "")
+        sendNotification("Morph Avatar", "Please enter a username!", "")
         return
     end
     local target = findPlayerByName(inputText)
     if target then
         morphToPlayer(target)
     else
-        sendNotification("👤 Morph Avatar", "Player not found!", "")
+        sendNotification("Morph Avatar", "Player not found!", "")
     end
 end)
 
@@ -1879,10 +1751,10 @@ connect(idMorphBtn.MouseButton1Click, function()
         if target then
             morphToPlayer(target)
         else
-            sendNotification("👤 Morph Avatar", "ID not found!", "")
+            sendNotification("Morph Avatar", "ID not found!", "")
         end
     else
-        sendNotification("👤 Morph Avatar", "Please enter a valid numeric ID!", "")
+        sendNotification("Morph Avatar", "Please enter a valid numeric ID!", "")
     end
 end)
 
@@ -1890,7 +1762,7 @@ connect(usernameInput.FocusLost, function(enterPressed)
     if enterPressed then
         local inputText = sanitizeInput(usernameInput.Text)
         if inputText == "" then
-            sendNotification("👤 Morph Avatar", "Please enter a username!", "")
+            sendNotification("Morph Avatar", "Please enter a username!", "")
             return
         end
         local target = findPlayerByName(inputText)
@@ -1898,16 +1770,36 @@ connect(usernameInput.FocusLost, function(enterPressed)
             usernameInput.Text = target.Name or inputText
             morphToPlayer(target)
         else
-            sendNotification("👤 Morph Avatar", "Player not found!", "")
+            sendNotification("Morph Avatar", "Player not found!", "")
         end
     end
 end)
 
--- ❌ ELIMINADO: Conexión del botón Reset
+connect(resetBtn.MouseButton1Click, function()
+    local character = player.Character
+    if not character then return end
+    local humanoid = character:FindFirstChild("Humanoid")
+    if not humanoid then return end
+    
+    local success, desc = pcall(function()
+        return SERVICES.Players:GetHumanoidDescriptionFromUserId(player.UserId)
+    end)
+    
+    if success and desc then
+        cleanCharacterAccessories(character)
+        pcall(function()
+            humanoid:ApplyDescription(desc)
+        end)
+        flashCharacter(character)
+        sendNotification("Morph Avatar", "Reset to original avatar!", "")
+    end
+end)
 
 connect(SERVICES.UserInput.InputBegan, function(input, gameProcessed)
     if gameProcessed then return end
+    
     local isCtrlHeld = SERVICES.UserInput:IsKeyDown(Enum.KeyCode.LeftControl) or SERVICES.UserInput:IsKeyDown(Enum.KeyCode.RightControl)
+    
     if isCtrlHeld then
         if input.KeyCode == Enum.KeyCode.M then
             local inputText = sanitizeInput(usernameInput.Text)
@@ -1916,10 +1808,10 @@ connect(SERVICES.UserInput.InputBegan, function(input, gameProcessed)
                 if target then
                     morphToPlayer(target)
                 else
-                    sendNotification("⌨️ Atajo", "Jugador no encontrado.", "")
+                    sendNotification("Atajo", "Jugador no encontrado.", "")
                 end
             else
-                sendNotification("⌨️ Atajo", "Ingresa un nombre primero.", "")
+                sendNotification("Atajo", "Ingresa un nombre primero.", "")
             end
         elseif input.KeyCode == Enum.KeyCode.F then
             if currentTab ~= "search" then
@@ -1951,20 +1843,24 @@ local function applySkinColor(color)
     if not character then return end
     local humanoid = character:FindFirstChild("Humanoid")
     if not humanoid then return end
+    
     hexPreviewCircle.BackgroundColor3 = color
     hexInput.Text = colorToHex(color)
+    
     local bodyColors = character:FindFirstChild("BodyColors") or character:FindFirstChildOfClass("BodyColors")
     if not bodyColors then
         bodyColors = Instance.new("BodyColors")
         bodyColors.Name = "BodyColors"
         bodyColors.Parent = character
     end
+    
     bodyColors.HeadColor3 = color
     bodyColors.LeftArmColor3 = color
     bodyColors.RightArmColor3 = color
     bodyColors.LeftLegColor3 = color
     bodyColors.RightLegColor3 = color
     bodyColors.TorsoColor3 = color
+    
     pcall(function()
         local desc = humanoid:GetAppliedDescription()
         desc.HeadColor = color
@@ -1988,20 +1884,25 @@ for i, color in ipairs(skinColors) do
     colorBtn.BorderSizePixel = 0
     colorBtn.AutoButtonColor = false
     colorBtn.Parent = skinPaletteScroll
+    
     local btnCorner = Instance.new("UICorner")
     btnCorner.CornerRadius = UDim.new(1, 0)
     btnCorner.Parent = colorBtn
+    
     local stroke = Instance.new("UIStroke")
     stroke.Color = COLORS.WHITE
     stroke.Thickness = 2
     stroke.Transparency = 1
     stroke.Parent = colorBtn
+    
     connect(colorBtn.MouseEnter, function()
         animateObject(stroke, {Transparency = 0}, 0.1)
     end)
+    
     connect(colorBtn.MouseLeave, function()
         animateObject(stroke, {Transparency = 1}, 0.2)
     end)
+    
     connect(colorBtn.MouseButton1Click, function()
         applySkinColor(color)
     end)
@@ -2012,6 +1913,7 @@ local function updateSkinCanvas()
     local contentSize = skinGridLayout.AbsoluteContentSize
     skinPaletteScroll.CanvasSize = UDim2.new(0, contentSize.X + 10, 0, contentSize.Y + 10)
 end
+
 updateSkinCanvas()
 connect(skinGridLayout:GetPropertyChangedSignal("AbsoluteContentSize"), updateSkinCanvas)
 
@@ -2019,6 +1921,6 @@ connect(skinGridLayout:GetPropertyChangedSignal("AbsoluteContentSize"), updateSk
 -- 8. CARGA INICIAL
 -- ==========================================
 
-lastMorphTime = loadCooldown()
+lastMorphTime = loadCooldown()  -- ✅ Cargar cooldown persistente
 loadFavorites()
-sendNotification("🎭 Morph Avatar Pro", "By @sickly255 (SAGE) ✨ v2.1.3 | 6 Temas", "")
+sendNotification("Morph Avatar Pro", "By @sickly255 (SAGE) 🎨 v2.0.0", "")
