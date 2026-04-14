@@ -618,73 +618,51 @@ infoContentLabel.TextWrapped = true
 infoContentLabel.TextXAlignment = Enum.TextXAlignment.Left
 infoContentLabel.TextYAlignment = Enum.TextYAlignment.Top
 infoContentLabel.Text = [[📝 REGISTRO DE CAMBIOS (v2.1.9)
+📅 Fecha: 14 Abril, 2026
 
 🆕 NUEVAS FUNCIONALIDADES
+🔍 Nuevo flujo de búsqueda: Search -> Preview -> Morph
+🖼️ Tarjeta de resultados con Thumbnail, Username, Display Name e ID
+🕒 Historial mejorado: ahora muestra Display Name
+⭐ Favoritos guardados automáticamente (si el executor lo permite)
 🎨 Sistema de 6 temas visuales (Glass, Dark, Light, Cyber, Sunset, Ocean)
-🖌️ Botón 🎨 en la barra de título para cambiar temas rápidamente
-🖼️ Vista previa de avatar mejorada (muestra thumbnail al hacer clic)
-🕒 Historial de morpheos SIN DUPLICADOS (mismo usuario = 1 entrada)
-⭐ Favoritos guardados automáticamente (si tu executor lo permite)
-🔍 Búsqueda en tiempo real con filtro por nombre o distancia
 🌈 Paleta de colores de piel con 56 tonos predefinidos
-🔢 Entrada hexadecimal CORREGIDA (v2.1.4)
+🔢 Entrada hexadecimal funcional con preview en tiempo real
 ⌨️ Atajos de teclado: Ctrl+M (morfear), Ctrl+F (enfocar búsqueda)
-✨ FIX v2.1.5: Orden de Accesorios Forzado + Eliminación de cleanCharacterAccessories
+✨ FIX v2.1.5: Orden de Accesorios Forzado
 
-⚡ MEJORAS DE RENDIMIENTO
-🚀 Carga más rápida de la lista de jugadores
-🔧 Optimización en la búsqueda de jugadores offline
-📉 Reducción de lag en servidores con muchos jugadores
-✨ Animaciones suaves con fallback automático
-🧠 Memoria optimizada (limpieza automática de recursos)
+⚡ MEJORAS DE RENDIMIENTO Y UI
+📱 Pestañas con scroll horizontal (compatible con móvil)
+💡 Feedback visual en botones y personaje al morphear
+🔔 Notificaciones nativas de Roblox
+🪟 Ventana minimizable, arrastrable y con botón de cierre 'X'
+🧹 Limpieza de UI: Eliminados botones redundantes y textos innecesarios
+🔒 Botón de búsqueda anclado al fondo de la pestaña
+📝 Registro de cambios con separación visual entre secciones
+🎨 Fix visual del input Hexadecimal (espaciado corregido)
 
 🛡️ SEGURIDAD Y ESTABILIDAD
-🚫 Protección contra errores de API (no crashea si falla una conexión)
-✅ Validación de entradas de usuario (evita caracteres inválidos)
+🚫 Protección contra errores de API
+✅ Validación de entradas de usuario
 ⏳ Cooldown anti-spam en botones de morph
-🔄 Manejo robusto de jugadores que se desconectan
 🛠️ Fallback automático si CoreGui está bloqueado
-🚑 MORPH SEGURO: Previene caídas, clips y regeneración forzada
+🚑 MORPH SEGURO: Previene caídas y clips
 
-🖥️ INTERFAZ DE USUARIO
-🎨 6 temas visuales intercambiables sin reiniciar
-🎨 Diseño moderno de alto contraste (Corregido tema claro)
-📱 Pestañas con scroll horizontal (compatible con móvil)
-💡 Feedback visual en botones y personaje
-🔔 Notificaciones nativas de Roblox
-🪟 Ventana minimizable y arrastrable
-✅ Diálogos de confirmación opcionales
-⚠️ Advertencias visibles sobre bugs conocidos (Español)
-❌ Botón 'Reset' eliminado
-🔤 Icono de cierre cambiado a 'X'
-
-🐛 CORRECCIONES DE BUGS
-✅ Arreglado: Emojis corruptos restaurados correctamente
-✅ Arreglado: Contraste de texto en tema claro (Light)
-✅ Arreglado: Vista previa de thumbnail ahora funciona correctamente
+🐛 CORRECCIONES DE BUGS (v2.1.9)
+✅ FIX CRÍTICO: Botón Morph ya no tapa el estado Online/Offline
+✅ FIX CRÍTICO: Display Name ahora se muestra correctamente
+✅ FIX CRÍTICO: Tabs se mantienen activos al cambiar de tema
+✅ FIX CRÍTICO: Placeholders visibles en todos los temas (Fix Light Theme)
+✅ Arreglado: Overflow de texto en pestaña Info
+✅ Arreglado: Error 'IsA' al buscar jugadores offline
 ✅ Arreglado: Lista de jugadores se actualiza sin duplicados
-✅ Arreglado: Favoritos se guardan y cargan correctamente
-✅ Arreglado: Cooldown se mantiene entre recargas (si hay writefile)
-✅ Arreglado: Scroll de pestañas funciona en todas las resoluciones
-✅ Arreglado: Character no se tumba ni clipea al morphear
 ✅ Arreglado: Historial no guarda duplicados del mismo usuario
-✅ Arreglado: Texto visible en barra de búsqueda (tema Light)
-✅ Arreglado: Texto de advertencia en español
-✅ Arreglado: SORTBTN - Botón de ordenar ahora funciona correctamente
-✅ Arreglado: HEX INPUT - Entrada hexadecimal ahora aplica colores correctamente
-✅ Arreglado v2.1.5: Accesorios ahora mantienen orden correcto al guardar outfits
-✅ Arreglado v2.1.5: Eliminada función conflictiva cleanCharacterAccessories
-✅ Arreglado v2.1.7: Tab activo se mantiene al cambiar de tema
-✅ Arreglado v2.1.7: Placeholders visibles en todos los temas (Light fix)
-✅ Arreglado v2.1.7: Search/History ahora muestran Username + Display Name
-✅ Arreglado v2.1.7: Eliminación de botón Morph by ID redundante
-✅ Arreglado v2.1.8: Tabs no se buguean al cambiar de pestaña (Fix Crítico)
-✅ Arreglado v2.1.9: Botón Morph no tapa el estado + DisplayName corregido
+✅ Arreglado: Scroll de pestañas funciona en todas las resoluciones
+✅ Arreglado: Cooldown se mantiene entre recargas (si hay writefile)
 
 🤝 SOPORTE
 ✅ Compatible con R6 y R15
 ✅ Funciona en la mayoría de executors (PC y móvil)
-✅ Soporte para juegos con CoreGui bloqueado
 ✅ Actualizaciones automáticas de lista de jugadores
 
 📜 CRÉDITOS
