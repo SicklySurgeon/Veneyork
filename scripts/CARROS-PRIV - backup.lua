@@ -20,8 +20,7 @@ local maxRange = 50
 local selectedButton = nil
 local lastDeselectTime = 0
 local deselectCooldown = 1.5
-local lastBoardingCFrame = nil
-local autoJumpEnabled = false -- ✅ Estado del checkbox
+local lastBoardingCFrame = nil -- ✅ NUEVO: Guarda posición antes de sentarse
 
 -- ==========================================
 -- 2. SISTEMA ANTI-DUPLICACIÓN
@@ -36,8 +35,8 @@ screenGui.Name = "Bycode_GUI_System"
 screenGui.ResetOnSpawn = false
 
 local main = Instance.new("Frame", screenGui)
-main.Size = UDim2.new(0, 210, 0, 580) -- ✅ Altura aumentada ligeramente
-main.Position = UDim2.new(0, 20, 0.5, -290) 
+main.Size = UDim2.new(0, 210, 0, 560) 
+main.Position = UDim2.new(0, 20, 0.5, -280) 
 main.BackgroundColor3 = Color3.fromRGB(10, 10, 12)
 main.BorderSizePixel = 0
 main.Active = true
@@ -74,22 +73,18 @@ local function createBtn(name, text, pos, color)
     return b
 end
 
--- BOTONES (Posiciones ajustadas para incluir checkbox)
+-- BOTONES
 local btnSinConductor = createBtn("BtnSinConductor", "ABORDAR (VACÍO)", UDim2.new(0, 10, 0, 55), Color3.fromRGB(20, 25, 35))
 local btnConConductor = createBtn("BtnConConductor", "ABORDAR (CONDUCTOR)", UDim2.new(0, 10, 0, 100), Color3.fromRGB(0, 50, 100))
 local btnCarJump = createBtn("BtnJump", "SALTO VERTICAL", UDim2.new(0, 10, 0, 145), Color3.fromRGB(0, 80, 150))
 local btnDeselect = createBtn("BtnDeselect", "DESELECCIONAR", UDim2.new(0, 10, 0, 190), Color3.fromRGB(40, 40, 45))
 
--- ✅ CHECKBOX AUTO-SALTO
-local btnAutoJump = createBtn("BtnAutoJump", "AUTO-SALTO: OFF", UDim2.new(0, 10, 0, 235), Color3.fromRGB(40, 40, 45))
-btnAutoJump.TextSize = 10
-
 -- ==========================================
--- INFO & LISTA (Desplazados ligeramente)
+-- INFO & LISTA
 -- ==========================================
 local infoLabel = Instance.new("TextLabel", main)
 infoLabel.Size = UDim2.new(1, -20, 0, 40)
-infoLabel.Position = UDim2.new(0, 10, 0, 280)
+infoLabel.Position = UDim2.new(0, 10, 0, 235)
 infoLabel.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
 infoLabel.TextColor3 = Color3.fromRGB(0, 162, 255)
 infoLabel.Font = Enum.Font.GothamBold
@@ -100,8 +95,8 @@ Instance.new("UICorner", infoLabel).CornerRadius = UDim.new(0, 6)
 infoLabel.Text = "Sin vehículo en rango"
 
 local listFrame = Instance.new("ScrollingFrame", main)
-listFrame.Size = UDim2.new(1, -20, 0, 100)
-listFrame.Position = UDim2.new(0, 10, 0, 325)
+listFrame.Size = UDim2.new(1, -20, 0, 120)
+listFrame.Position = UDim2.new(0, 10, 0, 285)
 listFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
 listFrame.BorderSizePixel = 0
 listFrame.ScrollBarThickness = 4
@@ -219,9 +214,9 @@ local function populateVehicleList()
     end
 end
 
-local btnRefreshList = createBtn("BtnRefreshList", "ACTUALIZAR LISTA", UDim2.new(0, 10, 0, 435), Color3.fromRGB(20, 25, 35))
-local btnHide = createBtn("BtnHide", "MINIMIZAR", UDim2.new(0, 10, 0, 480), Color3.fromRGB(20, 20, 20))
-local btnClose = createBtn("BtnClose", "CERRAR GUI", UDim2.new(0, 10, 0, 525), Color3.fromRGB(100, 0, 0))
+local btnRefreshList = createBtn("BtnRefreshList", "ACTUALIZAR LISTA", UDim2.new(0, 10, 0, 415), Color3.fromRGB(20, 25, 35))
+local btnHide = createBtn("BtnHide", "MINIMIZAR", UDim2.new(0, 10, 0, 460), Color3.fromRGB(20, 20, 20))
+local btnClose = createBtn("BtnClose", "CERRAR GUI", UDim2.new(0, 10, 0, 505), Color3.fromRGB(100, 0, 0))
 
 -- ==========================================
 -- LÓGICA DE SELECCIÓN & HIGHLIGHT PERSISTENTE
@@ -329,6 +324,7 @@ local function subirAlPiloto(targetSeat, forzarRobo)
     end
     
     if targetSeat.Occupant == nil then
+        -- ✅ GUARDAR POSICIÓN EXACTA ANTES DE SENTARSE
         local rootPart = character:FindFirstChild("HumanoidRootPart")
         if rootPart then
             lastBoardingCFrame = rootPart.CFrame
@@ -340,10 +336,36 @@ local function subirAlPiloto(targetSeat, forzarRobo)
     end
 end
 
+btnSinConductor.MouseButton1Click:Connect(function()
+    if currentTargetSeat and currentTargetSeat.Parent then
+        if not currentTargetSeat.Occupant then
+            subirAlPiloto(currentTargetSeat, false)
+        else
+            infoLabel.Text = "¡El vehículo tiene conductor!"
+            infoLabel.TextColor3 = Color3.fromRGB(255, 50, 50)
+        end
+    else
+        infoLabel.Text = "Sin objetivo seleccionado"
+    end
+end)
+
+btnConConductor.MouseButton1Click:Connect(function()
+    if currentTargetSeat and currentTargetSeat.Parent then
+        if currentTargetSeat.Occupant then
+            subirAlPiloto(currentTargetSeat, true)
+        else
+            infoLabel.Text = "¡El vehículo está vacío!"
+            infoLabel.TextColor3 = Color3.fromRGB(255, 50, 50)
+        end
+    else
+        infoLabel.Text = "Sin objetivo seleccionado"
+    end
+end)
+
 -- ==========================================
--- ✅ FUNCIÓN DE SALTO REUTILIZABLE
+-- SALTO VERTICAL CON RETORNO A POSICIÓN DE ABORDAJE
 -- ==========================================
-local function triggerCarJump()
+btnCarJump.MouseButton1Click:Connect(function()
     local hum = lplayer.Character and lplayer.Character:FindFirstChildOfClass("Humanoid")
     local seat = hum and hum.SeatPart
     if seat and seat:IsA("VehicleSeat") then
@@ -352,6 +374,7 @@ local function triggerCarJump()
         local root = lplayer.Character:FindFirstChild("HumanoidRootPart")
         if not root then return end
 
+        -- ✅ USAR POSICIÓN GUARDADA AL ABORDAR (O ACTUAL SI NO HAY)
         local savedCFrame = lastBoardingCFrame or root.CFrame
         local savedPos = savedCFrame.Position
         
@@ -397,47 +420,10 @@ local function triggerCarJump()
         
         infoLabel.Text = "¡Salto vertical activado!"
         infoLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
-    end
-end
-
--- ==========================================
--- CONEXIONES DE BOTONES
--- ==========================================
-btnSinConductor.MouseButton1Click:Connect(function()
-    if currentTargetSeat and currentTargetSeat.Parent then
-        if not currentTargetSeat.Occupant then
-            subirAlPiloto(currentTargetSeat, false)
-        else
-            infoLabel.Text = "¡El vehículo tiene conductor!"
-            infoLabel.TextColor3 = Color3.fromRGB(255, 50, 50)
-        end
     else
-        infoLabel.Text = "Sin objetivo seleccionado"
+        infoLabel.Text = "Debes estar en un vehículo"
+        infoLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
     end
-end)
-
-btnConConductor.MouseButton1Click:Connect(function()
-    if currentTargetSeat and currentTargetSeat.Parent then
-        if currentTargetSeat.Occupant then
-            subirAlPiloto(currentTargetSeat, true)
-        else
-            infoLabel.Text = "¡El vehículo está vacío!"
-            infoLabel.TextColor3 = Color3.fromRGB(255, 50, 50)
-        end
-    else
-        infoLabel.Text = "Sin objetivo seleccionado"
-    end
-end)
-
-btnCarJump.MouseButton1Click:Connect(triggerCarJump)
-
--- ✅ TOGGLE CHECKBOX
-btnAutoJump.MouseButton1Click:Connect(function()
-    autoJumpEnabled = not autoJumpEnabled
-    btnAutoJump.Text = autoJumpEnabled and "AUTO-SALTO: ON" or "AUTO-SALTO: OFF"
-    btnAutoJump.BackgroundColor3 = autoJumpEnabled and Color3.fromRGB(0, 120, 50) or Color3.fromRGB(40, 40, 45)
-    infoLabel.Text = autoJumpEnabled and "Auto-salto activado" or "Auto-salto desactivado"
-    infoLabel.TextColor3 = autoJumpEnabled and Color3.fromRGB(0, 255, 100) or Color3.fromRGB(150, 150, 150)
 end)
 
 -- ==========================================
@@ -464,14 +450,11 @@ btnClose.MouseButton1Click:Connect(function()
     screenGui:Destroy()
 end)
 
--- ==========================================
--- ✅ AUTO-SALTO AL SENTARSE + LIMPIEZA
--- ==========================================
-local function connectSeatedEvents(char)
-    lastBoardingCFrame = nil
+-- Limpieza al sentarse / reaparecer
+lplayer.CharacterAdded:Connect(function(char)
+    lastBoardingCFrame = nil -- ✅ Limpiar coordenadas antiguas al respawn
     local hum = char:WaitForChild("Humanoid")
-    
-    hum.Seated:Connect(function(active, seatPart)
+    hum.Seated:Connect(function(active)
         if active then
             selectionHighlight.Enabled = false
             currentTargetSeat = nil
@@ -479,19 +462,9 @@ local function connectSeatedEvents(char)
                 selectedButton.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
                 selectedButton = nil
             end
-            
-            -- 🚀 Disparar auto-salto si está activado y es un VehicleSeat
-            if autoJumpEnabled and seatPart and seatPart:IsA("VehicleSeat") then
-                task.delay(0.25, triggerCarJump) -- Pequeño delay para evitar conflicto con animación de sentado
-            end
         end
     end)
-end
-
-lplayer.CharacterAdded:Connect(connectSeatedEvents)
-if lplayer.Character then
-    task.defer(connectSeatedEvents, lplayer.Character)
-end
+end)
 
 btnRefreshList.MouseButton1Click:Connect(populateVehicleList)
 populateVehicleList()
