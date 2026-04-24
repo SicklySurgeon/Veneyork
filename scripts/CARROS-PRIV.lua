@@ -20,10 +20,10 @@ local maxRange = 50
 local selectedButton = nil
 local lastDeselectTime = 0
 local deselectCooldown = 1.5
-local lastBoardingCFrame = nil -- ? NUEVO: Guarda posiciÛn antes de sentarse
+local lastBoardingCFrame = nil -- ‚úÖ NUEVO: Guarda posici√≥n antes de sentarse
 
 -- ==========================================
--- 2. SISTEMA ANTI-DUPLICACI”N
+-- 2. SISTEMA ANTI-DUPLICACI√ìN
 -- ==========================================
 local existingGui = CoreGui:FindFirstChild("Bycode_GUI_System")
 if existingGui then
@@ -49,7 +49,7 @@ local uiStroke = Instance.new("UIStroke", main)
 uiStroke.Color = Color3.fromRGB(0, 162, 255)
 uiStroke.Thickness = 1.8
 
--- TÕTULO
+-- T√çTULO
 local title = Instance.new("TextLabel", main)
 title.Size = UDim2.new(1, 0, 0, 45)
 title.Text = "SISTEMA VEHICULAR"
@@ -74,7 +74,7 @@ local function createBtn(name, text, pos, color)
 end
 
 -- BOTONES
-local btnSinConductor = createBtn("BtnSinConductor", "ABORDAR (VACÕO)", UDim2.new(0, 10, 0, 55), Color3.fromRGB(20, 25, 35))
+local btnSinConductor = createBtn("BtnSinConductor", "ABORDAR (VAC√çO)", UDim2.new(0, 10, 0, 55), Color3.fromRGB(20, 25, 35))
 local btnConConductor = createBtn("BtnConConductor", "ABORDAR (CONDUCTOR)", UDim2.new(0, 10, 0, 100), Color3.fromRGB(0, 50, 100))
 local btnCarJump = createBtn("BtnJump", "SALTO VERTICAL", UDim2.new(0, 10, 0, 145), Color3.fromRGB(0, 80, 150))
 local btnDeselect = createBtn("BtnDeselect", "DESELECCIONAR", UDim2.new(0, 10, 0, 190), Color3.fromRGB(40, 40, 45))
@@ -92,7 +92,7 @@ infoLabel.TextSize = 12
 infoLabel.TextWrapped = true
 infoLabel.TextYAlignment = "Top"
 Instance.new("UICorner", infoLabel).CornerRadius = UDim.new(0, 6)
-infoLabel.Text = "Sin vehÌculo en rango"
+infoLabel.Text = "Sin veh√≠culo en rango"
 
 local listFrame = Instance.new("ScrollingFrame", main)
 listFrame.Size = UDim2.new(1, -20, 0, 120)
@@ -133,14 +133,14 @@ selectionHighlight.Enabled = false
 selectionHighlight.Parent = game:GetService("Lighting")
 
 -- ==========================================
--- FUNCI”N DESELECCIONAR
+-- FUNCI√ìN DESELECCIONAR
 -- ==========================================
 local function deselectVehicle()
     currentTargetSeat = nil
     selectionHighlight.Enabled = false
     lastDeselectTime = os.clock()
     
-    infoLabel.Text = "Sin vehÌculo seleccionado"
+    infoLabel.Text = "Sin veh√≠culo seleccionado"
     infoLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
 
     if selectedButton then
@@ -209,7 +209,7 @@ local function populateVehicleList()
         local lbl = Instance.new("TextLabel", listFrame)
         lbl.Size = UDim2.new(1, 0, 0, 30)
         lbl.BackgroundTransparency = 1
-        lbl.Text = "No se encontraron vehÌculos"
+        lbl.Text = "No se encontraron veh√≠culos"
         lbl.TextColor3 = Color3.fromRGB(150, 150, 150)
     end
 end
@@ -219,7 +219,7 @@ local btnHide = createBtn("BtnHide", "MINIMIZAR", UDim2.new(0, 10, 0, 460), Colo
 local btnClose = createBtn("BtnClose", "CERRAR GUI", UDim2.new(0, 10, 0, 505), Color3.fromRGB(100, 0, 0))
 
 -- ==========================================
--- L”GICA DE SELECCI”N & HIGHLIGHT PERSISTENTE
+-- L√ìGICA DE SELECCI√ìN & HIGHLIGHT PERSISTENTE
 -- ==========================================
 local function isValidVehicleModel(model)
     if not model then return false end
@@ -292,7 +292,7 @@ RunService.Heartbeat:Connect(function()
 end)
 
 -- ==========================================
--- L”GICA DE ABORDAJE (CORREGIDA)
+-- L√ìGICA DE ABORDAJE (CORREGIDA)
 -- ==========================================
 local function subirAlPiloto(targetSeat, forzarRobo)
     local character = lplayer.Character
@@ -324,7 +324,7 @@ local function subirAlPiloto(targetSeat, forzarRobo)
     end
     
     if targetSeat.Occupant == nil then
-        -- ? GUARDAR POSICI”N EXACTA ANTES DE SENTARSE
+        -- ‚úÖ GUARDAR POSICI√ìN EXACTA ANTES DE SENTARSE
         local rootPart = character:FindFirstChild("HumanoidRootPart")
         if rootPart then
             lastBoardingCFrame = rootPart.CFrame
@@ -341,7 +341,7 @@ btnSinConductor.MouseButton1Click:Connect(function()
         if not currentTargetSeat.Occupant then
             subirAlPiloto(currentTargetSeat, false)
         else
-            infoLabel.Text = "°El vehÌculo tiene conductor!"
+            infoLabel.Text = "¬°El veh√≠culo tiene conductor!"
             infoLabel.TextColor3 = Color3.fromRGB(255, 50, 50)
         end
     else
@@ -354,7 +354,7 @@ btnConConductor.MouseButton1Click:Connect(function()
         if currentTargetSeat.Occupant then
             subirAlPiloto(currentTargetSeat, true)
         else
-            infoLabel.Text = "°El vehÌculo est· vacÌo!"
+            infoLabel.Text = "¬°El veh√≠culo est√° vac√≠o!"
             infoLabel.TextColor3 = Color3.fromRGB(255, 50, 50)
         end
     else
@@ -363,7 +363,7 @@ btnConConductor.MouseButton1Click:Connect(function()
 end)
 
 -- ==========================================
--- SALTO VERTICAL CON RETORNO A POSICI”N DE ABORDAJE
+-- SALTO VERTICAL CON RETORNO A POSICI√ìN DE ABORDAJE
 -- ==========================================
 btnCarJump.MouseButton1Click:Connect(function()
     local hum = lplayer.Character and lplayer.Character:FindFirstChildOfClass("Humanoid")
@@ -374,7 +374,7 @@ btnCarJump.MouseButton1Click:Connect(function()
         local root = lplayer.Character:FindFirstChild("HumanoidRootPart")
         if not root then return end
 
-        -- ? USAR POSICI”N GUARDADA AL ABORDAR (O ACTUAL SI NO HAY)
+        -- ‚úÖ USAR POSICI√ìN GUARDADA AL ABORDAR (O ACTUAL SI NO HAY)
         local savedCFrame = lastBoardingCFrame or root.CFrame
         local savedPos = savedCFrame.Position
         
@@ -414,20 +414,20 @@ btnCarJump.MouseButton1Click:Connect(function()
             currentRoot.AssemblyLinearVelocity = Vector3.zero
             currentRoot.AssemblyAngularVelocity = Vector3.zero
             
-            infoLabel.Text = "°Retorno activado! PosiciÛn restaurada."
+            infoLabel.Text = "¬°Retorno activado! Posici√≥n restaurada."
             infoLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
         end)
         
-        infoLabel.Text = "°Salto vertical activado!"
+        infoLabel.Text = "¬°Salto vertical activado!"
         infoLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
     else
-        infoLabel.Text = "Debes estar en un vehÌculo"
+        infoLabel.Text = "Debes estar en un veh√≠culo"
         infoLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
     end
 end)
 
 -- ==========================================
--- BOT”N DESELECCIONAR & MINIMIZAR/CERRAR
+-- BOT√ìN DESELECCIONAR & MINIMIZAR/CERRAR
 -- ==========================================
 btnDeselect.MouseButton1Click:Connect(deselectVehicle)
 
@@ -452,7 +452,7 @@ end)
 
 -- Limpieza al sentarse / reaparecer
 lplayer.CharacterAdded:Connect(function(char)
-    lastBoardingCFrame = nil -- ? Limpiar coordenadas antiguas al respawn
+    lastBoardingCFrame = nil -- ‚úÖ Limpiar coordenadas antiguas al respawn
     local hum = char:WaitForChild("Humanoid")
     hum.Seated:Connect(function(active)
         if active then
