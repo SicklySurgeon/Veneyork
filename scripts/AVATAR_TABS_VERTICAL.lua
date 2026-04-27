@@ -802,10 +802,10 @@ searchContent.Visible = false
 local searchWarningLabel = Instance.new("TextLabel")
 searchWarningLabel.Size = UDim2.new(1, 0, 0, 38)
 searchWarningLabel.Position = UDim2.new(0, 0, 0, 0)
-searchWarningLabel.BackgroundColor3 = COLORS.DANGER
+searchWarningLabel.BackgroundColor3 = COLORS.SUCCESS -- Verde indicando éxito/solución
 searchWarningLabel.BackgroundTransparency = 0.15
 searchWarningLabel.BorderSizePixel = 0
-searchWarningLabel.Text = "⚠️ Bug conocido: Copiar avatares dentro de la plaza puede enviar al jugador bajo el piso"
+searchWarningLabel.Text = "✅ Bug Resuelto: Se integró NoClip automático para evitar que el personaje se quede atascado al copiar avatares."
 searchWarningLabel.TextColor3 = COLORS.TEXT_PRIMARY
 searchWarningLabel.Font = Enum.Font.GothamBold
 searchWarningLabel.TextSize = 11
@@ -813,7 +813,7 @@ searchWarningLabel.TextWrapped = true
 searchWarningLabel.TextXAlignment = Enum.TextXAlignment.Left
 searchWarningLabel.TextYAlignment = Enum.TextYAlignment.Center
 searchWarningLabel.Parent = searchContent
-registerThemeObj(searchWarningLabel, "DANGER", "BackgroundColor3")
+registerThemeObj(searchWarningLabel, "SUCCESS", "BackgroundColor3")
 registerThemeObj(searchWarningLabel, "TEXT_PRIMARY", "TextColor3")
 
 local warnCorner = Instance.new("UICorner")
@@ -983,10 +983,10 @@ playersContent.Visible = false
 local playersWarningLabel = Instance.new("TextLabel")
 playersWarningLabel.Size = UDim2.new(1, 0, 0, 38)
 playersWarningLabel.Position = UDim2.new(0, 0, 0, 0)
-playersWarningLabel.BackgroundColor3 = COLORS.DANGER
+playersWarningLabel.BackgroundColor3 = COLORS.SUCCESS -- Verde indicando éxito/solución
 playersWarningLabel.BackgroundTransparency = 0.15
 playersWarningLabel.BorderSizePixel = 0
-playersWarningLabel.Text = "⚠️ Bug conocido: Copiar avatares dentro de la plaza puede enviar al jugador bajo el piso"
+playersWarningLabel.Text = "✅ Bug Resuelto: Se integró NoClip automático para evitar que el personaje se quede atascado al copiar avatares."
 playersWarningLabel.TextColor3 = COLORS.TEXT_PRIMARY
 playersWarningLabel.Font = Enum.Font.GothamBold
 playersWarningLabel.TextSize = 11
@@ -994,7 +994,7 @@ playersWarningLabel.TextWrapped = true
 playersWarningLabel.TextXAlignment = Enum.TextXAlignment.Left
 playersWarningLabel.TextYAlignment = Enum.TextYAlignment.Center
 playersWarningLabel.Parent = playersContent
-registerThemeObj(playersWarningLabel, "DANGER", "BackgroundColor3")
+registerThemeObj(playersWarningLabel, "SUCCESS", "BackgroundColor3")
 registerThemeObj(playersWarningLabel, "TEXT_PRIMARY", "TextColor3")
 
 local pWarnCorner = Instance.new("UICorner")
