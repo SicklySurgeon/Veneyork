@@ -594,7 +594,7 @@ registerThemeObj(title, "ACCENT", "TextColor3")
 
 local themeBtn = createButton(titleBar, {Size = UDim2.new(0, 32, 0, 32), Position = UDim2.new(1, -104, 0, 4), Text = "🎨", TextSize = 15, Color = COLORS.BG_CARD})
 local miniBtn = createButton(titleBar, {Size = UDim2.new(0, 32, 0, 32), Position = UDim2.new(1, -68, 0, 4), Text = "−", TextSize = 18, Color = COLORS.BG_CARD})
-local closeBtn = createButton(titleBar, {Size = UDim2.new(0, 32, 0, 32), Position = UDim2.new(1, -32, 0, 4), Text = "✕", TextSize = 16, Color = COLORS.DANGER})
+local closeBtn = createButton(titleBar, {Size = UDim2.new(0, 32, 0, 32), Position = UDim2.new(1, -32, 0, 4), Text = "X", TextSize = 16, Color = COLORS.DANGER})
 
 local sidebarFrame = Instance.new("Frame")
 sidebarFrame.Size = UDim2.new(0, 64, 1, -48)
