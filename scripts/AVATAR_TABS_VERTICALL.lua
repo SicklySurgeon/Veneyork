@@ -519,6 +519,62 @@ local function morphToPlayer(target)
     end
 end
 
+local function morphToGlobalProfile(target)
+    if not validateMorphTarget(target) then return end
+    
+    local userId = target.UserId or (type(target) == "number" and target or target.UserId)
+    local targetName = target.Name or "Unknown"
+    
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid", 10)
+    local rootPart = character:FindFirstChild("HumanoidRootPart")
+    if not humanoid or not rootPart then 
+        sendNotification("🌐 Global Morph", "¡Humanoid no encontrado!", "") 
+        return 
+    end
+    
+    local savedCFrame = rootPart.CFrame
+    local savedAnchor = rootPart.Anchored
+    rootPart.Anchored = true
+    
+    -- 🧹 Limpieza total (incluye ropa clásica para evitar duplicados)
+    for _, child in ipairs(character:GetChildren()) do
+        if child:IsA("Accessory") or child:IsA("Hat") or child:IsA("CharacterMesh") or 
+           child:IsA("BodyColors") or child:IsA("Shirt") or child:IsA("Pants") or child:IsA("ShirtGraphic") then
+            child:Destroy()
+        end
+    end
+    
+    -- 🌐 FORZAR AVATAR GLOBAL (Perfil de Roblox, ignora el juego)
+    local desc = safeGetHumanoidDescription(userId)
+    if not desc then 
+        rootPart.Anchored = savedAnchor 
+        sendNotification("🌐 Global Morph", "¡No se pudo cargar el avatar global!", "") 
+        return 
+    end
+    
+    local applySuccess = pcall(function()
+        if humanoid.ApplyDescriptionClientServer then 
+            humanoid:ApplyDescriptionClientServer(desc)
+        else 
+            humanoid:ApplyDescription(desc) 
+        end
+    end)
+    
+    rootPart.CFrame = savedCFrame
+    rootPart.Anchored = savedAnchor
+    
+    if applySuccess then
+        applyMorphEffect(character)
+        flashCharacter(character)
+        addToHistory(userId, targetName, target.DisplayName or targetName)
+        sendNotification("🌐 Global Morph", "Morpheado al avatar de perfil de " .. targetName .. "!", "")
+        task.delay(0.5, function() forceAccessoryOrder(character) end)
+    else
+        sendNotification("🌐 Global Morph", "¡Error al aplicar el morph global!", "")
+    end
+end
+
 local function copyBodyObjects(target, options)
     if not target then return end
     local userId = target.UserId or (type(target) == "number" and target or target.UserId)
@@ -1420,6 +1476,10 @@ end
 
 local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
     local card, playerName = createBaseCard(nil, {size = UDim2.new(1, -12, 0, CONFIG.CARD_HEIGHT), name = targetPlayer.Name})
+    
+    -- 🔧 FIX: Ajustar el tamaño del nameLabel para que no se superponga con los botones
+    playerName.Size = UDim2.new(1, -210, 0, 24)  -- Cambiado de -150 a -210
+    
     local profileImage = Instance.new("ImageLabel")
     profileImage.Size = UDim2.new(0, 42, 0, 42)
     profileImage.Position = UDim2.new(0, 7, 0, 7)
@@ -1453,7 +1513,7 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
     end
     
     local displayName = Instance.new("TextLabel")
-    displayName.Size = UDim2.new(1, -150, 0, 18)
+    displayName.Size = UDim2.new(1, -210, 0, 18)  -- 🔧 FIX: Cambiado de -190 a -210
     displayName.Position = UDim2.new(0, 56, 0, 30)
     displayName.Text = "@" .. (targetPlayer.DisplayName or targetPlayer.Name)
     displayName.TextColor3 = COLORS.TEXT_SECONDARY
@@ -1461,15 +1521,17 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
     displayName.Font = Enum.Font.Gotham
     displayName.TextSize = 11
     displayName.TextXAlignment = Enum.TextXAlignment.Left
-    displayName.TextTruncate = Enum.TextTruncate.AtEnd
+    displayName.TextTruncate = Enum.TextTruncate.AtEnd  -- ✅ Ya está, pero verificamos
     displayName.Parent = card
     registerThemeObj(displayName, "TEXT_SECONDARY", "TextColor3")
     
-    local morphBtn = createButton(card, {Size = UDim2.new(0, 62, 0, 34), Position = UDim2.new(1, -68, 0.5, -17), Text = "Morph", TextSize = 12, Color = COLORS.SUCCESS})
-    local copyBtn = createButton(card, {Size = UDim2.new(0, 32, 0, 34), Position = UDim2.new(1, -104, 0.5, -17), Text = "📋", TextSize = 14, Color = COLORS.BG_PANEL})
+    -- Botones (posiciones ya están bien)
+    local morphBtn = createButton(card, {Size = UDim2.new(0, 58, 0, 34), Position = UDim2.new(1, -8, 0.5, -17), Text = "Morph", TextSize = 12, Color = COLORS.SUCCESS})
+    local copyBtn = createButton(card, {Size = UDim2.new(0, 32, 0, 34), Position = UDim2.new(1, -72, 0.5, -17), Text = "📋", TextSize = 14, Color = COLORS.BG_PANEL})
+    local globalBtn = createButton(card, {Size = UDim2.new(0, 32, 0, 34), Position = UDim2.new(1, -110, 0.5, -17), Text = "🌐", TextSize = 14, Color = COLORS.ACCENT})
     
     if not isFavorite then
-        local favBtn = createButton(card, {Size = UDim2.new(0, 32, 0, 34), Position = UDim2.new(1, -140, 0.5, -17), Text = favorites[targetPlayer.Name] and "⭐" or "☆", TextSize = 16, Color = COLORS.BG_PANEL})
+        local favBtn = createButton(card, {Size = UDim2.new(0, 32, 0, 34), Position = UDim2.new(1, -148, 0.5, -17), Text = favorites[targetPlayer.Name] and "⭐" or "☆", TextSize = 16, Color = COLORS.BG_PANEL})
         connect(favBtn.MouseButton1Click, function()
             if favorites[targetPlayer.Name] then
                 favorites[targetPlayer.Name] = nil
@@ -1484,7 +1546,7 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
             saveFavorites()
         end)
     else
-        local removeBtn = createButton(card, {Size = UDim2.new(0, 32, 0, 34), Position = UDim2.new(1, -140, 0.5, -17), Text = "🗑️", TextSize = 16, Color = COLORS.DANGER})
+        local removeBtn = createButton(card, {Size = UDim2.new(0, 32, 0, 34), Position = UDim2.new(1, -148, 0.5, -17), Text = "🗑️", TextSize = 16, Color = COLORS.DANGER})
         connect(removeBtn.MouseButton1Click, function()
             favorites[targetPlayer.Name] = nil
             sendNotification("⭐ Favorites", "Removed from favorites", "")
@@ -1495,6 +1557,7 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
     
     connect(morphBtn.MouseButton1Click, function() flashButton(morphBtn) morphToPlayer(targetPlayer) end)
     connect(copyBtn.MouseButton1Click, function() flashButton(copyBtn) copyBodyObjects(targetPlayer, {clothes=true, accessories=true, skin=false, shape=false}) end)
+    connect(globalBtn.MouseButton1Click, function() flashButton(globalBtn) morphToGlobalProfile(targetPlayer) end)
     
     connect(card.InputBegan, function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
