@@ -1366,7 +1366,7 @@ local function createPlayerCard(targetPlayer)
 	-- 🔧 REEMPLAZA las 3 líneas de creación de botones dentro de createPlayerCard por estas:
 	local morphBtn = createButton(card, {Size = UDim2.new(0, 58, 0, 34), Position = UDim2.new(1, -66, 0.5, -17), Text = "Morph", TextSize = 12, Color = COLORS.SUCCESS})
 	local copyBtn = createButton(card, {Size = UDim2.new(0, 32, 0, 34), Position = UDim2.new(1, -106, 0.5, -17), Text = "📋", TextSize = 14, Color = COLORS.BG_PANEL})
-	local globalBtn = createButton(card, {Size = UDim2.new(0, 32, 0, 34), Position = UDim2.new(1, -146, 0.5, -17), Text = "🌐", TextSize = 14, Color = COLORS.ACCENT})
+	local globalBtn = createButton(card, {Size = UDim2.new(0, 32, 0, 34), Position = UDim2.new(1, -146, 0.5, -17), Text = "🌐", TextSize = 14, Color = COLORS.BG_PANEL})
     
     connect(morphBtn.MouseButton1Click, function() flashButton(morphBtn) morphToPlayer(targetPlayer) end)
     connect(copyBtn.MouseButton1Click, function() flashButton(copyBtn) copyBodyObjects(targetPlayer, {clothes=true, accessories=true, skin=false, shape=false}) end)
