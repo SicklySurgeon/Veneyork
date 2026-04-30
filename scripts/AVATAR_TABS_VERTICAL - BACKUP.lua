@@ -1,6 +1,7 @@
 -- ==========================================
 -- MORPH AVATAR PRO - VERSIÓN FINAL (v2.1.9)
 -- FIXES: Search Button Position, Morph Overlap, DisplayName Logic
+-- UI/UX REDESIGN: Modern Sidebar, Semantic Themes, Card Layouts
 -- ==========================================
 
 -- ==========================================
@@ -8,12 +9,12 @@
 -- ==========================================
 
 local THEMES = {
-    Glass = { BLACK = Color3.fromRGB(15, 15, 15), DARK_GRAY = Color3.fromRGB(35, 35, 35), MID_GRAY = Color3.fromRGB(50, 50, 50), LIGHT_GRAY = Color3.fromRGB(200, 200, 200), WHITE = Color3.fromRGB(255, 255, 255), TEXT_MAIN = Color3.fromRGB(255, 255, 255), TEXT_DIM = Color3.fromRGB(180, 180, 180), RED = Color3.fromRGB(200, 50, 50), LIGHT_GREEN = Color3.fromRGB(50, 180, 50), BLUE = Color3.fromRGB(50, 120, 200), ACCENT = Color3.fromRGB(100, 150, 255), YELLOW = Color3.fromRGB(255, 255, 0), TRANSPARENCY = 0.05 },
-    Dark = { BLACK = Color3.fromRGB(20, 20, 25), DARK_GRAY = Color3.fromRGB(30, 30, 40), MID_GRAY = Color3.fromRGB(55, 55, 70), LIGHT_GRAY = Color3.fromRGB(180, 180, 200), WHITE = Color3.fromRGB(240, 240, 240), TEXT_MAIN = Color3.fromRGB(240, 240, 240), TEXT_DIM = Color3.fromRGB(160, 160, 170), RED = Color3.fromRGB(200, 50, 50), LIGHT_GREEN = Color3.fromRGB(40, 180, 90), BLUE = Color3.fromRGB(80, 130, 220), ACCENT = Color3.fromRGB(80, 130, 220), YELLOW = Color3.fromRGB(255, 200, 50), TRANSPARENCY = 0.05 },
-    Light = { BLACK = Color3.fromRGB(240, 240, 245), DARK_GRAY = Color3.fromRGB(220, 220, 230), MID_GRAY = Color3.fromRGB(200, 200, 210), LIGHT_GRAY = Color3.fromRGB(80, 80, 100), WHITE = Color3.fromRGB(20, 20, 25), TEXT_MAIN = Color3.fromRGB(20, 20, 25), TEXT_DIM = Color3.fromRGB(60, 60, 70), RED = Color3.fromRGB(180, 40, 40), LIGHT_GREEN = Color3.fromRGB(30, 150, 70), BLUE = Color3.fromRGB(60, 120, 200), ACCENT = Color3.fromRGB(60, 120, 200), YELLOW = Color3.fromRGB(200, 180, 0), TRANSPARENCY = 0.1 },
-    Cyber = { BLACK = Color3.fromRGB(10, 10, 20), DARK_GRAY = Color3.fromRGB(25, 25, 45), MID_GRAY = Color3.fromRGB(45, 45, 75), LIGHT_GRAY = Color3.fromRGB(150, 200, 255), WHITE = Color3.fromRGB(255, 255, 255), TEXT_MAIN = Color3.fromRGB(255, 255, 255), TEXT_DIM = Color3.fromRGB(150, 200, 255), RED = Color3.fromRGB(255, 50, 100), LIGHT_GREEN = Color3.fromRGB(0, 255, 150), BLUE = Color3.fromRGB(0, 200, 255), ACCENT = Color3.fromRGB(0, 255, 200), YELLOW = Color3.fromRGB(255, 255, 0), TRANSPARENCY = 0.2 },
-    Sunset = { BLACK = Color3.fromRGB(30, 20, 25), DARK_GRAY = Color3.fromRGB(50, 35, 40), MID_GRAY = Color3.fromRGB(70, 50, 55), LIGHT_GRAY = Color3.fromRGB(220, 180, 170), WHITE = Color3.fromRGB(255, 240, 230), TEXT_MAIN = Color3.fromRGB(255, 240, 230), TEXT_DIM = Color3.fromRGB(200, 160, 150), RED = Color3.fromRGB(255, 80, 80), LIGHT_GREEN = Color3.fromRGB(100, 200, 120), BLUE = Color3.fromRGB(255, 150, 100), ACCENT = Color3.fromRGB(255, 150, 100), YELLOW = Color3.fromRGB(255, 200, 100), TRANSPARENCY = 0.15 },
-    Ocean = { BLACK = Color3.fromRGB(10, 20, 30), DARK_GRAY = Color3.fromRGB(20, 40, 60), MID_GRAY = Color3.fromRGB(35, 60, 90), LIGHT_GRAY = Color3.fromRGB(150, 190, 220), WHITE = Color3.fromRGB(230, 245, 255), TEXT_MAIN = Color3.fromRGB(230, 245, 255), TEXT_DIM = Color3.fromRGB(150, 190, 220), RED = Color3.fromRGB(255, 80, 100), LIGHT_GREEN = Color3.fromRGB(60, 200, 180), BLUE = Color3.fromRGB(50, 180, 255), ACCENT = Color3.fromRGB(50, 180, 255), YELLOW = Color3.fromRGB(100, 220, 255), TRANSPARENCY = 0.18 }
+    Glass = { BG_MAIN = Color3.fromRGB(15, 15, 15), BG_PANEL = Color3.fromRGB(25, 25, 25), BG_CARD = Color3.fromRGB(35, 35, 35), BG_INPUT = Color3.fromRGB(45, 45, 45), TEXT_PRIMARY = Color3.fromRGB(255, 255, 255), TEXT_SECONDARY = Color3.fromRGB(180, 180, 180), ACCENT = Color3.fromRGB(100, 150, 255), SUCCESS = Color3.fromRGB(50, 180, 50), DANGER = Color3.fromRGB(200, 50, 50), BORDER = Color3.fromRGB(80, 80, 80), SCROLL_THUMB = Color3.fromRGB(100, 150, 255), TRANSPARENCY = 0.05 },
+    Dark = { BG_MAIN = Color3.fromRGB(20, 20, 25), BG_PANEL = Color3.fromRGB(30, 30, 40), BG_CARD = Color3.fromRGB(45, 45, 60), BG_INPUT = Color3.fromRGB(55, 55, 70), TEXT_PRIMARY = Color3.fromRGB(240, 240, 240), TEXT_SECONDARY = Color3.fromRGB(160, 160, 170), ACCENT = Color3.fromRGB(80, 130, 220), SUCCESS = Color3.fromRGB(40, 180, 90), DANGER = Color3.fromRGB(200, 50, 50), BORDER = Color3.fromRGB(70, 70, 90), SCROLL_THUMB = Color3.fromRGB(80, 130, 220), TRANSPARENCY = 0.05 },
+    Light = { BG_MAIN = Color3.fromRGB(240, 240, 245), BG_PANEL = Color3.fromRGB(220, 220, 230), BG_CARD = Color3.fromRGB(200, 200, 210), BG_INPUT = Color3.fromRGB(230, 230, 235), TEXT_PRIMARY = Color3.fromRGB(20, 20, 25), TEXT_SECONDARY = Color3.fromRGB(60, 60, 70), ACCENT = Color3.fromRGB(60, 120, 200), SUCCESS = Color3.fromRGB(30, 150, 70), DANGER = Color3.fromRGB(180, 40, 40), BORDER = Color3.fromRGB(150, 150, 160), SCROLL_THUMB = Color3.fromRGB(60, 120, 200), TRANSPARENCY = 0.1 },
+    Cyber = { BG_MAIN = Color3.fromRGB(10, 10, 20), BG_PANEL = Color3.fromRGB(20, 20, 35), BG_CARD = Color3.fromRGB(30, 30, 55), BG_INPUT = Color3.fromRGB(40, 40, 70), TEXT_PRIMARY = Color3.fromRGB(255, 255, 255), TEXT_SECONDARY = Color3.fromRGB(150, 200, 255), ACCENT = Color3.fromRGB(0, 255, 200), SUCCESS = Color3.fromRGB(0, 255, 150), DANGER = Color3.fromRGB(255, 50, 100), BORDER = Color3.fromRGB(0, 200, 255), SCROLL_THUMB = Color3.fromRGB(0, 255, 200), TRANSPARENCY = 0.2 },
+    Sunset = { BG_MAIN = Color3.fromRGB(30, 20, 25), BG_PANEL = Color3.fromRGB(45, 30, 35), BG_CARD = Color3.fromRGB(60, 40, 45), BG_INPUT = Color3.fromRGB(75, 50, 55), TEXT_PRIMARY = Color3.fromRGB(255, 240, 230), TEXT_SECONDARY = Color3.fromRGB(200, 160, 150), ACCENT = Color3.fromRGB(255, 150, 100), SUCCESS = Color3.fromRGB(100, 200, 120), DANGER = Color3.fromRGB(255, 80, 80), BORDER = Color3.fromRGB(120, 80, 70), SCROLL_THUMB = Color3.fromRGB(255, 150, 100), TRANSPARENCY = 0.15 },
+    Ocean = { BG_MAIN = Color3.fromRGB(10, 20, 30), BG_PANEL = Color3.fromRGB(15, 30, 45), BG_CARD = Color3.fromRGB(25, 45, 65), BG_INPUT = Color3.fromRGB(35, 55, 80), TEXT_PRIMARY = Color3.fromRGB(230, 245, 255), TEXT_SECONDARY = Color3.fromRGB(150, 190, 220), ACCENT = Color3.fromRGB(50, 180, 255), SUCCESS = Color3.fromRGB(60, 200, 180), DANGER = Color3.fromRGB(255, 80, 100), BORDER = Color3.fromRGB(40, 90, 130), SCROLL_THUMB = Color3.fromRGB(50, 180, 255), TRANSPARENCY = 0.18 }
 }
 
 local COLORS = THEMES.Glass
@@ -31,9 +32,9 @@ local SERVICES = {
 }
 
 local CONFIG = {
-    MENU_WIDTH = 380, MENU_HEIGHT = 450, CREATOR_NAME = "Sickly255", ANIM_SPEED = 0.2, CONFIRM_MORPH = false,
+    MENU_WIDTH = 420, MENU_HEIGHT = 520, CREATOR_NAME = "Sickly255", ANIM_SPEED = 0.2, CONFIRM_MORPH = false,
     SORT_MODE = "name", MAX_HISTORY = 10, COOLDOWN = 5, MAX_CACHE_SIZE = 50, DEBOUNCE_TIME = 0.3,
-    TAB_BUTTON_WIDTH = 90, CARD_HEIGHT = 50, CARD_MARGIN = 5
+    TAB_BUTTON_WIDTH = 90, CARD_HEIGHT = 56, CARD_MARGIN = 5
 }
 
 local player = SERVICES.Players.LocalPlayer
@@ -80,7 +81,11 @@ end
 local function updateTabHighlights()
     for name, btn in pairs(tabButtons) do
         if btn and btn:IsA("TextButton") then
-            btn.BackgroundColor3 = (name == currentTab) and COLORS.ACCENT or COLORS.MID_GRAY
+            local isActive = (name == currentTab)
+            btn.BackgroundColor3 = isActive and COLORS.ACCENT or COLORS.BG_CARD
+            btn.TextColor3 = isActive and COLORS.BG_MAIN or COLORS.TEXT_SECONDARY
+            local stroke = btn:FindFirstChildOfClass("UIStroke")
+            if stroke then stroke.Color = isActive and COLORS.ACCENT or COLORS.BORDER end
         end
     end
 end
@@ -94,17 +99,17 @@ local function applyTheme(themeName)
         if COLORS[role] then obj[prop] = COLORS[role] end
     end
     if frame then frame.BackgroundTransparency = 1 - (1 - COLORS.TRANSPARENCY) * 0.95 end
-    if tabsContainer then tabsContainer.ScrollBarImageColor3 = COLORS.ACCENT end
-    if infoContent then infoContent.ScrollBarImageColor3 = COLORS.ACCENT end
-    if playersScrollFrame then playersScrollFrame.ScrollBarImageColor3 = COLORS.ACCENT end
-    if favoritesScrollFrame then favoritesScrollFrame.ScrollBarImageColor3 = COLORS.ACCENT end
-    if historyScrollFrame then historyScrollFrame.ScrollBarImageColor3 = COLORS.ACCENT end
-    if skinPaletteScroll then skinPaletteScroll.ScrollBarImageColor3 = COLORS.ACCENT end
+    if tabsContainer then tabsContainer.ScrollBarImageColor3 = COLORS.SCROLL_THUMB end
+    if infoContent then infoContent.ScrollBarImageColor3 = COLORS.SCROLL_THUMB end
+    if playersScrollFrame then playersScrollFrame.ScrollBarImageColor3 = COLORS.SCROLL_THUMB end
+    if favoritesScrollFrame then favoritesScrollFrame.ScrollBarImageColor3 = COLORS.SCROLL_THUMB end
+    if historyScrollFrame then historyScrollFrame.ScrollBarImageColor3 = COLORS.SCROLL_THUMB end
+    if skinPaletteScroll then skinPaletteScroll.ScrollBarImageColor3 = COLORS.SCROLL_THUMB end
     
     updateTabHighlights()
     local textboxes = {usernameInput, searchPlayersBox, hexInput}
     for _, tb in ipairs(textboxes) do
-        if tb and tb:IsA("TextBox") then tb.PlaceholderColor3 = COLORS.TEXT_DIM end
+        if tb and tb:IsA("TextBox") then tb.PlaceholderColor3 = COLORS.TEXT_SECONDARY end
     end
     
     sendNotification("🎨 Tema", "Cambiado a: " .. themeName, "")
@@ -140,42 +145,52 @@ local function createButton(parent, props)
     btn.Text = props.Text or ""
     btn.Font = props.Font or Enum.Font.GothamBold
     btn.TextSize = props.TextSize or 14
-    btn.TextColor3 = COLORS.TEXT_MAIN
-    btn.BackgroundColor3 = props.Color or COLORS.MID_GRAY
+    btn.TextColor3 = COLORS.TEXT_PRIMARY
+    btn.BackgroundColor3 = props.Color or COLORS.BG_CARD
     btn.BorderSizePixel = 0
     btn.AutoButtonColor = false
     btn.Parent = parent
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, props.CornerRadius or 6)
     corner.Parent = btn
-    local colorRole = "MID_GRAY"
-    if props.Color == COLORS.LIGHT_GREEN then colorRole = "LIGHT_GREEN"
-    elseif props.Color == COLORS.RED then colorRole = "RED"
-    elseif props.Color == COLORS.BLUE then colorRole = "BLUE"
+    local stroke = Instance.new("UIStroke")
+    stroke.Thickness = 1.5
+    stroke.Color = COLORS.BORDER
+    stroke.Parent = btn
+    local colorRole = "BG_CARD"
+    if props.Color == COLORS.SUCCESS then colorRole = "SUCCESS"
+    elseif props.Color == COLORS.DANGER then colorRole = "DANGER"
     elseif props.Color == COLORS.ACCENT then colorRole = "ACCENT"
-    elseif props.Color == COLORS.DARK_GRAY then colorRole = "DARK_GRAY"
+    elseif props.Color == COLORS.BG_PANEL then colorRole = "BG_PANEL"
     end
     registerThemeObj(btn, colorRole, "BackgroundColor3")
-    registerThemeObj(btn, "TEXT_MAIN", "TextColor3")
+    registerThemeObj(btn, "TEXT_PRIMARY", "TextColor3")
+    registerThemeObj(stroke, "BORDER", "Color")
     return btn
 end
 
 local function createRoundedFrame(parent, size, pos, color, radius)
-    local frame = Instance.new("Frame")
-    frame.Size = size or UDim2.new(0, 100, 0, 100)
-    frame.Position = pos or UDim2.new(0, 0, 0, 0)
-    frame.BackgroundColor3 = color or COLORS.BLACK
-    frame.BorderSizePixel = 0
-    frame.Parent = parent
+    local frm = Instance.new("Frame")
+    frm.Size = size or UDim2.new(0, 100, 0, 100)
+    frm.Position = pos or UDim2.new(0, 0, 0, 0)
+    frm.BackgroundColor3 = color or COLORS.BG_MAIN
+    frm.BorderSizePixel = 0
+    frm.Parent = parent
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, radius or 8)
-    corner.Parent = frame
-    local colorRole = "BLACK"
-    if color == COLORS.DARK_GRAY then colorRole = "DARK_GRAY"
-    elseif color == COLORS.MID_GRAY then colorRole = "MID_GRAY"
+    corner.Parent = frm
+    local stroke = Instance.new("UIStroke")
+    stroke.Thickness = 1.5
+    stroke.Color = COLORS.BORDER
+    stroke.Parent = frm
+    local colorRole = "BG_MAIN"
+    if color == COLORS.BG_PANEL then colorRole = "BG_PANEL"
+    elseif color == COLORS.BG_CARD then colorRole = "BG_CARD"
+    elseif color == COLORS.BG_INPUT then colorRole = "BG_INPUT"
     end
-    registerThemeObj(frame, colorRole, "BackgroundColor3")
-    return frame
+    registerThemeObj(frm, colorRole, "BackgroundColor3")
+    registerThemeObj(stroke, "BORDER", "Color")
+    return frm
 end
 
 local function animateObject(obj, props, time)
@@ -194,7 +209,7 @@ end
 
 local function flashButton(btn)
     local originalColor = btn.BackgroundColor3
-    animateObject(btn, {BackgroundColor3 = COLORS.WHITE}, 0.1)
+    animateObject(btn, {BackgroundColor3 = COLORS.TEXT_PRIMARY}, 0.1)
     task.wait(0.1)
     animateObject(btn, {BackgroundColor3 = originalColor}, 0.2)
 end
@@ -204,7 +219,7 @@ local function flashCharacter(character)
     if not root then return end
     local highlight = Instance.new("SelectionBox")
     highlight.Adornee = root
-    highlight.Color3 = COLORS.YELLOW
+    highlight.Color3 = COLORS.ACCENT
     highlight.LineThickness = 0.1
     highlight.Transparency = 0.5
     highlight.Parent = root
@@ -324,7 +339,7 @@ local function applyMorphEffect(character)
     particleEmitter.Speed = NumberRange.new(5, 10)
     particleEmitter.Lifetime = NumberRange.new(0.5, 1)
     particleEmitter.SpreadAngle = Vector2.new(360, 360)
-    particleEmitter.Color = ColorSequence.new(COLORS.LIGHT_GREEN)
+    particleEmitter.Color = ColorSequence.new(COLORS.SUCCESS)
     particleEmitter.Parent = rootPart
     task.spawn(function() task.wait(2) particleEmitter.Enabled = false task.wait(1) particleEmitter:Destroy() end)
 end
@@ -387,34 +402,118 @@ local function getTargetDescription(target, userId)
     return desc
 end
 
+local function regenerateCharacter()
+	local currentChar = player.Character
+	if not currentChar then return end
+	
+	local root = currentChar:FindFirstChild("HumanoidRootPart")
+	local savedCFrame = root and root.CFrame or CFrame.new(0, 10, 0)
+	
+	-- 🔧 FIX: LoadCharacter() está bloqueado en cliente.
+	-- Forzamos la muerte del humanoid para activar el respawn automático del servidor.
+	local humanoid = currentChar:FindFirstChildOfClass("Humanoid")
+	if humanoid and humanoid.Health > 0 then
+		humanoid.Health = 0
+	end
+	
+	task.spawn(function()
+		local success, newChar = pcall(function() 
+			return player.CharacterAdded:Wait() 
+		end)
+		
+		if not success or not newChar then return end
+		
+		local newRoot = newChar:WaitForChild("HumanoidRootPart", 10)
+		if not newRoot or not savedCFrame then return end
+		
+		-- Espera a que el motor de físicas estabilice el spawn
+		task.wait(0.15)
+		
+		pcall(function()
+			if newRoot and newRoot.Parent and typeof(savedCFrame) == "CFrame" then
+				newRoot.CFrame = savedCFrame
+			end
+		end)
+	end)
+end
+
 local function morphToPlayer(target)
     if not validateMorphTarget(target) then return end
+    
     local userId = target.UserId or (type(target) == "number" and target or target.UserId)
     local targetName = target.Name or "Unknown"
+    
+    -- Esperar a que el personaje exista
     local character = player.Character or player.CharacterAdded:Wait()
     local humanoid = character:WaitForChild("Humanoid", 10)
     local rootPart = character:FindFirstChild("HumanoidRootPart")
-    if not humanoid or not rootPart then sendNotification("👤 Morph Avatar", "Failed to find humanoid!", "") return end
     
+    if not humanoid or not rootPart then 
+        sendNotification("👤 Morph Avatar", "Failed to find humanoid!", "") 
+        return 
+    end
+    
+    -- Guardar posición para no teletransportarse
     local savedCFrame = rootPart.CFrame
     local savedAnchor = rootPart.Anchored
-    rootPart.Anchored = true
-    local desc = getTargetDescription(target, userId)
-    if not desc then rootPart.Anchored = savedAnchor sendNotification("👤 Morph Avatar", "Failed to load avatar data!", "") return end
+    rootPart.Anchored = true -- Anclar para evitar movimientos durante el cambio
     
+    -- 🔧 FIX CRÍTICO: Limpieza manual de accesorios, ropa clásica y objetos viejos
+    -- Esto evita que se queden "fantasmas", se dupliquen o no se reemplace la ropa clásica
+    for _, child in ipairs(character:GetChildren()) do
+        if child:IsA("Accessory") or child:IsA("Hat") or child:IsA("CharacterMesh") or 
+           child:IsA("BodyColors") or child:IsA("Shirt") or child:IsA("Pants") or child:IsA("ShirtGraphic") then
+            child:Destroy()
+        end
+    end
+    
+    -- Obtener la descripción del objetivo
+    local desc = getTargetDescription(target, userId)
+    if not desc then 
+        rootPart.Anchored = savedAnchor 
+        sendNotification("👤 Morph Avatar", "Failed to load avatar data!", "") 
+        return 
+    end
+    
+    -- Aplicar la nueva descripción
     local applySuccess = pcall(function()
-        if humanoid.ApplyDescriptionClientServer then humanoid:ApplyDescriptionClientServer(desc)
-        else humanoid:ApplyDescription(desc) end
+        if humanoid.ApplyDescriptionClientServer then 
+            humanoid:ApplyDescriptionClientServer(desc)
+        else 
+            humanoid:ApplyDescription(desc) 
+        end
     end)
+    
+    -- Restaurar posición y anclaje
     rootPart.CFrame = savedCFrame
     rootPart.Anchored = savedAnchor
     
     if applySuccess then
+        -- ▽ NOCLIP AUTOMÁTICO PARA "ColiderMerengues" (Solo tras morph exitoso)
+        task.spawn(function()
+            local success, colider = pcall(function()
+                local found = workspace:FindFirstChild("ColiderMerengues")
+                if not found then
+                    found = workspace:WaitForChild("ColiderMerengues", 3)
+                end
+                return found
+            end)
+            
+            if success and colider and colider:IsA("BasePart") then
+                colider.CanCollide = false
+            end
+        end)
+        -- △ FIN NOCLIP
+        
         applyMorphEffect(character)
         flashCharacter(character)
         addToHistory(userId, targetName, target.DisplayName or targetName)
         sendNotification("👤 Morph Avatar", "Morphed to " .. targetName .. "!", "")
-        task.spawn(forceAccessoryOrder, character)
+        
+        -- Forzar orden de accesorios después de un breve delay para asegurar que cargaron
+        task.delay(0.5, function()
+            forceAccessoryOrder(character)
+        end)
     else
         sendNotification("👤 Morph Avatar", "Failed to apply morph!", "")
     end
@@ -494,10 +593,17 @@ screenGui.DisplayOrder = 999999
 screenGui.Parent = guiParent
 screenGui.Enabled = true
 
-local frame = createRoundedFrame(screenGui, UDim2.new(0, CONFIG.MENU_WIDTH, 0, CONFIG.MENU_HEIGHT), UDim2.new(0.5, -190, 0.5, -225), COLORS.BLACK, 10)
+local frame = createRoundedFrame(screenGui, UDim2.new(0, CONFIG.MENU_WIDTH, 0, CONFIG.MENU_HEIGHT), UDim2.new(0.5, -CONFIG.MENU_WIDTH/2, 0.5, -CONFIG.MENU_HEIGHT/2), COLORS.BG_MAIN, 12)
 frame.BackgroundTransparency = 1 - 0.95
 frame.Active = true
 frame.ClipsDescendants = true
+
+local mainPadding = Instance.new("UIPadding")
+mainPadding.PaddingTop = UDim.new(0, 8)
+mainPadding.PaddingBottom = UDim.new(0, 8)
+mainPadding.PaddingLeft = UDim.new(0, 8)
+mainPadding.PaddingRight = UDim.new(0, 8)
+mainPadding.Parent = frame
 
 local titleBar = Instance.new("Frame")
 titleBar.Size = UDim2.new(1, 0, 0, 40)
@@ -507,8 +613,8 @@ titleBar.Parent = frame
 titleBar.Active = true
 
 local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, -80, 0, 40)
-title.Position = UDim2.new(0, 15, 0, 0)
+title.Size = UDim2.new(1, -120, 0, 40)
+title.Position = UDim2.new(0, 8, 0, 0)
 title.Text = "🎭 Morph Avatar Pro"
 title.TextColor3 = COLORS.ACCENT
 title.BackgroundTransparency = 1
@@ -519,42 +625,64 @@ title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = titleBar
 registerThemeObj(title, "ACCENT", "TextColor3")
 
-local themeBtn = createButton(titleBar, {Size = UDim2.new(0, 35, 0, 35), Position = UDim2.new(1, -115, 0, 2.5), Text = "🎨", TextSize = 16, Color = COLORS.MID_GRAY})
-local miniBtn = createButton(titleBar, {Size = UDim2.new(0, 35, 0, 35), Position = UDim2.new(1, -75, 0, 2.5), Text = "−", TextSize = 20, Color = COLORS.MID_GRAY})
-local closeBtn = createButton(titleBar, {Size = UDim2.new(0, 35, 0, 35), Position = UDim2.new(1, -37.5, 0, 2.5), Text = "X", TextSize = 18, Color = COLORS.RED})
+local themeBtn = createButton(titleBar, {Size = UDim2.new(0, 32, 0, 32), Position = UDim2.new(1, -104, 0, 4), Text = "🎨", TextSize = 15, Color = COLORS.BG_CARD})
+local miniBtn = createButton(titleBar, {Size = UDim2.new(0, 32, 0, 32), Position = UDim2.new(1, -68, 0, 4), Text = "−", TextSize = 18, Color = COLORS.BG_CARD})
+local closeBtn = createButton(titleBar, {Size = UDim2.new(0, 32, 0, 32), Position = UDim2.new(1, -32, 0, 4), Text = "X", TextSize = 16, Color = COLORS.DANGER})
+
+local sidebarFrame = Instance.new("Frame")
+sidebarFrame.Size = UDim2.new(0, 64, 1, -48)
+sidebarFrame.Position = UDim2.new(0, 0, 0, 48)
+sidebarFrame.BackgroundColor3 = COLORS.BG_PANEL
+sidebarFrame.BorderSizePixel = 0
+sidebarFrame.Parent = frame
+registerThemeObj(sidebarFrame, "BG_PANEL", "BackgroundColor3")
+
+local sidebarCorner = Instance.new("UICorner")
+sidebarCorner.CornerRadius = UDim.new(0, 8)
+sidebarCorner.Parent = sidebarFrame
+
+local sidebarStroke = Instance.new("UIStroke")
+sidebarStroke.Thickness = 1.5
+sidebarStroke.Color = COLORS.BORDER
+sidebarStroke.Parent = sidebarFrame
+registerThemeObj(sidebarStroke, "BORDER", "Color")
 
 local tabsContainer = Instance.new("ScrollingFrame")
-tabsContainer.Size = UDim2.new(1, -20, 0, 35)
-tabsContainer.Position = UDim2.new(0, 10, 0, 50)
-tabsContainer.BackgroundColor3 = COLORS.DARK_GRAY
+tabsContainer.Size = UDim2.new(1, 0, 1, 0)
+tabsContainer.Position = UDim2.new(0, 0, 0, 0)
+tabsContainer.BackgroundTransparency = 1
 tabsContainer.BorderSizePixel = 0
-tabsContainer.ScrollBarThickness = 4
-tabsContainer.ScrollBarImageColor3 = COLORS.ACCENT
-tabsContainer.ScrollingDirection = Enum.ScrollingDirection.X
+tabsContainer.ScrollBarThickness = 3
+tabsContainer.ScrollBarImageColor3 = COLORS.SCROLL_THUMB
+tabsContainer.ScrollingDirection = Enum.ScrollingDirection.Y
 tabsContainer.ScrollingEnabled = true
 tabsContainer.CanvasSize = UDim2.new(0, 0, 0, 0)
-tabsContainer.Parent = frame
-registerThemeObj(tabsContainer, "DARK_GRAY", "BackgroundColor3")
-
-local tabsCorner = Instance.new("UICorner")
-tabsCorner.CornerRadius = UDim.new(0, 8)
-tabsCorner.Parent = tabsContainer
+tabsContainer.Parent = sidebarFrame
 
 local tabsLayout = Instance.new("UIListLayout")
-tabsLayout.FillDirection = Enum.FillDirection.Horizontal
-tabsLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
-tabsLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-tabsLayout.Padding = UDim.new(0, 4)
+tabsLayout.FillDirection = Enum.FillDirection.Vertical
+tabsLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+tabsLayout.VerticalAlignment = Enum.VerticalAlignment.Top
+tabsLayout.Padding = UDim.new(0, 6)
 tabsLayout.Parent = tabsContainer
+
+local tabsPadding = Instance.new("UIPadding")
+tabsPadding.PaddingTop = UDim.new(0, 8)
+tabsPadding.PaddingBottom = UDim.new(0, 8)
+tabsPadding.PaddingLeft = UDim.new(0, 4)
+tabsPadding.PaddingRight = UDim.new(0, 4)
+tabsPadding.Parent = tabsContainer
 
 local function createTab(name, icon)
     local btn = createButton(tabsContainer, {
-        Size = UDim2.new(0, CONFIG.TAB_BUTTON_WIDTH, 1, -6),
-        Position = UDim2.new(0, 0, 0, 3),
-        Text = icon .. " " .. name,
-        TextSize = 12,
-        Color = (name:lower() == currentTab) and COLORS.ACCENT or COLORS.MID_GRAY
+        Size = UDim2.new(1, -8, 0, 48),
+        Position = UDim2.new(0, 0, 0, 0),
+        Text = icon .. "\n" .. name,
+        TextSize = 10,
+        Color = (name:lower() == currentTab) and COLORS.ACCENT or COLORS.BG_CARD
     })
+    btn.TextWrapped = true
+    btn.Font = Enum.Font.GothamMedium
     tabButtons[name:lower()] = btn
     return btn
 end
@@ -562,56 +690,64 @@ end
 local infoTab = createTab("Info", "ℹ️")
 local searchTab = createTab("Search", "🔍")
 local playersTab = createTab("Players", "👥")
-local favoritesTab = createTab("Favorites", "⭐")
+local favoritesTab = createTab("Favs", "⭐")
 local skinTab = createTab("Skin", "🎨")
-local historyTab = createTab("History", "🕒")
+local historyTab = createTab("Hist", "🕒")
 
 local function updateTabsCanvasSize()
     task.wait()
-    tabsContainer.CanvasSize = UDim2.new(0, tabsLayout.AbsoluteContentSize.X + 10, 0, 0)
+    tabsContainer.CanvasSize = UDim2.new(0, 0, 0, tabsLayout.AbsoluteContentSize.Y + 16)
 end
 updateTabsCanvasSize()
 
 local contentContainer = Instance.new("Frame")
-contentContainer.Size = UDim2.new(1, -20, 1, -105)
-contentContainer.Position = UDim2.new(0, 10, 0, 95)
+contentContainer.Size = UDim2.new(1, -76, 1, -48)
+contentContainer.Position = UDim2.new(0, 72, 0, 48)
 contentContainer.BackgroundTransparency = 1
 contentContainer.BorderSizePixel = 0
+contentContainer.ClipsDescendants = true
 contentContainer.Parent = frame
 
 -- ==========================================
--- PESTAÑA INFO - ✅ FIX OVERFLOW Y SEPARACIÓN
+-- PESTAÑA INFO
 -- ==========================================
 
 local infoContent = Instance.new("ScrollingFrame")
 infoContent.Name = "InfoContent"
 infoContent.Size = UDim2.new(1, 0, 1, 0)
-infoContent.BackgroundColor3 = COLORS.DARK_GRAY
+infoContent.BackgroundColor3 = COLORS.BG_PANEL
 infoContent.BorderSizePixel = 0
-infoContent.ScrollBarThickness = 6
-infoContent.ScrollBarImageColor3 = COLORS.ACCENT
+infoContent.ScrollBarThickness = 5
+infoContent.ScrollBarImageColor3 = COLORS.SCROLL_THUMB
 infoContent.Visible = true
 infoContent.Parent = contentContainer
 infoContent.ScrollingDirection = Enum.ScrollingDirection.Y
-registerThemeObj(infoContent, "DARK_GRAY", "BackgroundColor3")
+infoContent.ClipsDescendants = true
+registerThemeObj(infoContent, "BG_PANEL", "BackgroundColor3")
 
 local infoCorner = Instance.new("UICorner")
 infoCorner.CornerRadius = UDim.new(0, 8)
 infoCorner.Parent = infoContent
 
+local infoStroke = Instance.new("UIStroke")
+infoStroke.Thickness = 1.5
+infoStroke.Color = COLORS.BORDER
+infoStroke.Parent = infoContent
+registerThemeObj(infoStroke, "BORDER", "Color")
+
 local infoPadding = Instance.new("UIPadding")
-infoPadding.PaddingTop = UDim.new(0, 15)
-infoPadding.PaddingBottom = UDim.new(0, 15)
-infoPadding.PaddingLeft = UDim.new(0, 15)
-infoPadding.PaddingRight = UDim.new(0, 15)
+infoPadding.PaddingTop = UDim.new(0, 12)
+infoPadding.PaddingBottom = UDim.new(0, 12)
+infoPadding.PaddingLeft = UDim.new(0, 12)
+infoPadding.PaddingRight = UDim.new(0, 12)
 infoPadding.Parent = infoContent
 
 local infoContentLabel = Instance.new("TextLabel")
-infoContentLabel.Size = UDim2.new(1, -30, 0, 0)
+infoContentLabel.Size = UDim2.new(1, -24, 0, 0)
 infoContentLabel.AutomaticSize = Enum.AutomaticSize.Y
 infoContentLabel.Position = UDim2.new(0, 0, 0, 0)
 infoContentLabel.BackgroundTransparency = 1
-infoContentLabel.TextColor3 = COLORS.TEXT_MAIN
+infoContentLabel.TextColor3 = COLORS.TEXT_PRIMARY
 infoContentLabel.Font = Enum.Font.Gotham
 infoContentLabel.TextSize = 13
 infoContentLabel.TextWrapped = true
@@ -632,10 +768,10 @@ infoContentLabel.Text = [[📝 REGISTRO DE CAMBIOS (v2.1.9)
 ✨ FIX v2.1.5: Orden de Accesorios Forzado
 
 ⚡ MEJORAS DE RENDIMIENTO Y UI
-📱 Pestañas con scroll horizontal (compatible con móvil)
+📱 Sidebar vertical moderno con navegación clara
 💡 Feedback visual en botones y personaje al morphear
 🔔 Notificaciones nativas de Roblox
-🪟 Ventana minimizable, arrastrable y con botón de cierre 'X'
+🪟 Ventana minimizable, arrastrable y con botón de cierre '✕'
 🧹 Limpieza de UI: Eliminados botones redundantes y textos innecesarios
 🔒 Botón de búsqueda anclado al fondo de la pestaña
 📝 Registro de cambios con separación visual entre secciones
@@ -671,12 +807,12 @@ Versión con temas + fixes: v2.1.9
 Basado en feedback de la comunidad
 ]]
 infoContentLabel.Parent = infoContent
-registerThemeObj(infoContentLabel, "TEXT_MAIN", "TextColor3")
+registerThemeObj(infoContentLabel, "TEXT_PRIMARY", "TextColor3")
 
 local function updateInfoCanvasSize()
     task.wait(0.1)
     local labelHeight = infoContentLabel.AbsoluteSize.Y
-    local padding = 30
+    local padding = 24
     infoContent.CanvasSize = UDim2.new(0, 0, 0, labelHeight + padding)
 end
 
@@ -686,7 +822,7 @@ task.spawn(function()
 end)
 
 -- ==========================================
--- PESTAÑA SEARCH - ✅ FIXES LAYOUT & DISPLAY NAME
+-- PESTAÑA SEARCH
 -- ==========================================
 
 local searchContent = Instance.new("Frame")
@@ -697,151 +833,174 @@ searchContent.Parent = contentContainer
 searchContent.Visible = false
 
 local searchWarningLabel = Instance.new("TextLabel")
-searchWarningLabel.Size = UDim2.new(1, -20, 0, 35)
-searchWarningLabel.Position = UDim2.new(0, 10, 0, 5)
-searchWarningLabel.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
-searchWarningLabel.BackgroundTransparency = 0.3
+searchWarningLabel.Size = UDim2.new(1, 0, 0, 38)
+searchWarningLabel.Position = UDim2.new(0, 0, 0, 0)
+searchWarningLabel.BackgroundColor3 = COLORS.SUCCESS -- Verde indicando éxito/solución
+searchWarningLabel.BackgroundTransparency = 0.15
 searchWarningLabel.BorderSizePixel = 0
-searchWarningLabel.Text = "⚠️ Bug conocido: Copiar avatares dentro de la plaza puede enviar al jugador bajo el piso"
-searchWarningLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+searchWarningLabel.Text = "✅ Bug Resuelto: Se integró NoClip automático para evitar que el personaje se quede atascado al copiar avatares."
+searchWarningLabel.TextColor3 = COLORS.TEXT_PRIMARY
 searchWarningLabel.Font = Enum.Font.GothamBold
 searchWarningLabel.TextSize = 11
 searchWarningLabel.TextWrapped = true
 searchWarningLabel.TextXAlignment = Enum.TextXAlignment.Left
-searchWarningLabel.TextYAlignment = Enum.TextYAlignment.Top
+searchWarningLabel.TextYAlignment = Enum.TextYAlignment.Center
 searchWarningLabel.Parent = searchContent
+registerThemeObj(searchWarningLabel, "SUCCESS", "BackgroundColor3")
+registerThemeObj(searchWarningLabel, "TEXT_PRIMARY", "TextColor3")
 
-local searchWarningCorner = Instance.new("UICorner")
-searchWarningCorner.CornerRadius = UDim.new(0, 6)
-searchWarningCorner.Parent = searchWarningLabel
+local warnCorner = Instance.new("UICorner")
+warnCorner.CornerRadius = UDim.new(0, 6)
+warnCorner.Parent = searchWarningLabel
 
 local searchLabel = Instance.new("TextLabel")
-searchLabel.Size = UDim2.new(1, 0, 0, 25)
-searchLabel.Position = UDim2.new(0, 0, 0, 45)
+searchLabel.Size = UDim2.new(1, 0, 0, 22)
+searchLabel.Position = UDim2.new(0, 0, 0, 46)
 searchLabel.Text = "Enter Username or ID to Search"
-searchLabel.TextColor3 = COLORS.TEXT_DIM
+searchLabel.TextColor3 = COLORS.TEXT_SECONDARY
 searchLabel.BackgroundTransparency = 1
-searchLabel.Font = Enum.Font.Gotham
+searchLabel.Font = Enum.Font.GothamMedium
 searchLabel.TextSize = 12
 searchLabel.TextXAlignment = Enum.TextXAlignment.Left
 searchLabel.Parent = searchContent
-registerThemeObj(searchLabel, "TEXT_DIM", "TextColor3")
+registerThemeObj(searchLabel, "TEXT_SECONDARY", "TextColor3")
 
 local usernameInput = Instance.new("TextBox")
-usernameInput.Size = UDim2.new(1, 0, 0, 40)
-usernameInput.Position = UDim2.new(0, 0, 0, 75)
+usernameInput.Size = UDim2.new(1, 0, 0, 42)
+usernameInput.Position = UDim2.new(0, 0, 0, 72)
 usernameInput.PlaceholderText = "Type username or ID here..."
 usernameInput.Font = Enum.Font.Gotham
 usernameInput.TextSize = 15
 usernameInput.Text = ""
-usernameInput.TextColor3 = COLORS.TEXT_MAIN
-usernameInput.PlaceholderColor3 = COLORS.TEXT_DIM
-usernameInput.BackgroundColor3 = COLORS.DARK_GRAY
+usernameInput.TextColor3 = COLORS.TEXT_PRIMARY
+usernameInput.PlaceholderColor3 = COLORS.TEXT_SECONDARY
+usernameInput.BackgroundColor3 = COLORS.BG_INPUT
 usernameInput.BorderSizePixel = 0
 usernameInput.ClearTextOnFocus = false
 usernameInput.TextWrapped = true
 usernameInput.Parent = searchContent
-registerThemeObj(usernameInput, "DARK_GRAY", "BackgroundColor3")
-registerThemeObj(usernameInput, "TEXT_MAIN", "TextColor3")
+registerThemeObj(usernameInput, "BG_INPUT", "BackgroundColor3")
+registerThemeObj(usernameInput, "TEXT_PRIMARY", "TextColor3")
 
 local inputCorner = Instance.new("UICorner")
 inputCorner.CornerRadius = UDim.new(0, 8)
 inputCorner.Parent = usernameInput
 
--- ==========================================
--- 🎯 RESULTADO DE BÚSQUEDA (Layout Mejorado)
--- ==========================================
+local inputStroke = Instance.new("UIStroke")
+inputStroke.Thickness = 1.5
+inputStroke.Color = COLORS.BORDER
+inputStroke.Parent = usernameInput
+registerThemeObj(inputStroke, "BORDER", "Color")
 
 local searchResultContainer = createRoundedFrame(searchContent, 
-    UDim2.new(1, 0, 0, 115), -- Altura ligeramente aumentada para evitar overlap
-    UDim2.new(0, 0, 0, 120), 
-    COLORS.MID_GRAY, 
-    8
+    UDim2.new(1, 0, 0, 120),
+    UDim2.new(0, 0, 0, 122), 
+    COLORS.BG_CARD, 
+    10
 )
 searchResultContainer.Visible = false
 
 local searchResultImage = Instance.new("ImageLabel")
-searchResultImage.Size = UDim2.new(0, 70, 0, 70)
-searchResultImage.Position = UDim2.new(0, 15, 0, 20)
-searchResultImage.BackgroundColor3 = COLORS.DARK_GRAY
+searchResultImage.Size = UDim2.new(0, 72, 0, 72)
+searchResultImage.Position = UDim2.new(0, 12, 0, 24)
+searchResultImage.BackgroundColor3 = COLORS.BG_INPUT
 searchResultImage.BorderSizePixel = 0
 searchResultImage.Image = ""
 searchResultImage.Parent = searchResultContainer
 local resultImgCorner = Instance.new("UICorner")
-resultImgCorner.CornerRadius = UDim.new(0, 6)
+resultImgCorner.CornerRadius = UDim.new(1, 0)
 resultImgCorner.Parent = searchResultImage
-registerThemeObj(searchResultImage, "DARK_GRAY", "BackgroundColor3")
+registerThemeObj(searchResultImage, "BG_INPUT", "BackgroundColor3")
+
+local resultImgStroke = Instance.new("UIStroke")
+resultImgStroke.Thickness = 2
+resultImgStroke.Color = COLORS.BORDER
+resultImgStroke.Parent = searchResultImage
+registerThemeObj(resultImgStroke, "BORDER", "Color")
 
 local searchResultName = Instance.new("TextLabel")
-searchResultName.Size = UDim2.new(1, -160, 0, 22)
-searchResultName.Position = UDim2.new(0, 95, 0, 15)
+searchResultName.Size = UDim2.new(1, -180, 0, 22)
+searchResultName.Position = UDim2.new(0, 96, 0, 18)
 searchResultName.Text = ""
-searchResultName.TextColor3 = COLORS.TEXT_MAIN
+searchResultName.TextColor3 = COLORS.TEXT_PRIMARY
 searchResultName.BackgroundTransparency = 1
 searchResultName.Font = Enum.Font.GothamBold
 searchResultName.TextSize = 16
 searchResultName.TextXAlignment = Enum.TextXAlignment.Left
 searchResultName.TextTruncate = Enum.TextTruncate.AtEnd
 searchResultName.Parent = searchResultContainer
-registerThemeObj(searchResultName, "TEXT_MAIN", "TextColor3")
+registerThemeObj(searchResultName, "TEXT_PRIMARY", "TextColor3")
 
 local searchResultDisplayName = Instance.new("TextLabel")
-searchResultDisplayName.Size = UDim2.new(1, -160, 0, 18)
-searchResultDisplayName.Position = UDim2.new(0, 95, 0, 38)
+searchResultDisplayName.Size = UDim2.new(1, -180, 0, 18)
+searchResultDisplayName.Position = UDim2.new(0, 96, 0, 42)
 searchResultDisplayName.Text = ""
-searchResultDisplayName.TextColor3 = COLORS.TEXT_DIM
+searchResultDisplayName.TextColor3 = COLORS.TEXT_SECONDARY
 searchResultDisplayName.BackgroundTransparency = 1
 searchResultDisplayName.Font = Enum.Font.Gotham
 searchResultDisplayName.TextSize = 12
 searchResultDisplayName.TextXAlignment = Enum.TextXAlignment.Left
 searchResultDisplayName.TextTruncate = Enum.TextTruncate.AtEnd
 searchResultDisplayName.Parent = searchResultContainer
-registerThemeObj(searchResultDisplayName, "TEXT_DIM", "TextColor3")
+registerThemeObj(searchResultDisplayName, "TEXT_SECONDARY", "TextColor3")
 
 local searchResultId = Instance.new("TextLabel")
-searchResultId.Size = UDim2.new(1, -160, 0, 16)
-searchResultId.Position = UDim2.new(0, 95, 0, 58)
+searchResultId.Size = UDim2.new(1, -180, 0, 16)
+searchResultId.Position = UDim2.new(0, 96, 0, 62)
 searchResultId.Text = ""
 searchResultId.TextColor3 = COLORS.ACCENT
 searchResultId.BackgroundTransparency = 1
-searchResultId.Font = Enum.Font.Gotham
+searchResultId.Font = Enum.Font.GothamMedium
 searchResultId.TextSize = 11
 searchResultId.TextXAlignment = Enum.TextXAlignment.Left
 searchResultId.Parent = searchResultContainer
 registerThemeObj(searchResultId, "ACCENT", "TextColor3")
 
 local searchResultStatus = Instance.new("TextLabel")
-searchResultStatus.Size = UDim2.new(0, 80, 0, 18)
-searchResultStatus.Position = UDim2.new(1, -95, 0, 15) -- Movido arriba para no chocar con el botón Morph
+searchResultStatus.Size = UDim2.new(0, 85, 0, 20)
+searchResultStatus.Position = UDim2.new(1, -95, 0, 18)
 searchResultStatus.Text = "🔴 Offline"
-searchResultStatus.TextColor3 = COLORS.TEXT_DIM
+searchResultStatus.TextColor3 = COLORS.TEXT_SECONDARY
 searchResultStatus.BackgroundTransparency = 1
 searchResultStatus.Font = Enum.Font.GothamBold
 searchResultStatus.TextSize = 12
 searchResultStatus.TextXAlignment = Enum.TextXAlignment.Right
 searchResultStatus.Parent = searchResultContainer
-registerThemeObj(searchResultStatus, "TEXT_DIM", "TextColor3")
+registerThemeObj(searchResultStatus, "TEXT_SECONDARY", "TextColor3")
 
--- ✅ Botón Morph reposicionado para no tapar nada
 local confirmMorphBtn = createButton(searchResultContainer, {
-    Size = UDim2.new(0, 85, 0, 35),
-    Position = UDim2.new(1, -95, 0, 65), -- Posición inferior derecha
+    Size = UDim2.new(0, 90, 0, 36),
+    Position = UDim2.new(1, -100, 0, 72),
     Text = "✅ Morph",
-    TextSize = 13,
-    Color = COLORS.LIGHT_GREEN
+    TextSize = 14,
+    Color = COLORS.SUCCESS
 })
-
--- ==========================================
--- BOTÓN DE BÚSQUEDA (Movido al fondo)
--- ==========================================
 
 local searchBtn = createButton(searchContent, {
-    Size = UDim2.new(1, 0, 0, 45),
-    Position = UDim2.new(0, 0, 1, -60), -- ✅ Anclado al fondo de la pestaña
+    Size = UDim2.new(1, 0, 0, 46),
+    Position = UDim2.new(0, 0, 1, -54),
     Text = "🔍 Search Player",
     TextSize = 16,
-    Color = COLORS.BLUE
+    Color = COLORS.ACCENT
 })
+
+-- ▽ BOTÓN DE REGENERACIÓN (Integrado en Pestaña Search)
+local regenBtn = createButton(searchContent, {
+	Size = UDim2.new(1, 0, 0, 46),
+	Position = UDim2.new(0, 0, 1, -108), -- Anclado justo encima del botón Search
+	Text = "🔄 Regen (Mantener Posición)",
+	TextSize = 15,
+	Color = COLORS.ACCENT,
+	CornerRadius = 8
+})
+registerThemeObj(regenBtn, "ACCENT", "BackgroundColor3")
+
+connect(regenBtn.MouseButton1Click, function()
+	flashButton(regenBtn)
+	regenerateCharacter()
+	sendNotification("🔄 Regeneración", "Personaje regenerado en posición actual.", "")
+end)
+-- △ FIN BOTÓN REGEN
 
 -- ==========================================
 -- PESTAÑA PLAYERS
@@ -855,32 +1014,34 @@ playersContent.Parent = contentContainer
 playersContent.Visible = false
 
 local playersWarningLabel = Instance.new("TextLabel")
-playersWarningLabel.Size = UDim2.new(1, -20, 0, 35)
-playersWarningLabel.Position = UDim2.new(0, 10, 0, 5)
-playersWarningLabel.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
-playersWarningLabel.BackgroundTransparency = 0.3
+playersWarningLabel.Size = UDim2.new(1, 0, 0, 38)
+playersWarningLabel.Position = UDim2.new(0, 0, 0, 0)
+playersWarningLabel.BackgroundColor3 = COLORS.SUCCESS -- Verde indicando éxito/solución
+playersWarningLabel.BackgroundTransparency = 0.15
 playersWarningLabel.BorderSizePixel = 0
-playersWarningLabel.Text = "⚠️ Bug conocido: Copiar avatares dentro de la plaza puede enviar al jugador bajo el piso"
-playersWarningLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+playersWarningLabel.Text = "✅ Bug Resuelto: Se integró NoClip automático para evitar que el personaje se quede atascado al copiar avatares."
+playersWarningLabel.TextColor3 = COLORS.TEXT_PRIMARY
 playersWarningLabel.Font = Enum.Font.GothamBold
 playersWarningLabel.TextSize = 11
 playersWarningLabel.TextWrapped = true
 playersWarningLabel.TextXAlignment = Enum.TextXAlignment.Left
-playersWarningLabel.TextYAlignment = Enum.TextYAlignment.Top
+playersWarningLabel.TextYAlignment = Enum.TextYAlignment.Center
 playersWarningLabel.Parent = playersContent
+registerThemeObj(playersWarningLabel, "SUCCESS", "BackgroundColor3")
+registerThemeObj(playersWarningLabel, "TEXT_PRIMARY", "TextColor3")
 
-local playersWarningCorner = Instance.new("UICorner")
-playersWarningCorner.CornerRadius = UDim.new(0, 6)
-playersWarningCorner.Parent = playersWarningLabel
+local pWarnCorner = Instance.new("UICorner")
+pWarnCorner.CornerRadius = UDim.new(0, 6)
+pWarnCorner.Parent = playersWarningLabel
 
-local playersTopBar = createRoundedFrame(playersContent, UDim2.new(1, 0, 0, 35), UDim2.new(0, 0, 0, 45), COLORS.DARK_GRAY, 6)
+local playersTopBar = createRoundedFrame(playersContent, UDim2.new(1, 0, 0, 38), UDim2.new(0, 0, 0, 46), COLORS.BG_PANEL, 8)
 
 local searchPlayersBox = Instance.new("TextBox")
-searchPlayersBox.Size = UDim2.new(0.7, -5, 0, 25)
-searchPlayersBox.Position = UDim2.new(0, 5, 0.5, -12.5)
-searchPlayersBox.BackgroundColor3 = COLORS.MID_GRAY
-searchPlayersBox.TextColor3 = COLORS.TEXT_MAIN
-searchPlayersBox.PlaceholderColor3 = COLORS.TEXT_DIM
+searchPlayersBox.Size = UDim2.new(0.65, -4, 0, 26)
+searchPlayersBox.Position = UDim2.new(0, 4, 0.5, -13)
+searchPlayersBox.BackgroundColor3 = COLORS.BG_INPUT
+searchPlayersBox.TextColor3 = COLORS.TEXT_PRIMARY
+searchPlayersBox.PlaceholderColor3 = COLORS.TEXT_SECONDARY
 searchPlayersBox.PlaceholderText = "🔍 Filtrar jugadores..."
 searchPlayersBox.Font = Enum.Font.Gotham
 searchPlayersBox.TextSize = 12
@@ -888,39 +1049,59 @@ searchPlayersBox.BorderSizePixel = 0
 searchPlayersBox.Text = ""
 searchPlayersBox.ClearTextOnFocus = true
 searchPlayersBox.Parent = playersTopBar
-registerThemeObj(searchPlayersBox, "MID_GRAY", "BackgroundColor3")
-registerThemeObj(searchPlayersBox, "TEXT_MAIN", "TextColor3")
+registerThemeObj(searchPlayersBox, "BG_INPUT", "BackgroundColor3")
+registerThemeObj(searchPlayersBox, "TEXT_PRIMARY", "TextColor3")
 
 local searchBoxCorner = Instance.new("UICorner")
-searchBoxCorner.CornerRadius = UDim.new(0, 4)
+searchBoxCorner.CornerRadius = UDim.new(0, 6)
 searchBoxCorner.Parent = searchPlayersBox
 
+local searchBoxStroke = Instance.new("UIStroke")
+searchBoxStroke.Thickness = 1.5
+searchBoxStroke.Color = COLORS.BORDER
+searchBoxStroke.Parent = searchPlayersBox
+registerThemeObj(searchBoxStroke, "BORDER", "Color")
+
 local sortBtn = createButton(playersTopBar, {
-    Size = UDim2.new(0.3, -5, 0, 25),
-    Position = UDim2.new(0.7, 0, 0.5, -12.5),
+    Size = UDim2.new(0.35, -8, 0, 26),
+    Position = UDim2.new(0.65, 4, 0.5, -13),
     Text = "🔤 Name",
     TextSize = 11,
-    Color = COLORS.MID_GRAY
+    Color = COLORS.BG_CARD
 })
 
 local playersScrollFrame = Instance.new("ScrollingFrame")
-playersScrollFrame.Size = UDim2.new(1, 0, 1, -85)
-playersScrollFrame.Position = UDim2.new(0, 0, 0, 85)
-playersScrollFrame.BackgroundColor3 = COLORS.DARK_GRAY
+playersScrollFrame.Size = UDim2.new(1, 0, 1, -92)
+playersScrollFrame.Position = UDim2.new(0, 0, 0, 92)
+playersScrollFrame.BackgroundColor3 = COLORS.BG_PANEL
 playersScrollFrame.BorderSizePixel = 0
-playersScrollFrame.ScrollBarThickness = 6
-playersScrollFrame.ScrollBarImageColor3 = COLORS.ACCENT
+playersScrollFrame.ScrollBarThickness = 5
+playersScrollFrame.ScrollBarImageColor3 = COLORS.SCROLL_THUMB
+playersScrollFrame.ClipsDescendants = true
 playersScrollFrame.Parent = playersContent
-registerThemeObj(playersScrollFrame, "DARK_GRAY", "BackgroundColor3")
+registerThemeObj(playersScrollFrame, "BG_PANEL", "BackgroundColor3")
 
 local playersScrollCorner = Instance.new("UICorner")
 playersScrollCorner.CornerRadius = UDim.new(0, 8)
 playersScrollCorner.Parent = playersScrollFrame
 
+local playersScrollStroke = Instance.new("UIStroke")
+playersScrollStroke.Thickness = 1.5
+playersScrollStroke.Color = COLORS.BORDER
+playersScrollStroke.Parent = playersScrollFrame
+registerThemeObj(playersScrollStroke, "BORDER", "Color")
+
 local playersLayout = Instance.new("UIListLayout")
-playersLayout.Padding = UDim.new(0, 5)
+playersLayout.Padding = UDim.new(0, 8)
 playersLayout.SortOrder = Enum.SortOrder.LayoutOrder
 playersLayout.Parent = playersScrollFrame
+
+local playersPadding = Instance.new("UIPadding")
+playersPadding.PaddingTop = UDim.new(0, 8)
+playersPadding.PaddingBottom = UDim.new(0, 8)
+playersPadding.PaddingLeft = UDim.new(0, 6)
+playersPadding.PaddingRight = UDim.new(0, 6)
+playersPadding.Parent = playersScrollFrame
 
 -- ==========================================
 -- PESTAÑA FAVORITES
@@ -935,35 +1116,49 @@ favoritesContent.Visible = false
 
 local favoritesScrollFrame = Instance.new("ScrollingFrame")
 favoritesScrollFrame.Size = UDim2.new(1, 0, 1, 0)
-favoritesScrollFrame.BackgroundColor3 = COLORS.DARK_GRAY
+favoritesScrollFrame.BackgroundColor3 = COLORS.BG_PANEL
 favoritesScrollFrame.BorderSizePixel = 0
-favoritesScrollFrame.ScrollBarThickness = 6
-favoritesScrollFrame.ScrollBarImageColor3 = COLORS.ACCENT
+favoritesScrollFrame.ScrollBarThickness = 5
+favoritesScrollFrame.ScrollBarImageColor3 = COLORS.SCROLL_THUMB
+favoritesScrollFrame.ClipsDescendants = true
 favoritesScrollFrame.Parent = favoritesContent
-registerThemeObj(favoritesScrollFrame, "DARK_GRAY", "BackgroundColor3")
+registerThemeObj(favoritesScrollFrame, "BG_PANEL", "BackgroundColor3")
 
 local favScrollCorner = Instance.new("UICorner")
 favScrollCorner.CornerRadius = UDim.new(0, 8)
 favScrollCorner.Parent = favoritesScrollFrame
 
+local favScrollStroke = Instance.new("UIStroke")
+favScrollStroke.Thickness = 1.5
+favScrollStroke.Color = COLORS.BORDER
+favScrollStroke.Parent = favoritesScrollFrame
+registerThemeObj(favScrollStroke, "BORDER", "Color")
+
 local favoritesLayout = Instance.new("UIListLayout")
-favoritesLayout.Padding = UDim.new(0, 5)
+favoritesLayout.Padding = UDim.new(0, 8)
 favoritesLayout.SortOrder = Enum.SortOrder.Name
 favoritesLayout.Parent = favoritesScrollFrame
+
+local favPadding = Instance.new("UIPadding")
+favPadding.PaddingTop = UDim.new(0, 8)
+favPadding.PaddingBottom = UDim.new(0, 8)
+favPadding.PaddingLeft = UDim.new(0, 6)
+favPadding.PaddingRight = UDim.new(0, 6)
+favPadding.Parent = favoritesScrollFrame
 
 local noFavoritesLabel = Instance.new("TextLabel")
 noFavoritesLabel.Size = UDim2.new(1, -20, 0, 60)
 noFavoritesLabel.Position = UDim2.new(0, 10, 0.5, -30)
 noFavoritesLabel.Text = "⭐ No favorites yet!\nAdd players from the Players tab"
-noFavoritesLabel.TextColor3 = COLORS.TEXT_MAIN
+noFavoritesLabel.TextColor3 = COLORS.TEXT_PRIMARY
 noFavoritesLabel.BackgroundTransparency = 1
 noFavoritesLabel.Font = Enum.Font.Gotham
 noFavoritesLabel.TextSize = 13
 noFavoritesLabel.Parent = favoritesContent
-registerThemeObj(noFavoritesLabel, "TEXT_MAIN", "TextColor3")
+registerThemeObj(noFavoritesLabel, "TEXT_PRIMARY", "TextColor3")
 
 -- ==========================================
--- PESTAÑA HISTORY - ✅ MEJORADA
+-- PESTAÑA HISTORY
 -- ==========================================
 
 local historyContent = Instance.new("Frame")
@@ -975,35 +1170,49 @@ historyContent.Visible = false
 
 local historyScrollFrame = Instance.new("ScrollingFrame")
 historyScrollFrame.Size = UDim2.new(1, 0, 1, 0)
-historyScrollFrame.BackgroundColor3 = COLORS.DARK_GRAY
+historyScrollFrame.BackgroundColor3 = COLORS.BG_PANEL
 historyScrollFrame.BorderSizePixel = 0
-historyScrollFrame.ScrollBarThickness = 6
-historyScrollFrame.ScrollBarImageColor3 = COLORS.ACCENT
+historyScrollFrame.ScrollBarThickness = 5
+historyScrollFrame.ScrollBarImageColor3 = COLORS.SCROLL_THUMB
+historyScrollFrame.ClipsDescendants = true
 historyScrollFrame.Parent = historyContent
-registerThemeObj(historyScrollFrame, "DARK_GRAY", "BackgroundColor3")
+registerThemeObj(historyScrollFrame, "BG_PANEL", "BackgroundColor3")
 
 local historyScrollCorner = Instance.new("UICorner")
 historyScrollCorner.CornerRadius = UDim.new(0, 8)
 historyScrollCorner.Parent = historyScrollFrame
 
+local historyScrollStroke = Instance.new("UIStroke")
+historyScrollStroke.Thickness = 1.5
+historyScrollStroke.Color = COLORS.BORDER
+historyScrollStroke.Parent = historyScrollFrame
+registerThemeObj(historyScrollStroke, "BORDER", "Color")
+
 local historyLayout = Instance.new("UIListLayout")
-historyLayout.Padding = UDim.new(0, 5)
+historyLayout.Padding = UDim.new(0, 8)
 historyLayout.SortOrder = Enum.SortOrder.LayoutOrder
 historyLayout.Parent = historyScrollFrame
+
+local histPadding = Instance.new("UIPadding")
+histPadding.PaddingTop = UDim.new(0, 8)
+histPadding.PaddingBottom = UDim.new(0, 8)
+histPadding.PaddingLeft = UDim.new(0, 6)
+histPadding.PaddingRight = UDim.new(0, 6)
+histPadding.Parent = historyScrollFrame
 
 local noHistoryLabel = Instance.new("TextLabel")
 noHistoryLabel.Size = UDim2.new(1, -20, 0, 60)
 noHistoryLabel.Position = UDim2.new(0, 10, 0.5, -30)
 noHistoryLabel.Text = "🕒 No history yet!\nMorph to someone to see it here"
-noHistoryLabel.TextColor3 = COLORS.TEXT_MAIN
+noHistoryLabel.TextColor3 = COLORS.TEXT_PRIMARY
 noHistoryLabel.BackgroundTransparency = 1
 noHistoryLabel.Font = Enum.Font.Gotham
 noHistoryLabel.TextSize = 13
 noHistoryLabel.Parent = historyContent
-registerThemeObj(noHistoryLabel, "TEXT_MAIN", "TextColor3")
+registerThemeObj(noHistoryLabel, "TEXT_PRIMARY", "TextColor3")
 
 -- ==========================================
--- PESTAÑA SKIN - ✅ HEX INPUT FIX VISUAL
+-- PESTAÑA SKIN
 -- ==========================================
 
 local skinContent = Instance.new("Frame")
@@ -1014,20 +1223,27 @@ skinContent.Parent = contentContainer
 skinContent.Visible = false
 
 local skinPaletteScroll = Instance.new("ScrollingFrame")
-skinPaletteScroll.Size = UDim2.new(1, 0, 1, -60)
-skinPaletteScroll.BackgroundColor3 = COLORS.DARK_GRAY
+skinPaletteScroll.Size = UDim2.new(1, 0, 1, -64)
+skinPaletteScroll.BackgroundColor3 = COLORS.BG_PANEL
 skinPaletteScroll.BorderSizePixel = 0
-skinPaletteScroll.ScrollBarThickness = 6
-skinPaletteScroll.ScrollBarImageColor3 = COLORS.ACCENT
+skinPaletteScroll.ScrollBarThickness = 5
+skinPaletteScroll.ScrollBarImageColor3 = COLORS.SCROLL_THUMB
+skinPaletteScroll.ClipsDescendants = true
 skinPaletteScroll.Parent = skinContent
-registerThemeObj(skinPaletteScroll, "DARK_GRAY", "BackgroundColor3")
+registerThemeObj(skinPaletteScroll, "BG_PANEL", "BackgroundColor3")
 
 local skinScrollCorner = Instance.new("UICorner")
 skinScrollCorner.CornerRadius = UDim.new(0, 8)
 skinScrollCorner.Parent = skinPaletteScroll
 
+local skinScrollStroke = Instance.new("UIStroke")
+skinScrollStroke.Thickness = 1.5
+skinScrollStroke.Color = COLORS.BORDER
+skinScrollStroke.Parent = skinPaletteScroll
+registerThemeObj(skinScrollStroke, "BORDER", "Color")
+
 local skinGridLayout = Instance.new("UIGridLayout")
-skinGridLayout.CellSize = UDim2.new(0, 38, 0, 38)
+skinGridLayout.CellSize = UDim2.new(0, 36, 0, 36)
 skinGridLayout.CellPadding = UDim2.new(0, 8, 0, 8)
 skinGridLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 skinGridLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -1040,28 +1256,28 @@ skinPadding.PaddingLeft = UDim.new(0, 10)
 skinPadding.PaddingRight = UDim.new(0, 10)
 skinPadding.Parent = skinPaletteScroll
 
-local hexContainer = createRoundedFrame(skinContent, UDim2.new(1, 0, 0, 50), UDim2.new(0, 0, 1, -50), COLORS.DARK_GRAY, 8)
+local hexContainer = createRoundedFrame(skinContent, UDim2.new(1, 0, 0, 52), UDim2.new(0, 0, 1, -56), COLORS.BG_PANEL, 8)
 
 local hexLabel = Instance.new("TextLabel")
-hexLabel.Text = "Color hexadecimal:"
-hexLabel.Size = UDim2.new(0, 110, 1, 0)
-hexLabel.Position = UDim2.new(0, 15, 0, 0)
+hexLabel.Text = "Hex Color:"
+hexLabel.Size = UDim2.new(0, 70, 1, 0)
+hexLabel.Position = UDim2.new(0, 12, 0, 0)
 hexLabel.BackgroundTransparency = 1
-hexLabel.TextColor3 = COLORS.TEXT_MAIN
+hexLabel.TextColor3 = COLORS.TEXT_PRIMARY
 hexLabel.Font = Enum.Font.GothamBold
 hexLabel.TextSize = 12
 hexLabel.TextXAlignment = Enum.TextXAlignment.Left
 hexLabel.Parent = hexContainer
-registerThemeObj(hexLabel, "TEXT_MAIN", "TextColor3")
+registerThemeObj(hexLabel, "TEXT_PRIMARY", "TextColor3")
 
-local hexPreviewCircle = createRoundedFrame(hexContainer, UDim2.new(0, 28, 0, 28), UDim2.new(0, 130, 0.5, -14), Color3.fromRGB(240,240,240), 14)
+local hexPreviewCircle = createRoundedFrame(hexContainer, UDim2.new(0, 28, 0, 28), UDim2.new(0, 88, 0.5, -14), Color3.fromRGB(240,240,240), 14)
 
 local hexInput = Instance.new("TextBox")
 hexInput.Size = UDim2.new(0, 85, 0, 32)
-hexInput.Position = UDim2.new(0, 165, 0.5, -16)
-hexInput.BackgroundColor3 = COLORS.MID_GRAY
-hexInput.TextColor3 = COLORS.TEXT_MAIN
-hexInput.PlaceholderColor3 = COLORS.TEXT_DIM
+hexInput.Position = UDim2.new(0, 124, 0.5, -16)
+hexInput.BackgroundColor3 = COLORS.BG_INPUT
+hexInput.TextColor3 = COLORS.TEXT_PRIMARY
+hexInput.PlaceholderColor3 = COLORS.TEXT_SECONDARY
 hexInput.Font = Enum.Font.GothamBold
 hexInput.TextSize = 13
 hexInput.Text = "#F0F0F0"
@@ -1070,19 +1286,25 @@ hexInput.BorderSizePixel = 0
 hexInput.ClearTextOnFocus = false
 hexInput.TextXAlignment = Enum.TextXAlignment.Center
 hexInput.Parent = hexContainer
-registerThemeObj(hexInput, "MID_GRAY", "BackgroundColor3")
-registerThemeObj(hexInput, "TEXT_MAIN", "TextColor3")
+registerThemeObj(hexInput, "BG_INPUT", "BackgroundColor3")
+registerThemeObj(hexInput, "TEXT_PRIMARY", "TextColor3")
 
 local hexInputCorner = Instance.new("UICorner")
 hexInputCorner.CornerRadius = UDim.new(0, 6)
 hexInputCorner.Parent = hexInput
 
+local hexInputStroke = Instance.new("UIStroke")
+hexInputStroke.Thickness = 1.5
+hexInputStroke.Color = COLORS.BORDER
+hexInputStroke.Parent = hexInput
+registerThemeObj(hexInputStroke, "BORDER", "Color")
+
 local applyHexBtn = createButton(hexContainer, {
     Size = UDim2.new(0, 80, 0, 32),
-    Position = UDim2.new(1, -95, 0.5, -16),
+    Position = UDim2.new(1, -92, 0.5, -16),
     Text = "Aplicar",
     TextSize = 13,
-    Color = COLORS.LIGHT_GREEN
+    Color = COLORS.SUCCESS
 })
 
 local function applyHexColor(text, showNotification)
@@ -1180,34 +1402,40 @@ local skinColors = {
 -- ==========================================
 
 local function createBaseCard(parent, config)
-    local card = createRoundedFrame(parent, config.size, config.position, COLORS.MID_GRAY, 6)
+    local card = createRoundedFrame(parent, config.size, config.position, COLORS.BG_CARD, 8)
     local nameLabel = Instance.new("TextLabel")
-    nameLabel.Size = UDim2.new(1, -145, 0, 25)
-    nameLabel.Position = UDim2.new(0, 10, 0, 5)
+    nameLabel.Size = UDim2.new(1, -150, 0, 24)
+    nameLabel.Position = UDim2.new(0, 56, 0, 6)
     nameLabel.Text = config.name
-    nameLabel.TextColor3 = COLORS.TEXT_MAIN
+    nameLabel.TextColor3 = COLORS.TEXT_PRIMARY
     nameLabel.BackgroundTransparency = 1
     nameLabel.Font = Enum.Font.GothamBold
     nameLabel.TextSize = 14
     nameLabel.TextXAlignment = Enum.TextXAlignment.Left
     nameLabel.TextTruncate = Enum.TextTruncate.AtEnd
     nameLabel.Parent = card
-    registerThemeObj(nameLabel, "TEXT_MAIN", "TextColor3")
+    registerThemeObj(nameLabel, "TEXT_PRIMARY", "TextColor3")
     return card, nameLabel
 end
 
 local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
-    local card, playerName = createBaseCard(nil, {size = UDim2.new(1, -10, 0, CONFIG.CARD_HEIGHT), name = targetPlayer.Name})
+    local card, playerName = createBaseCard(nil, {size = UDim2.new(1, -12, 0, CONFIG.CARD_HEIGHT), name = targetPlayer.Name})
     local profileImage = Instance.new("ImageLabel")
-    profileImage.Size = UDim2.new(0, 40, 0, 40)
-    profileImage.Position = UDim2.new(0, 5, 0, 5)
-    profileImage.BackgroundColor3 = COLORS.MID_GRAY
+    profileImage.Size = UDim2.new(0, 42, 0, 42)
+    profileImage.Position = UDim2.new(0, 7, 0, 7)
+    profileImage.BackgroundColor3 = COLORS.BG_INPUT
     profileImage.BorderSizePixel = 0
     profileImage.Parent = card
     local imgCorner = Instance.new("UICorner")
-    imgCorner.CornerRadius = UDim.new(0, 6)
+    imgCorner.CornerRadius = UDim.new(1, 0)
     imgCorner.Parent = profileImage
-    registerThemeObj(profileImage, "MID_GRAY", "BackgroundColor3")
+    registerThemeObj(profileImage, "BG_INPUT", "BackgroundColor3")
+    
+    local imgStroke = Instance.new("UIStroke")
+    imgStroke.Thickness = 2
+    imgStroke.Color = COLORS.BORDER
+    imgStroke.Parent = profileImage
+    registerThemeObj(imgStroke, "BORDER", "Color")
     
     local userId = targetPlayer.UserId
     local cached = playerCache[userId]
@@ -1223,27 +1451,25 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
             end
         end)
     end
-    playerName.Position = UDim2.new(0, 55, 0, 5)
-    playerName.Size = UDim2.new(1, -195, 0, 25)
+    
     local displayName = Instance.new("TextLabel")
-    displayName.Size = UDim2.new(1, -145, 0, 20)
-    displayName.Position = UDim2.new(0, 55, 0, 25)
+    displayName.Size = UDim2.new(1, -150, 0, 18)
+    displayName.Position = UDim2.new(0, 56, 0, 30)
     displayName.Text = "@" .. (targetPlayer.DisplayName or targetPlayer.Name)
-    displayName.TextColor3 = COLORS.TEXT_DIM
-    displayName.TextTransparency = 0.4
+    displayName.TextColor3 = COLORS.TEXT_SECONDARY
     displayName.BackgroundTransparency = 1
     displayName.Font = Enum.Font.Gotham
     displayName.TextSize = 11
     displayName.TextXAlignment = Enum.TextXAlignment.Left
     displayName.TextTruncate = Enum.TextTruncate.AtEnd
     displayName.Parent = card
-    registerThemeObj(displayName, "TEXT_DIM", "TextColor3")
+    registerThemeObj(displayName, "TEXT_SECONDARY", "TextColor3")
     
-    local morphBtn = createButton(card, {Size = UDim2.new(0, 60, 0, 35), Position = UDim2.new(1, -65, 0, 7.5), Text = "Morph", TextSize = 12, Color = COLORS.LIGHT_GREEN})
-    local copyBtn = createButton(card, {Size = UDim2.new(0, 30, 0, 35), Position = UDim2.new(1, -100, 0, 7.5), Text = "📋", TextSize = 14, Color = COLORS.DARK_GRAY})
+    local morphBtn = createButton(card, {Size = UDim2.new(0, 62, 0, 34), Position = UDim2.new(1, -68, 0.5, -17), Text = "Morph", TextSize = 12, Color = COLORS.SUCCESS})
+    local copyBtn = createButton(card, {Size = UDim2.new(0, 32, 0, 34), Position = UDim2.new(1, -104, 0.5, -17), Text = "📋", TextSize = 14, Color = COLORS.BG_PANEL})
     
     if not isFavorite then
-        local favBtn = createButton(card, {Size = UDim2.new(0, 30, 0, 35), Position = UDim2.new(1, -135, 0, 7.5), Text = favorites[targetPlayer.Name] and "⭐" or "☆", TextSize = 16, Color = COLORS.DARK_GRAY})
+        local favBtn = createButton(card, {Size = UDim2.new(0, 32, 0, 34), Position = UDim2.new(1, -140, 0.5, -17), Text = favorites[targetPlayer.Name] and "⭐" or "☆", TextSize = 16, Color = COLORS.BG_PANEL})
         connect(favBtn.MouseButton1Click, function()
             if favorites[targetPlayer.Name] then
                 favorites[targetPlayer.Name] = nil
@@ -1258,7 +1484,7 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
             saveFavorites()
         end)
     else
-        local removeBtn = createButton(card, {Size = UDim2.new(0, 30, 0, 35), Position = UDim2.new(1, -135, 0, 7.5), Text = "🗑️", TextSize = 16, Color = COLORS.RED})
+        local removeBtn = createButton(card, {Size = UDim2.new(0, 32, 0, 34), Position = UDim2.new(1, -140, 0.5, -17), Text = "🗑️", TextSize = 16, Color = COLORS.DANGER})
         connect(removeBtn.MouseButton1Click, function()
             favorites[targetPlayer.Name] = nil
             sendNotification("⭐ Favorites", "Removed from favorites", "")
@@ -1273,8 +1499,8 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
     connect(card.InputBegan, function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             if not previewFrame then
-                previewFrame = createRoundedFrame(screenGui, UDim2.new(0, 150, 0, 150), UDim2.new(0, 0, 0, 0), COLORS.BLACK, 8)
-                previewFrame.BackgroundTransparency = 0.2
+                previewFrame = createRoundedFrame(screenGui, UDim2.new(0, 150, 0, 150), UDim2.new(0, 0, 0, 0), COLORS.BG_MAIN, 10)
+                previewFrame.BackgroundTransparency = 0.1
                 previewFrame.ZIndex = 20
                 previewImage = Instance.new("ImageLabel")
                 previewImage.Size = UDim2.new(1, -10, 1, -10)
@@ -1303,46 +1529,46 @@ local function createPlayerCard(targetPlayer, isFavorite, showCopyOptions)
 end
 
 local function createHistoryCard(entry)
-    local card = createRoundedFrame(nil, UDim2.new(1, -10, 0, 45), nil, COLORS.MID_GRAY, 6)
+    local card = createRoundedFrame(nil, UDim2.new(1, -12, 0, 50), nil, COLORS.BG_CARD, 8)
     local nameLabel = Instance.new("TextLabel")
-    nameLabel.Size = UDim2.new(1, -80, 0, 22)
-    nameLabel.Position = UDim2.new(0, 10, 0, 3)
+    nameLabel.Size = UDim2.new(1, -140, 0, 22)
+    nameLabel.Position = UDim2.new(0, 12, 0, 5)
     nameLabel.Text = entry.Name
-    nameLabel.TextColor3 = COLORS.TEXT_MAIN
+    nameLabel.TextColor3 = COLORS.TEXT_PRIMARY
     nameLabel.BackgroundTransparency = 1
     nameLabel.Font = Enum.Font.GothamBold
     nameLabel.TextSize = 13
     nameLabel.TextXAlignment = Enum.TextXAlignment.Left
     nameLabel.TextTruncate = Enum.TextTruncate.AtEnd
     nameLabel.Parent = card
-    registerThemeObj(nameLabel, "TEXT_MAIN", "TextColor3")
+    registerThemeObj(nameLabel, "TEXT_PRIMARY", "TextColor3")
     
     local displayNameLabel = Instance.new("TextLabel")
-    displayNameLabel.Size = UDim2.new(1, -80, 0, 18)
-    displayNameLabel.Position = UDim2.new(0, 10, 0, 22)
+    displayNameLabel.Size = UDim2.new(1, -140, 0, 18)
+    displayNameLabel.Position = UDim2.new(0, 12, 0, 26)
     displayNameLabel.Text = "@" .. (entry.DisplayName or entry.Name)
-    displayNameLabel.TextColor3 = COLORS.TEXT_DIM
+    displayNameLabel.TextColor3 = COLORS.TEXT_SECONDARY
     displayNameLabel.BackgroundTransparency = 1
     displayNameLabel.Font = Enum.Font.Gotham
     displayNameLabel.TextSize = 11
     displayNameLabel.TextXAlignment = Enum.TextXAlignment.Left
     displayNameLabel.TextTruncate = Enum.TextTruncate.AtEnd
     displayNameLabel.Parent = card
-    registerThemeObj(displayNameLabel, "TEXT_DIM", "TextColor3")
+    registerThemeObj(displayNameLabel, "TEXT_SECONDARY", "TextColor3")
     
     local timeLabel = Instance.new("TextLabel")
-    timeLabel.Size = UDim2.new(0, 60, 0, 18)
-    timeLabel.Position = UDim2.new(1, -75, 0, 14)
+    timeLabel.Size = UDim2.new(0, 65, 0, 18)
+    timeLabel.Position = UDim2.new(1, -135, 0, 16)
     timeLabel.Text = os.date("%H:%M:%S", entry.Time)
     timeLabel.TextColor3 = COLORS.ACCENT
     timeLabel.BackgroundTransparency = 1
-    timeLabel.Font = Enum.Font.Gotham
+    timeLabel.Font = Enum.Font.GothamMedium
     timeLabel.TextSize = 10
     timeLabel.TextXAlignment = Enum.TextXAlignment.Right
     timeLabel.Parent = card
     registerThemeObj(timeLabel, "ACCENT", "TextColor3")
     
-    local morphBtn = createButton(card, {Size = UDim2.new(0, 55, 0, 28), Position = UDim2.new(1, -60, 0.5, -14), Text = "Morph", TextSize = 11, Color = COLORS.LIGHT_GREEN})
+    local morphBtn = createButton(card, {Size = UDim2.new(0, 58, 0, 30), Position = UDim2.new(1, -64, 0.5, -15), Text = "Morph", TextSize = 11, Color = COLORS.SUCCESS})
     connect(morphBtn.MouseButton1Click, function()
         flashButton(morphBtn)
         local target = findPlayerById(entry.UserId) or entry
@@ -1389,7 +1615,7 @@ local function updatePlayersList(filterText)
         card.Parent = playersScrollFrame
     end
     task.wait()
-    playersScrollFrame.CanvasSize = UDim2.new(0, 0, 0, playersLayout.AbsoluteContentSize.Y + 10)
+    playersScrollFrame.CanvasSize = UDim2.new(0, 0, 0, playersLayout.AbsoluteContentSize.Y + 16)
 end
 
 local function updateFavoritesList()
@@ -1402,7 +1628,7 @@ local function updateFavoritesList()
         card.Parent = favoritesScrollFrame
     end
     noFavoritesLabel.Visible = not hasFavorites
-    favoritesScrollFrame.CanvasSize = UDim2.new(0, 0, 0, favoritesLayout.AbsoluteContentSize.Y + 10)
+    favoritesScrollFrame.CanvasSize = UDim2.new(0, 0, 0, favoritesLayout.AbsoluteContentSize.Y + 16)
 end
 
 local function updateHistoryList()
@@ -1415,7 +1641,7 @@ local function updateHistoryList()
             card.Parent = historyScrollFrame
         end
     end
-    historyScrollFrame.CanvasSize = UDim2.new(0, 0, 0, historyLayout.AbsoluteContentSize.Y + 10)
+    historyScrollFrame.CanvasSize = UDim2.new(0, 0, 0, historyLayout.AbsoluteContentSize.Y + 16)
 end
 
 local function switchTab(tabName)
@@ -1465,14 +1691,14 @@ end)
 connect(miniBtn.MouseButton1Click, function()
     minimized = not minimized
     if minimized then
-        animateObject(frame, {Size = UDim2.new(0, 350, 0, 40)}, 0.2)
+        animateObject(frame, {Size = UDim2.new(0, 380, 0, 40)}, 0.2)
         miniBtn.Text = "+"
-        tabsContainer.Visible = false
+        sidebarFrame.Visible = false
         contentContainer.Visible = false
     else
         animateObject(frame, {Size = UDim2.new(0, CONFIG.MENU_WIDTH, 0, CONFIG.MENU_HEIGHT)}, 0.2)
         miniBtn.Text = "−"
-        tabsContainer.Visible = true
+        sidebarFrame.Visible = true
         contentContainer.Visible = true
     end
 end)
@@ -1516,7 +1742,6 @@ local function showSearchResult(targetPlayer)
     local userId, playerName, displayName
     local isOnline = false
     
-    -- ✅ FIX: Lógica mejorada para obtener DisplayName correctamente
     if typeof(targetPlayer) == "Instance" then
         userId = targetPlayer.UserId
         playerName = targetPlayer.Name
@@ -1529,12 +1754,11 @@ local function showSearchResult(targetPlayer)
         isOnline = false
     else return end
     
-    -- Actualizar UI
     searchResultName.Text = playerName
     searchResultDisplayName.Text = "@" .. displayName
     searchResultId.Text = "ID: " .. tostring(userId)
     searchResultStatus.Text = isOnline and "🟢 Online" or "🔴 Offline"
-    searchResultStatus.TextColor3 = isOnline and COLORS.LIGHT_GREEN or COLORS.TEXT_DIM
+    searchResultStatus.TextColor3 = isOnline and COLORS.SUCCESS or COLORS.TEXT_SECONDARY
     
     local cached = playerCache[userId]
     if cached and cached.Thumbnail ~= "" then searchResultImage.Image = cached.Thumbnail
@@ -1657,10 +1881,11 @@ for i, color in ipairs(skinColors) do
     btnCorner.CornerRadius = UDim.new(1, 0)
     btnCorner.Parent = colorBtn
     local stroke = Instance.new("UIStroke")
-    stroke.Color = COLORS.WHITE
+    stroke.Color = COLORS.BORDER
     stroke.Thickness = 2
     stroke.Transparency = 1
     stroke.Parent = colorBtn
+    registerThemeObj(stroke, "BORDER", "Color")
     connect(colorBtn.MouseEnter, function() animateObject(stroke, {Transparency = 0}, 0.1) end)
     connect(colorBtn.MouseLeave, function() animateObject(stroke, {Transparency = 1}, 0.2) end)
     connect(colorBtn.MouseButton1Click, function() applySkinColor(color) end)
@@ -1681,4 +1906,4 @@ connect(skinGridLayout:GetPropertyChangedSignal("AbsoluteContentSize"), updateSk
 
 lastMorphTime = loadCooldown()
 loadFavorites()
-sendNotification("🎭 Morph Avatar Pro", "By @sickly255 (SAGE) ✨ v2.1.9 | Layout Fixes", "")
+sendNotification("🎭 Morph Avatar Pro", "By @sickly255 (SAGE) ✨ v2.1.9 | UI Redesign", "")
