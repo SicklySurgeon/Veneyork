@@ -1,5 +1,5 @@
 -- ==========================================
--- AUTO-JOB DELIVERY SYSTEM + PANEL HORIZONTAL (v3 FINAL)
+-- AUTO-JOB DELIVERY SYSTEM + PANEL HORIZONTAL (v4 DUAL-GIVER FIX)
 -- ==========================================
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
@@ -21,7 +21,10 @@ local FAIL_COOLDOWN = 5
 local NPC_SPAWN_WAIT = 6
 
 local GIVER_HARDCODED_POS = Vector3.new(151.902512, 40.724411, 512.531128)
-local cachedGiverPos = GIVER_HARDCODED_POS
+
+-- 🔒 SISTEMA DE BLOQUEO DE GIVER (Evita confusión entre givers cercanos)
+local lockedGiverPos = GIVER_HARDCODED_POS
+local lockedGiverPrompt = nil
 
 local autoJobEnabled = false
 local systemPaused = false
@@ -157,7 +160,7 @@ local btnToggle = createBtn(content, "BtnToggle", "🟢 ACTIVAR AUTO-JOB", UDim2
 local btnHide   = createBtn(content, "BtnHide", "📉 MINIMIZAR", UDim2.new(0, 170, 0, 0), UDim2.new(0, 110, 0, 32), Color3.fromRGB(30, 30, 35))
 local btnClose  = createBtn(content, "BtnClose", "❌ CERRAR", UDim2.new(0, 290, 0, 0), UDim2.new(0, 90, 0, 32), Color3.fromRGB(120, 20, 20))
 
-local sliderSpeed = createSlider(content, "Velocidad (Studs)", 10, 50, 25, UDim2.new(0, 0, 0, 40))
+local sliderSpeed = createSlider(content, "Velocidad (Studs)", 10, 199, 25, UDim2.new(0, 0, 0, 40))
 local sliderAnti  = createSlider(content, "Intentos Anti-Bucle", 1, 5, 3, UDim2.new(0, 250, 0, 40))
 
 local toggleNoclip   = createToggle(content, "Noclip", true, UDim2.new(0, 500, 0, 0))
@@ -210,7 +213,7 @@ local function updateNoclip()
 end
 updateNoclip()
 
--- ✅ TELEPORT CORREGIDO: Sin anclaje, verificación de llegada, manejo de física
+-- ✅ TELEPORT ROBUSTO (Sin anclaje, verificación de llegada)
 local function smoothTeleport(targetPos)
     local char = player.Character
     if not char then return false end
@@ -221,7 +224,7 @@ local function smoothTeleport(targetPos)
     local totalDist = (targetPos - startPos).Magnitude
     if totalDist < 3 then return true end
 
-    local step = math.clamp(moveSpeed, 10, 50)
+    local step = math.clamp(moveSpeed, 10, 199)
     local dir = (targetPos - startPos).Unit
     local traveled = 0
 
@@ -235,18 +238,59 @@ local function smoothTeleport(targetPos)
         task.wait(0.02)
     end
 
-    -- ✅ Forzar posición final y sincronizar
     if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
         player.Character:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(targetPos)
     end
     task.wait(0.05)
 
-    -- ✅ Verificar que realmente llegó
     local finalRoot = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
     if finalRoot and (finalRoot.Position - targetPos).Magnitude > 12 then
         return false
     end
     return true
+end
+
+-- 🔒 DETECCIÓN INTELIGENTE DE GIVER (Bloqueo por Instancia)
+local function getValidGiverPrompt()
+    -- Si ya tenemos un prompt bloqueado, verificamos que siga existiendo y esté cerca
+    if lockedGiverPrompt and lockedGiverPrompt:IsA("ProximityPrompt") and lockedGiverPrompt.Parent then
+        local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if root and (lockedGiverPrompt.Parent.Position - root.Position).Magnitude < 12 then
+            return lockedGiverPrompt
+        end
+        -- Si nos alejamos o respawnamos, desbloqueamos para reescanear
+        lockedGiverPrompt = nil
+    end
+
+    -- Escaneo relativo a la posición ACTUAL del jugador (no al cache)
+    local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    if not root then return nil end
+
+    local works = Workspace:FindFirstChild("Works")
+    if not works then return nil end
+    local p = works:FindFirstChild("Arturos")
+    if p then p = p:FindFirstChild("Delivery") end
+    if p then p = p:FindFirstChild("Giver") end
+    if not p then return nil end
+
+    local closest, minDist = nil, math.huge
+    for _, d in ipairs(p:GetDescendants()) do
+        if d:IsA("ProximityPrompt") and d.Parent:IsA("BasePart") then
+            local dist = (d.Parent.Position - root.Position).Magnitude
+            if dist < minDist then
+                minDist = dist
+                closest = d
+            end
+        end
+    end
+
+    -- Solo bloqueamos si está a distancia razonable (evita saltar al giver equivocado)
+    if closest and minDist < 10 then
+        lockedGiverPrompt = closest
+        lockedGiverPos = closest.Parent.Position
+        return closest
+    end
+    return nil
 end
 
 local function bypassAndTriggerPrompt(prompt)
@@ -270,24 +314,6 @@ local function hasChicken()
     local char = player.Character
     if not char then return false end
     return char:FindFirstChild("Fried Chicken") or player.Backpack:FindFirstChild("Fried Chicken")
-end
-
-local function findClosestGiverPrompt(targetPos)
-    local works = Workspace:FindFirstChild("Works")
-    if not works then return nil end
-    local p = works:FindFirstChild("Arturos")
-    if p then p = p:FindFirstChild("Delivery") end
-    if p then p = p:FindFirstChild("Giver") end
-    if not p then return nil end
-
-    local closest, minDist = nil, math.huge
-    for _, d in ipairs(p:GetDescendants()) do
-        if d:IsA("ProximityPrompt") and d.Parent:IsA("BasePart") then
-            local dist = (d.Parent.Position - targetPos).Magnitude
-            if dist < minDist then minDist = dist; closest = d end
-        end
-    end
-    return closest
 end
 
 local function getDeliveryTarget()
@@ -335,12 +361,14 @@ local function triggerAntiLoopReset()
             infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
             systemPaused = false
             promptFailCount = 0
+            lockedGiverPrompt = nil -- Resetear bloqueo tras respawn
             return
         end
     until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 
     task.wait(1.2)
     promptFailCount = 0
+    lockedGiverPrompt = nil -- Forzar reescaneo limpio
     systemPaused = false
     infoLabel.Text = "✅ Personaje regenerado. Reanudando..."
     infoLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
@@ -370,65 +398,67 @@ function runAutoJob()
             infoLabel.Text = "📦 Yendo al Giver..."
             infoLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
             
-            -- ✅ Verificar éxito del teleport antes de continuar
-            if not smoothTeleport(cachedGiverPos) then
+            if not smoothTeleport(lockedGiverPos) then
                 infoLabel.Text = "⚠️ Teleport fallido. Reintentando..."
                 infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
                 task.wait(1)
                 continue
             end
             
-            local giverPrompt = nil
-            for _ = 1, 25 do
-                if systemPaused or not autoJobEnabled then break end
-                giverPrompt = findClosestGiverPrompt(cachedGiverPos)
-                if giverPrompt then break end
-                task.wait(promptCooldownEnabled and 0.1 or 0.05)
-            end
-            
-            if giverPrompt then
-                cachedGiverPos = giverPrompt.Parent.Position
-                bypassAndTriggerPrompt(giverPrompt)
-                promptFailCount = 0
-                
-                infoLabel.Text = "⏳ Esperando pedido..."
-                infoLabel.TextColor3 = Color3.fromRGB(150, 200, 255)
-                
-                local waitTime = 0
-                local pickupSuccess = false
-                while waitTime < PICKUP_TIMEOUT and autoJobEnabled and not systemPaused do
-                    if hasChicken() then pickupSuccess = true; break end
-                    if waitTime > 0 and math.floor(waitTime) % RETRY_TRIGGER_EVERY == 0 then
-                        local retry = findClosestGiverPrompt(cachedGiverPos)
-                        if retry then bypassAndTriggerPrompt(retry) end
-                    end
-                    task.wait(promptCooldownEnabled and 0.5 or 0.1)
-                    waitTime += 0.5
-                end
-                
-                if pickupSuccess then
-                    consecutiveFails = 0
-                    infoLabel.Text = "✅ Pedido recibido. Buscando NPC..."
-                    infoLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
-                else
-                    consecutiveFails += 1
-                    infoLabel.Text = string.format("⚠️ Timeout recogiendo (%d/3)", consecutiveFails)
-                    infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
-                    if consecutiveFails >= 3 then
-                        infoLabel.Text = "❌ Pausa por fallos..."
-                        infoLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
-                        task.wait(FAIL_COOLDOWN)
-                        consecutiveFails = 0
-                    end
-                    task.wait(1)
-                    continue
-                end
-            else
+            -- 🔒 Buscar/verificar prompt relativo al JUGADOR, no al cache antiguo
+            local giverPrompt = getValidGiverPrompt()
+            if not giverPrompt then
                 promptFailCount += 1
                 infoLabel.Text = string.format("⚠️ Giver no detectado (%d/%d)", promptFailCount, maxAntiLoopAttempts)
                 infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
                 if promptFailCount >= maxAntiLoopAttempts then triggerAntiLoopReset() end
                 task.wait(1.5)
+                continue
+            end
+            
+            -- 🎯 Micro-ajuste: si caímos a >4 studs del prompt bloqueado, nos acercamos exactamente a él
+            local promptPart = giverPrompt.Parent
+            if (root.Position - promptPart.Position).Magnitude > 4 then
+                smoothTeleport(promptPart.Position)
+                lockedGiverPos = promptPart.Position
+            end
+            
+            bypassAndTriggerPrompt(giverPrompt)
+            promptFailCount = 0
+            
+            infoLabel.Text = "⏳ Esperando pedido..."
+            infoLabel.TextColor3 = Color3.fromRGB(150, 200, 255)
+            
+            local waitTime = 0
+            local pickupSuccess = false
+            while waitTime < PICKUP_TIMEOUT and autoJobEnabled and not systemPaused do
+                if hasChicken() then pickupSuccess = true; break end
+                if waitTime > 0 and math.floor(waitTime) % RETRY_TRIGGER_EVERY == 0 then
+                    -- Reintentar SOLO con el prompt bloqueado
+                    if lockedGiverPrompt and lockedGiverPrompt:IsA("ProximityPrompt") then
+                        bypassAndTriggerPrompt(lockedGiverPrompt)
+                    end
+                end
+                task.wait(promptCooldownEnabled and 0.5 or 0.1)
+                waitTime += 0.5
+            end
+            
+            if pickupSuccess then
+                consecutiveFails = 0
+                infoLabel.Text = "✅ Pedido recibido. Buscando NPC..."
+                infoLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
+            else
+                consecutiveFails += 1
+                infoLabel.Text = string.format("⚠️ Timeout recogiendo (%d/3)", consecutiveFails)
+                infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
+                if consecutiveFails >= 3 then
+                    infoLabel.Text = "❌ Pausa por fallos..."
+                    infoLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
+                    task.wait(FAIL_COOLDOWN)
+                    consecutiveFails = 0
+                    lockedGiverPrompt = nil -- Resetear bloqueo si falla repetidamente
+                end
+                task.wait(1)
                 continue
             end
         else
@@ -448,7 +478,6 @@ function runAutoJob()
                 infoLabel.Text = string.format("📍 NPC detectado: %.1f, %.1f, %.1f", npcPos.X, npcPos.Y, npcPos.Z)
                 infoLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
                 
-                -- ✅ Verificar éxito del teleport al NPC
                 if not smoothTeleport(npcPos) then
                     infoLabel.Text = "⚠️ Teleport al NPC fallido. Reintentando..."
                     infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
@@ -531,6 +560,7 @@ btnToggle.MouseButton1Click:Connect(function()
         consecutiveFails = 0
         promptFailCount = 0
         systemPaused = false
+        lockedGiverPrompt = nil -- Escaneo limpio al activar
         if not jobThread or coroutine.status(jobThread) == "dead" then
             jobThread = task.spawn(runAutoJob)
         end
