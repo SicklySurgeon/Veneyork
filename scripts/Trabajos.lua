@@ -161,7 +161,7 @@ local btnToggle = createBtn(content, "BtnToggle", "🟢 ACTIVAR AUTO-JOB", UDim2
 local btnHide   = createBtn(content, "BtnHide", "📉 MINIMIZAR", UDim2.new(0, 170, 0, 0), UDim2.new(0, 110, 0, 32), Color3.fromRGB(30, 30, 35))
 local btnClose  = createBtn(content, "BtnClose", "❌ CERRAR", UDim2.new(0, 290, 0, 0), UDim2.new(0, 90, 0, 32), Color3.fromRGB(120, 20, 20))
 
-local sliderSpeed = createSlider(content, "Velocidad (Studs)", 10, 250, moveSpeed, UDim2.new(0, 0, 0, 40))
+local sliderSpeed = createSlider(content, "Velocidad (Studs)", 10, 150, moveSpeed, UDim2.new(0, 0, 0, 40))
 local sliderAnti  = createSlider(content, "Intentos Anti-Bucle", 1, 5, maxAntiLoopAttempts, UDim2.new(0, 250, 0, 40))
 
 local toggleNoclip   = createToggle(content, "Noclip", noclipEnabled, UDim2.new(0, 500, 0, 0))
@@ -248,7 +248,7 @@ local function smoothTeleport(targetPos)
     if (targetPos - root.Position).Magnitude < 3 then return true end
 
     -- CAPEO FÍSICO SEGURO
-    local safeStep = math.min(moveSpeed, 250)
+    local safeStep = math.min(moveSpeed, 150)
 
     -- Previene fricción del humanoide
     hum:ChangeState(Enum.HumanoidStateType.Physics)
