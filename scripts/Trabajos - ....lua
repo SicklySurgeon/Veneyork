@@ -1,5 +1,5 @@
 -- ==========================================
--- AUTO-JOB DELIVERY SYSTEM + PANEL HORIZONTAL (v4 DUAL-GIVER FIX) + ANTI-AFK
+-- AUTO-JOB DELIVERY SYSTEM (OPTIMIZED & STABLE v5)
 -- ==========================================
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
@@ -8,12 +8,12 @@ local UIS = game:GetService("UserInputService")
 
 local player = Players.LocalPlayer
 
--- ⚙️ CONFIGURACIÓN DINÁMICA
-local moveSpeed = 25                -- Slider: 10 - 199 (Default: 25)
+-- ⚙️ CONFIGURACIÓN DINÁMICA REPARADA
+local moveSpeed = 160                -- Slider: 10 - 199 (Adaptado con capeo seguro)
 local maxAntiLoopAttempts = 3       -- Slider: 1 - 5
 local noclipEnabled = true          -- Toggle: ON por defecto
 local promptCooldownEnabled = true  -- Toggle: ON por defecto
-local antiAfkEnabled = true         -- Toggle: ON por defecto (NUEVO)
+local antiAfkEnabled = true         -- Toggle: ON por defecto
 
 local PICKUP_TIMEOUT = 12
 local DELIVERY_TIMEOUT = 12
@@ -23,7 +23,7 @@ local NPC_SPAWN_WAIT = 6
 
 local GIVER_HARDCODED_POS = Vector3.new(151.902512, 40.724411, 512.531128)
 
--- 🔒 SISTEMA DE BLOQUEO DE GIVER (Evita confusión entre givers cercanos)
+-- 🔒 SISTEMA DE BLOQUEO DE GIVER
 local lockedGiverPos = GIVER_HARDCODED_POS
 local lockedGiverPrompt = nil
 
@@ -71,7 +71,7 @@ content.Position = UDim2.new(0, 10, 0, 40)
 content.BackgroundTransparency = 1
 
 -- ==========================================
--- HELPERS UI (CLOSURES SEGUROS)
+-- HELPERS UI
 -- ==========================================
 local function createBtn(parent, name, text, pos, size, color)
     local b = Instance.new("TextButton", parent)
@@ -161,16 +161,16 @@ local btnToggle = createBtn(content, "BtnToggle", "🟢 ACTIVAR AUTO-JOB", UDim2
 local btnHide   = createBtn(content, "BtnHide", "📉 MINIMIZAR", UDim2.new(0, 170, 0, 0), UDim2.new(0, 110, 0, 32), Color3.fromRGB(30, 30, 35))
 local btnClose  = createBtn(content, "BtnClose", "❌ CERRAR", UDim2.new(0, 290, 0, 0), UDim2.new(0, 90, 0, 32), Color3.fromRGB(120, 20, 20))
 
-local sliderSpeed = createSlider(content, "Velocidad (Studs)", 10, 199, 25, UDim2.new(0, 0, 0, 40))
-local sliderAnti  = createSlider(content, "Intentos Anti-Bucle", 1, 5, 3, UDim2.new(0, 250, 0, 40))
+local sliderSpeed = createSlider(content, "Velocidad (Studs)", 10, 150, moveSpeed, UDim2.new(0, 0, 0, 40))
+local sliderAnti  = createSlider(content, "Intentos Anti-Bucle", 1, 5, maxAntiLoopAttempts, UDim2.new(0, 250, 0, 40))
 
-local toggleNoclip   = createToggle(content, "Noclip", true, UDim2.new(0, 500, 0, 0))
-local toggleCooldown = createToggle(content, "Prompt Cooldown", true, UDim2.new(0, 500, 0, 40))
-local toggleAntiAfk  = createToggle(content, "Anti-AFK", true, UDim2.new(0, 350, 0, 80)) -- ✅ NUEVO
+local toggleNoclip   = createToggle(content, "Noclip", noclipEnabled, UDim2.new(0, 500, 0, 0))
+local toggleCooldown = createToggle(content, "Prompt Cooldown", promptCooldownEnabled, UDim2.new(0, 500, 0, 40))
+local toggleAntiAfk  = createToggle(content, "Anti-AFK", antiAfkEnabled, UDim2.new(0, 350, 0, 80))
 
 local infoLabel = Instance.new("TextLabel", content)
 infoLabel.Size = UDim2.new(1, 0, 0, 35)
-infoLabel.Position = UDim2.new(0, 0, 0, 100) -- 📐 Ajustado para evitar solapamiento
+infoLabel.Position = UDim2.new(0, 0, 0, 100)
 infoLabel.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
 infoLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
 infoLabel.Font = Enum.Font.GothamBold
@@ -215,60 +215,95 @@ local function updateNoclip()
 end
 updateNoclip()
 
--- ✅ SISTEMA ANTI-AFK (NUEVO)
 local function runAntiAfk()
     while antiAfkEnabled do
-        -- Roblox kickea a los ~20 min. Ejecutamos cada 10 min con leve variación aleatoria.
-        task.wait(600 + math.random(-30, 30))
-        local char = player.Character
-        if char and char:FindFirstChild("Humanoid") and char:FindFirstChild("HumanoidRootPart") then
-            -- Simula actividad mediante un salto ligero (resetea el timer de inactividad)
-            char.Humanoid.Jump = true
-            task.wait(0.1)
-            char.Humanoid.Jump = false
-        end
+        task.wait(600 + math.random(-20, 20))
+        pcall(function()
+            if keypress and keyrelease then
+                keypress("w")
+                task.wait(0.05)
+                keyrelease("w")
+            elseif mouse1click then
+                mouse1click()
+            else
+                local VIM = game:GetService("VirtualInputManager")
+                VIM:SendKeyEvent(true, Enum.KeyCode.W, false, game)
+                task.wait(0.1)
+                VIM:SendKeyEvent(false, Enum.KeyCode.W, false, game)
+            end
+        end)
     end
 end
-task.spawn(runAntiAfk) -- ✅ Inicia en segundo plano sin bloquear el auto-job
+task.spawn(runAntiAfk)
 
--- ✅ TELEPORT ROBUSTO (Sin anclaje, verificación de llegada)
+-- ✅ TELEPORT ROBUSTO OPTIMIZADO (Solución anti Rubberbanding y desvíos)
 local function smoothTeleport(targetPos)
     local char = player.Character
     if not char then return false end
     local root = char:FindFirstChild("HumanoidRootPart")
-    if not root then return false end
+    local hum = char:FindFirstChild("Humanoid")
+    if not root or not hum then return false end
 
-    local startPos = root.Position
-    local totalDist = (targetPos - startPos).Magnitude
-    if totalDist < 3 then return true end
+    -- Si ya estamos lo suficientemente cerca, no hacemos nada
+    if (targetPos - root.Position).Magnitude < 3 then return true end
 
-    local step = math.clamp(moveSpeed, 10, 199)
-    local dir = (targetPos - startPos).Unit
-    local traveled = 0
+    -- CAPEO FÍSICO SEGURO
+    local safeStep = math.min(moveSpeed, 150)
 
-    while traveled < totalDist do
+    -- Previene fricción del humanoide
+    hum:ChangeState(Enum.HumanoidStateType.Physics)
+
+    -- Seguro contra bucles infinitos por si el anticheat nos atasca en una pared
+    local maxAttempts = 300 
+    local attempts = 0
+
+    while true do
         if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then return false end
-        local move = math.min(step, totalDist - traveled)
-        root.CFrame = CFrame.new(root.Position + dir * move)
+        
+        -- 💡 EL SECRETO: Recalcular la posición, distancia y dirección EN CADA TICK
+        local currentPos = root.Position
+        local dist = (targetPos - currentPos).Magnitude
+        
+        if dist < 3 then break end -- Llegamos al destino
+        
+        attempts += 1
+        if attempts > maxAttempts then break end
+
+        local dir = (targetPos - currentPos).Unit
+        local move = math.min(safeStep, dist)
+        
+        root.CFrame = CFrame.new(currentPos + dir * move)
         root.AssemblyLinearVelocity = Vector3.zero
         root.AssemblyAngularVelocity = Vector3.zero
-        traveled += move
-        task.wait(0.02)
+        
+        task.wait(0.015)
     end
 
+    -- Forzar posición final para máxima precisión al terminar el loop
     if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
         player.Character:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(targetPos)
+        player.Character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity = Vector3.zero
+        player.Character:FindFirstChild("HumanoidRootPart").AssemblyAngularVelocity = Vector3.zero
     end
     task.wait(0.05)
 
+    -- Verificación de llegada con corrección forzada
     local finalRoot = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-    if finalRoot and (finalRoot.Position - targetPos).Magnitude > 12 then
-        return false
+    if finalRoot then
+        local distError = (finalRoot.Position - targetPos).Magnitude
+        if distError > 12 then
+            finalRoot.CFrame = CFrame.new(targetPos)
+            task.wait(0.1)
+            distError = (finalRoot.Position - targetPos).Magnitude
+            if distError > 12 then return false end
+        end
     end
+
+    hum:ChangeState(Enum.HumanoidStateType.RunningNoPhysics)
     return true
 end
 
--- 🔒 DETECCIÓN INTELIGENTE DE GIVER (Bloqueo por Instancia)
+-- 🔒 DETECCIÓN INTELIGENTE DE GIVER
 local function getValidGiverPrompt()
     if lockedGiverPrompt and lockedGiverPrompt:IsA("ProximityPrompt") and lockedGiverPrompt.Parent then
         local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
@@ -393,7 +428,7 @@ local function triggerAntiLoopReset()
 end
 
 -- ==========================================
--- 5. CICLO PRINCIPAL (FLUJO CORREGIDO)
+-- 5. CICLO PRINCIPAL
 -- ==========================================
 function runAutoJob()
     while autoJobEnabled do
@@ -585,6 +620,6 @@ sliderSpeed.SetCallback(function(v) moveSpeed = v end)
 sliderAnti.SetCallback(function(v) maxAntiLoopAttempts = v end)
 toggleNoclip.SetCallback(function(v) noclipEnabled = v; updateNoclip() end)
 toggleCooldown.SetCallback(function(v) promptCooldownEnabled = v end)
-toggleAntiAfk.SetCallback(function(v) antiAfkEnabled = v end) -- ✅ NUEVO
+toggleAntiAfk.SetCallback(function(v) antiAfkEnabled = v end)
 
 infoLabel.Text = "Sistema listo. Presiona ACTIVAR para iniciar."
