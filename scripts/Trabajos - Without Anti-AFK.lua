@@ -1,5 +1,5 @@
 -- ==========================================
--- AUTO-JOB DELIVERY SYSTEM + PANEL HORIZONTAL (v4 DUAL-GIVER FIX) + ANTI-AFK
+-- AUTO-JOB DELIVERY SYSTEM + PANEL HORIZONTAL (v4 DUAL-GIVER FIX)
 -- ==========================================
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
@@ -13,7 +13,6 @@ local moveSpeed = 25                -- Slider: 10 - 199 (Default: 25)
 local maxAntiLoopAttempts = 3       -- Slider: 1 - 5
 local noclipEnabled = true          -- Toggle: ON por defecto
 local promptCooldownEnabled = true  -- Toggle: ON por defecto
-local antiAfkEnabled = true         -- Toggle: ON por defecto (NUEVO)
 
 local PICKUP_TIMEOUT = 12
 local DELIVERY_TIMEOUT = 12
@@ -166,11 +165,10 @@ local sliderAnti  = createSlider(content, "Intentos Anti-Bucle", 1, 5, 3, UDim2.
 
 local toggleNoclip   = createToggle(content, "Noclip", true, UDim2.new(0, 500, 0, 0))
 local toggleCooldown = createToggle(content, "Prompt Cooldown", true, UDim2.new(0, 500, 0, 40))
-local toggleAntiAfk  = createToggle(content, "Anti-AFK", true, UDim2.new(0, 350, 0, 80)) -- ✅ NUEVO
 
 local infoLabel = Instance.new("TextLabel", content)
 infoLabel.Size = UDim2.new(1, 0, 0, 35)
-infoLabel.Position = UDim2.new(0, 0, 0, 100) -- 📐 Ajustado para evitar solapamiento
+infoLabel.Position = UDim2.new(0, 0, 0, 95)
 infoLabel.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
 infoLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
 infoLabel.Font = Enum.Font.GothamBold
@@ -215,22 +213,6 @@ local function updateNoclip()
 end
 updateNoclip()
 
--- ✅ SISTEMA ANTI-AFK (NUEVO)
-local function runAntiAfk()
-    while antiAfkEnabled do
-        -- Roblox kickea a los ~20 min. Ejecutamos cada 10 min con leve variación aleatoria.
-        task.wait(600 + math.random(-30, 30))
-        local char = player.Character
-        if char and char:FindFirstChild("Humanoid") and char:FindFirstChild("HumanoidRootPart") then
-            -- Simula actividad mediante un salto ligero (resetea el timer de inactividad)
-            char.Humanoid.Jump = true
-            task.wait(0.1)
-            char.Humanoid.Jump = false
-        end
-    end
-end
-task.spawn(runAntiAfk) -- ✅ Inicia en segundo plano sin bloquear el auto-job
-
 -- ✅ TELEPORT ROBUSTO (Sin anclaje, verificación de llegada)
 local function smoothTeleport(targetPos)
     local char = player.Character
@@ -270,14 +252,17 @@ end
 
 -- 🔒 DETECCIÓN INTELIGENTE DE GIVER (Bloqueo por Instancia)
 local function getValidGiverPrompt()
+    -- Si ya tenemos un prompt bloqueado, verificamos que siga existiendo y esté cerca
     if lockedGiverPrompt and lockedGiverPrompt:IsA("ProximityPrompt") and lockedGiverPrompt.Parent then
         local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
         if root and (lockedGiverPrompt.Parent.Position - root.Position).Magnitude < 12 then
             return lockedGiverPrompt
         end
+        -- Si nos alejamos o respawnamos, desbloqueamos para reescanear
         lockedGiverPrompt = nil
     end
 
+    -- Escaneo relativo a la posición ACTUAL del jugador (no al cache)
     local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
     if not root then return nil end
 
@@ -299,6 +284,7 @@ local function getValidGiverPrompt()
         end
     end
 
+    -- Solo bloqueamos si está a distancia razonable (evita saltar al giver equivocado)
     if closest and minDist < 10 then
         lockedGiverPrompt = closest
         lockedGiverPos = closest.Parent.Position
@@ -375,14 +361,14 @@ local function triggerAntiLoopReset()
             infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
             systemPaused = false
             promptFailCount = 0
-            lockedGiverPrompt = nil
+            lockedGiverPrompt = nil -- Resetear bloqueo tras respawn
             return
         end
     until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 
     task.wait(1.2)
     promptFailCount = 0
-    lockedGiverPrompt = nil
+    lockedGiverPrompt = nil -- Forzar reescaneo limpio
     systemPaused = false
     infoLabel.Text = "✅ Personaje regenerado. Reanudando..."
     infoLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
@@ -419,6 +405,7 @@ function runAutoJob()
                 continue
             end
             
+            -- 🔒 Buscar/verificar prompt relativo al JUGADOR, no al cache antiguo
             local giverPrompt = getValidGiverPrompt()
             if not giverPrompt then
                 promptFailCount += 1
@@ -429,6 +416,7 @@ function runAutoJob()
                 continue
             end
             
+            -- 🎯 Micro-ajuste: si caímos a >4 studs del prompt bloqueado, nos acercamos exactamente a él
             local promptPart = giverPrompt.Parent
             if (root.Position - promptPart.Position).Magnitude > 4 then
                 smoothTeleport(promptPart.Position)
@@ -446,6 +434,7 @@ function runAutoJob()
             while waitTime < PICKUP_TIMEOUT and autoJobEnabled and not systemPaused do
                 if hasChicken() then pickupSuccess = true; break end
                 if waitTime > 0 and math.floor(waitTime) % RETRY_TRIGGER_EVERY == 0 then
+                    -- Reintentar SOLO con el prompt bloqueado
                     if lockedGiverPrompt and lockedGiverPrompt:IsA("ProximityPrompt") then
                         bypassAndTriggerPrompt(lockedGiverPrompt)
                     end
@@ -467,7 +456,7 @@ function runAutoJob()
                     infoLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
                     task.wait(FAIL_COOLDOWN)
                     consecutiveFails = 0
-                    lockedGiverPrompt = nil
+                    lockedGiverPrompt = nil -- Resetear bloqueo si falla repetidamente
                 end
                 task.wait(1)
                 continue
@@ -571,7 +560,7 @@ btnToggle.MouseButton1Click:Connect(function()
         consecutiveFails = 0
         promptFailCount = 0
         systemPaused = false
-        lockedGiverPrompt = nil
+        lockedGiverPrompt = nil -- Escaneo limpio al activar
         if not jobThread or coroutine.status(jobThread) == "dead" then
             jobThread = task.spawn(runAutoJob)
         end
@@ -585,6 +574,5 @@ sliderSpeed.SetCallback(function(v) moveSpeed = v end)
 sliderAnti.SetCallback(function(v) maxAntiLoopAttempts = v end)
 toggleNoclip.SetCallback(function(v) noclipEnabled = v; updateNoclip() end)
 toggleCooldown.SetCallback(function(v) promptCooldownEnabled = v end)
-toggleAntiAfk.SetCallback(function(v) antiAfkEnabled = v end) -- ✅ NUEVO
 
 infoLabel.Text = "Sistema listo. Presiona ACTIVAR para iniciar."
