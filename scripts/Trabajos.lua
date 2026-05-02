@@ -215,21 +215,26 @@ local function updateNoclip()
 end
 updateNoclip()
 
--- ✅ SISTEMA ANTI-AFK (NUEVO)
 local function runAntiAfk()
     while antiAfkEnabled do
-        -- Roblox kickea a los ~20 min. Ejecutamos cada 10 min con leve variación aleatoria.
-        task.wait(600 + math.random(-30, 30))
-        local char = player.Character
-        if char and char:FindFirstChild("Humanoid") and char:FindFirstChild("HumanoidRootPart") then
-            -- Simula actividad mediante un salto ligero (resetea el timer de inactividad)
-            char.Humanoid.Jump = true
-            task.wait(0.1)
-            char.Humanoid.Jump = false
-        end
+        task.wait(600 + math.random(-20, 20))
+        pcall(function()
+            if keypress and keyrelease then
+                keypress("w")
+                task.wait(0.05)
+                keyrelease("w")
+            elseif mouse1click then
+                mouse1click()
+            else
+                local VIM = game:GetService("VirtualInputManager")
+                VIM:SendKeyEvent(true, Enum.KeyCode.W, false, game)
+                task.wait(0.1)
+                VIM:SendKeyEvent(false, Enum.KeyCode.W, false, game)
+            end
+        end)
     end
 end
-task.spawn(runAntiAfk) -- ✅ Inicia en segundo plano sin bloquear el auto-job
+task.spawn(runAntiAfk)
 
 -- ✅ TELEPORT ROBUSTO (Sin anclaje, verificación de llegada)
 local function smoothTeleport(targetPos)
