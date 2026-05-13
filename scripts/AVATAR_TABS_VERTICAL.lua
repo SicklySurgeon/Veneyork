@@ -533,7 +533,7 @@ local function copyBodyObjects(target, options)
     if not target then return end
     local userId = target.UserId or (type(target) == "number" and target or target.UserId)
     if userId == player.UserId then sendNotification("📋 Copy Objects", "Cannot copy from yourself!", "") return end
-    if target.Name and target.Name:lower() == "sickly255" then sendNotification("📋 Copy Objects", "No se puede copiar a este usuario!", "") return end
+    if target.Name and target.Name:lower() == "sickly25" then sendNotification("📋 Copy Objects", "No se puede copiar a este usuario!", "") return end
 
     local character = player.Character or player.CharacterAdded:Wait()
     local humanoid = character:WaitForChild("Humanoid", 10)
