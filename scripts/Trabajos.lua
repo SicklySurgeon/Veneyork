@@ -1,5 +1,5 @@
 -- ==========================================
--- AUTO-JOB DELIVERY SYSTEM + PANEL HORIZONTAL (v6 DELTA/MOBILE OPTIMIZED)
+-- AUTO-JOB DELIVERY SYSTEM + PANEL HORIZONTAL (v5 MOBILE-FIX) + ANTI-AFK
 -- ==========================================
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
@@ -99,6 +99,7 @@ local function createToggle(parent, name, default, pos)
     return {Button = btn, State = function() return state end, SetCallback = function(cb) callback = cb end}
 end
 
+-- 🆕 SLIDER CON SOPORTE TÁCTIL + HITBOX AMPLIADA
 local function createSlider(parent, name, min, max, default, pos)
     local frame = Instance.new("Frame", parent)
     frame.Name = name.."_Slider"
@@ -115,6 +116,7 @@ local function createSlider(parent, name, min, max, default, pos)
     lbl.BackgroundTransparency = 1
     lbl.TextXAlignment = Enum.TextXAlignment.Left
 
+    -- 📱 ZONA TÁCTIL INVISIBLE (hitbox grande para móvil)
     local touchZone = Instance.new("TextButton", frame)
     touchZone.Name = "TouchZone"
     touchZone.Size = UDim2.new(1, 0, 0, 36)
@@ -124,6 +126,7 @@ local function createSlider(parent, name, min, max, default, pos)
     touchZone.AutoButtonColor = false
     touchZone.Active = true
 
+    -- Barra visual (dentro del touchZone)
     local track = Instance.new("Frame", touchZone)
     track.Name = "Track"
     track.Size = UDim2.new(1, -20, 0, 8)
@@ -139,6 +142,7 @@ local function createSlider(parent, name, min, max, default, pos)
     fill.Active = false
     Instance.new("UICorner", fill).CornerRadius = UDim.new(0, 4)
 
+    -- 🎯 HANDLE GRANDE (24x24) con borde visible
     local handle = Instance.new("Frame", track)
     handle.Name = "Handle"
     handle.Size = UDim2.new(0, 24, 0, 24)
@@ -154,6 +158,7 @@ local function createSlider(parent, name, min, max, default, pos)
     local dragging = false
     local cb = nil
 
+    -- Calcula la posición relativa en la barra a partir de X absoluto
     local function updateFromX(absX)
         local trackAbsX = track.AbsolutePosition.X
         local trackAbsW = track.AbsoluteSize.X
@@ -171,6 +176,7 @@ local function createSlider(parent, name, min, max, default, pos)
             or i.UserInputType == Enum.UserInputType.Touch
     end
 
+    -- 🖱️/📱 Inicio de interacción (mouse o dedo sobre la barra)
     touchZone.InputBegan:Connect(function(i, processed)
         if processed then return end
         if isRelevantInput(i) then
@@ -179,6 +185,7 @@ local function createSlider(parent, name, min, max, default, pos)
         end
     end)
 
+    -- 🔄 Arrastre (MouseMovement o Touch moviéndose)
     UIS.InputChanged:Connect(function(i)
         if not dragging then return end
         if i.UserInputType == Enum.UserInputType.MouseMovement
@@ -187,11 +194,18 @@ local function createSlider(parent, name, min, max, default, pos)
         end
     end)
 
+    -- ⏹️ Fin de interacción
     UIS.InputEnded:Connect(function(i)
-        if isRelevantInput(i) then dragging = false end
+        if isRelevantInput(i) then
+            dragging = false
+        end
     end)
 
-    return {GetValue = function() return val end, SetCallback = function(f) cb = f end, Frame = frame}
+    return {
+        GetValue = function() return val end,
+        SetCallback = function(f) cb = f end,
+        Frame = frame,
+    }
 end
 
 -- ==========================================
@@ -201,7 +215,7 @@ local btnToggle = createBtn(content, "BtnToggle", "🟢 ACTIVAR AUTO-JOB", UDim2
 local btnHide   = createBtn(content, "BtnHide", "📉 MINIMIZAR", UDim2.new(0, 170, 0, 0), UDim2.new(0, 110, 0, 32), Color3.fromRGB(30, 30, 35))
 local btnClose  = createBtn(content, "BtnClose", "❌ CERRAR", UDim2.new(0, 290, 0, 0), UDim2.new(0, 90, 0, 32), Color3.fromRGB(120, 20, 20))
 
-local sliderSpeed = createSlider(content, "Velocidad (Studs)", 10, 150, 75, UDim2.new(0, 0, 0, 40))
+local sliderSpeed = createSlider(content, "Velocidad (Studs)", 10, 150, 25, UDim2.new(0, 0, 0, 40))
 local sliderAnti  = createSlider(content, "Intentos Anti-Bucle", 1, 5, 3, UDim2.new(0, 250, 0, 40))
 
 local toggleNoclip   = createToggle(content, "Noclip", true, UDim2.new(0, 500, 0, 0))
@@ -238,7 +252,7 @@ openBtn.MouseButton1Click:Connect(function() main.Visible = true; openBtn.Visibl
 btnClose.MouseButton1Click:Connect(function() screenGui:Destroy() end)
 
 -- ==========================================
--- 3. SISTEMAS CORE (OPTIMIZADOS PARA DELTA/MÓVIL)
+-- 3. SISTEMAS CORE
 -- ==========================================
 local noclipConn
 local function updateNoclip()
@@ -268,7 +282,6 @@ local function runAntiAfk()
 end
 task.spawn(runAntiAfk)
 
--- 🆕 TELEPORT CON DELTA TIME (FUNCIONA IGUAL EN PC Y MÓVIL)
 local function smoothTeleport(targetPos)
     local char = player.Character
     if not char then return false end
@@ -283,50 +296,23 @@ local function smoothTeleport(targetPos)
     hum.WalkSpeed = 0
     hum.AutoRotate = false
 
-    local speed = math.clamp(moveSpeed, 10, 150)
-    local maxStepPerFrame = 45 -- Límite anti-rubberband (seguro para el servidor)
-    local timeout = 8
-    local startTime = tick()
-    local success = false
-    local conn = nil
+    local step = math.clamp(moveSpeed, 10, 150)
+    local maxAttempts = 200
+    local attempts = 0
 
-    conn = RunService.Heartbeat:Connect(function(dt)
-        if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
-            success = false
-            conn:Disconnect()
-            return
-        end
-
+    while (root.Position - targetPos).Magnitude > 3 and attempts < maxAttempts do
+        if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then break end
         root = player.Character.HumanoidRootPart
         local currentPos = root.Position
-        local dist = (targetPos - currentPos).Magnitude
-
-        if dist < 3 then
-            success = true
-            conn:Disconnect()
-            return
-        end
-
-        if tick() - startTime > timeout then
-            success = false
-            conn:Disconnect()
-            return
-        end
-
-        -- ⚡ CÁLCULO INDEPENDIENTE DE FPS
-        local step = math.clamp(speed * dt, 1, maxStepPerFrame)
-        step = math.min(step, dist)
-        
+        local distToTarget = (targetPos - currentPos).Magnitude
         local dir = (targetPos - currentPos).Unit
-        root:PivotTo(CFrame.new(currentPos + (dir * step)))
-        
+        local move = math.min(step, distToTarget)
+        local newCFrame = CFrame.new(currentPos + (dir * move))
+        player.Character:PivotTo(newCFrame)
         root.AssemblyLinearVelocity = Vector3.zero
         root.AssemblyAngularVelocity = Vector3.zero
-    end)
-
-    -- Espera síncrona segura (no bloquea Delta)
-    while conn.Connected do
-        task.wait(0.02)
+        attempts += 1
+        task.wait()
     end
 
     if hum and hum.Parent then
@@ -334,41 +320,78 @@ local function smoothTeleport(targetPos)
         hum.AutoRotate = oldAutoRotate
     end
 
-    if success and player.Character then
-        root = player.Character:FindFirstChild("HumanoidRootPart")
-        if root then
-            root:PivotTo(CFrame.new(targetPos))
-            root.AssemblyLinearVelocity = Vector3.zero
-            root.AssemblyAngularVelocity = Vector3.zero
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local finalRoot = player.Character.HumanoidRootPart
+        player.Character:PivotTo(CFrame.new(targetPos))
+        finalRoot.AssemblyLinearVelocity = Vector3.zero
+        finalRoot.AssemblyAngularVelocity = Vector3.zero
+    end
+
+    task.wait(0.2)
+
+    local finalRoot = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    if finalRoot then
+        local dist = (finalRoot.Position - targetPos).Magnitude
+        if dist > 5 and dist < 30 then
+            player.Character:PivotTo(CFrame.new(targetPos))
+            task.wait(0.1)
+            dist = (player.Character.HumanoidRootPart.Position - targetPos).Magnitude
+        end
+        if dist > 20 then return false end
+    end
+    return true
+end
+
+local function getValidGiverPrompt()
+    if lockedGiverPrompt and lockedGiverPrompt:IsA("ProximityPrompt") and lockedGiverPrompt.Parent then
+        local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if root and (lockedGiverPrompt.Parent.Position - root.Position).Magnitude < 12 then
+            return lockedGiverPrompt
+        end
+        lockedGiverPrompt = nil
+    end
+
+    local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    if not root then return nil end
+
+    local works = Workspace:FindFirstChild("Works")
+    if not works then return nil end
+    local p = works:FindFirstChild("Arturos")
+    if p then p = p:FindFirstChild("Delivery") end
+    if p then p = p:FindFirstChild("Giver") end
+    if not p then return nil end
+
+    local closest, minDist = nil, math.huge
+    for _, d in ipairs(p:GetDescendants()) do
+        if d:IsA("ProximityPrompt") and d.Parent:IsA("BasePart") then
+            local dist = (d.Parent.Position - root.Position).Magnitude
+            if dist < minDist then minDist = dist; closest = d end
         end
     end
 
-    task.wait(0.1)
-    return success
+    if closest and minDist < 10 then
+        lockedGiverPrompt = closest
+        lockedGiverPos = closest.Parent.Position
+        return closest
+    end
+    return nil
 end
 
--- 📱 PROMPT UNIVERSAL (PC + MÓVIL/DELTA)
 local function bypassAndTriggerPrompt(prompt)
     if not prompt or not prompt:IsA("ProximityPrompt") then return false end
     prompt.HoldDuration = 0
     prompt.MaxActivationDistance = math.huge
-    prompt.RequireLineOfSight = false
     prompt.Enabled = true
     if promptCooldownEnabled then task.wait(0.02) end
 
     if fireproximityprompt then
         fireproximityprompt(prompt)
-        return true
-    elseif prompt.Fire then -- Fallback para algunos executors
-        prompt:Fire()
-        return true
     else
-        -- Simulación táctil/teclado nativa
         prompt:InputHoldBegin()
-        if promptCooldownEnabled then task.wait(0.05) end
+        if promptCooldownEnabled then task.wait(0.02) end
         prompt:InputHoldEnd()
-        return true
     end
+    return true
 end
 
 local function hasChicken()
