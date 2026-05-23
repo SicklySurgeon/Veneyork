@@ -1,10 +1,12 @@
 -- ==========================================
--- AUTO-JOB DELIVERY SYSTEM + PANEL HORIZONTAL (v7 MOBILE FIX)
+-- AUTO-JOB DELIVERY SYSTEM + PANEL HORIZONTAL
+-- v7 HEARTBEAT UNLIMITED + ANTI-AFK + FIX MÓVIL (PROMPT VISIBILITY)
 -- ==========================================
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
 local RunService = game:GetService("RunService")
 local UIS = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
 
 local player = Players.LocalPlayer
 
@@ -99,7 +101,6 @@ local function createToggle(parent, name, default, pos)
     return {Button = btn, State = function() return state end, SetCallback = function(cb) callback = cb end}
 end
 
--- 🆕 SLIDER CON SOPORTE TÁCTIL + HITBOX AMPLIADA
 local function createSlider(parent, name, min, max, default, pos)
     local frame = Instance.new("Frame", parent)
     frame.Name = name.."_Slider"
@@ -275,7 +276,65 @@ local function runAntiAfk()
 end
 task.spawn(runAntiAfk)
 
--- 🆕 TELEPORT CON HEARTBEAT + DELTA TIME (SIN LÍMITES)
+-- ==========================================
+-- 📱 FIX MÓVIL: FORZAR VISIBILIDAD DEL PROMPT
+-- ==========================================
+-- Orienta la cámara hacia el objetivo para que el engine
+-- "vea" al NPC y muestre el ProximityPrompt correctamente.
+local function forceCameraLookAt(targetPos)
+    local camera = Workspace.CurrentCamera
+    if not camera then return end
+    local camPos = camera.CFrame.Position
+    local lookAt = CFrame.lookAt(camPos, targetPos)
+    pcall(function()
+        camera.CFrame = lookAt
+    end)
+    task.wait(0.08) -- tiempo para que el engine recalcule visibilidad
+end
+
+-- Simula un tap en el centro de la pantalla.
+-- Fuerza al engine a considerar que hay input del usuario,
+-- lo que hace que el ProximityPrompt aparezca y se mantenga.
+local function simulateScreenTap()
+    local camera = Workspace.CurrentCamera
+    local center = (camera and camera.ViewportSize and Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2))
+        or Vector2.new(500, 500)
+
+    -- Método 1: VirtualInputManager (Delta, Fluxus, Arceus X, etc.)
+    local ok1, VIM = pcall(function() return game:GetService("VirtualInputManager") end)
+    if ok1 and VIM then
+        pcall(function()
+            VIM:SendTouchEvent(0, 0, {center})  -- touch begin
+            task.wait(0.04)
+            VIM:SendTouchEvent(0, 2, {center})  -- touch end
+        end)
+        task.wait(0.05)
+        return
+    end
+
+    -- Método 2: VirtualUser (fallback)
+    local ok2, VU = pcall(function() return game:GetService("VirtualUser") end)
+    if ok2 and VU then
+        pcall(function()
+            VU:Button1Down(center)
+            task.wait(0.04)
+            VU:Button1Up(center)
+        end)
+        task.wait(0.05)
+        return
+    end
+end
+
+-- Helper combinado: cámara + tap + espera
+local function refreshPromptVisibility(targetPos)
+    if targetPos then
+        forceCameraLookAt(targetPos)
+    end
+    simulateScreenTap()
+    task.wait(0.1)
+end
+-- ==========================================
+
 local function smoothTeleport(targetPos)
     local char = player.Character
     if not char then return false end
@@ -370,51 +429,39 @@ local function getValidGiverPrompt()
     return nil
 end
 
--- 🆕 FUNCIÓN MEJORADA PARA MÓVIL (FIX DE PROMPT FANTASMA + FIX DE TELEPORT ERRÁTICO)
-local function bypassAndTriggerPrompt(prompt, lookAtPos)
+-- 🔧 MODIFICADA: ahora acepta targetPos opcional y es más robusta en móvil
+local function bypassAndTriggerPrompt(prompt, targetPos)
     if not prompt or not prompt:IsA("ProximityPrompt") then return false end
-    
-    -- Forzar propiedades para que el prompt no desaparezca en la pantalla del celular
-    pcall(function()
-        prompt.HoldDuration = 0
-        prompt.MaxActivationDistance = math.huge
-        prompt.RequiresLineOfSight = false
-        prompt.Enabled = true
-    end)
-    
-    -- Orientar personaje hacia el objetivo (solo si hay distancia suficiente para evitar división por cero)
-    local char = player.Character
-    local root = char and char:FindFirstChild("HumanoidRootPart")
-    if root and lookAtPos then
-        local dist = (lookAtPos - root.Position).Magnitude
-        if dist > 2 then
-            pcall(function()
-                local lookAt = Vector3.new(lookAtPos.X, root.Position.Y, lookAtPos.Z)
-                root.CFrame = CFrame.lookAt(root.Position, lookAt)
-            end)
-        end
-    end
-    
-    -- Orientar cámara hacia el objetivo
-    local cam = workspace.CurrentCamera
-    if cam and lookAtPos then
-        pcall(function()
-            cam.CFrame = CFrame.lookAt(cam.CFrame.Position, lookAtPos)
-        end)
+
+    -- Forzar propiedades para que siempre sea activable
+    prompt.HoldDuration = 0
+    prompt.MaxActivationDistance = math.huge
+    pcall(function() prompt.RequiresLineOfSight = false end)
+    prompt.Enabled = true
+    pcall(function() prompt.ClickablePrompt = true end)
+
+    -- 🆕 Refrescar visibilidad si nos dieron la posición
+    if targetPos then
+        refreshPromptVisibility(targetPos)
     end
 
-    if promptCooldownEnabled then task.wait(0.05) end
+    if promptCooldownEnabled then task.wait(0.03) end
 
-    -- Ejecutar el prompt con protección de errores
+    -- Intento principal con fireproximityprompt
     if fireproximityprompt then
         pcall(fireproximityprompt, prompt)
     else
-        pcall(function()
-            prompt:InputHoldBegin()
-            task.wait(0.05)
-            prompt:InputHoldEnd()
-        end)
+        pcall(function() prompt:InputHoldBegin() end)
+        if promptCooldownEnabled then task.wait(0.03) end
+        pcall(function() prompt:InputHoldEnd() end)
     end
+
+    -- 🆕 Segundo intento por seguridad en móvil (algunos exploits fallan a la primera)
+    task.wait(0.05)
+    pcall(function() prompt:InputHoldBegin() end)
+    task.wait(0.02)
+    pcall(function() prompt:InputHoldEnd() end)
+
     return true
 end
 
@@ -487,7 +534,7 @@ local function triggerAntiLoopReset()
 end
 
 -- ==========================================
--- 5. CICLO PRINCIPAL (CORREGIDO)
+-- 5. CICLO PRINCIPAL
 -- ==========================================
 function runAutoJob()
     while autoJobEnabled do
@@ -503,19 +550,12 @@ function runAutoJob()
         if not hasChicken() then
             infoLabel.Text = "📦 Yendo al Giver..."
             infoLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
-            
-            -- Intentar obtener el prompt primero
-            local giverPrompt = getValidGiverPrompt()
-            if not giverPrompt then
-                -- Si no hay prompt, ir a la posición hardcodeada
-                if not smoothTeleport(lockedGiverPos) then
-                    infoLabel.Text = "⚠️ Teleport fallido. Reintentando..."
-                    infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
-                    task.wait(1); continue
-                end
-                giverPrompt = getValidGiverPrompt()
+            if not smoothTeleport(lockedGiverPos) then
+                infoLabel.Text = "⚠️ Teleport fallido. Reintentando..."
+                infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
+                task.wait(1); continue
             end
-            
+            local giverPrompt = getValidGiverPrompt()
             if not giverPrompt then
                 promptFailCount += 1
                 infoLabel.Text = string.format("⚠️ Giver no detectado (%d/%d)", promptFailCount, maxAntiLoopAttempts)
@@ -523,25 +563,13 @@ function runAutoJob()
                 if promptFailCount >= maxAntiLoopAttempts then triggerAntiLoopReset() end
                 task.wait(1.5); continue
             end
-            
-            -- 👇 Teletransportar directamente a la posición del prompt (NO a lockedGiverPos duplicado)
             local promptPart = giverPrompt.Parent
-            local targetPos = promptPart.Position
-            
-            if (root.Position - targetPos).Magnitude > 5 then
-                if not smoothTeleport(targetPos) then
-                    infoLabel.Text = "⚠️ Teleport al Giver fallido..."
-                    infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
-                    task.wait(1); continue
-                end
+            if (root.Position - promptPart.Position).Magnitude > 4 then
+                smoothTeleport(promptPart.Position)
+                lockedGiverPos = promptPart.Position
             end
-            
-            -- Actualizar posición bloqueada a la posición real del prompt
-            lockedGiverPos = targetPos
-            lockedGiverPrompt = giverPrompt
-            
-            -- Activar el prompt
-            bypassAndTriggerPrompt(giverPrompt, targetPos)
+            -- 🆕 Pasamos la posición para refrescar visibilidad en móvil
+            bypassAndTriggerPrompt(giverPrompt, promptPart.Position)
             promptFailCount = 0
             infoLabel.Text = "⏳ Esperando pedido..."
             infoLabel.TextColor3 = Color3.fromRGB(150, 200, 255)
@@ -552,7 +580,10 @@ function runAutoJob()
                 if hasChicken() then pickupSuccess = true; break end
                 if waitTime > 0 and math.floor(waitTime) % RETRY_TRIGGER_EVERY == 0 then
                     if lockedGiverPrompt and lockedGiverPrompt:IsA("ProximityPrompt") then
-                        bypassAndTriggerPrompt(lockedGiverPrompt, lockedGiverPos)
+                        local gp = lockedGiverPrompt.Parent
+                        local gPos = gp and gp.Position or lockedGiverPos
+                        refreshPromptVisibility(gPos)
+                        bypassAndTriggerPrompt(lockedGiverPrompt, gPos)
                     end
                 end
                 task.wait(promptCooldownEnabled and 0.5 or 0.1)
@@ -595,29 +626,40 @@ function runAutoJob()
                     infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
                     task.wait(1); continue
                 end
-                task.wait(promptCooldownEnabled and 0.3 or 0.05)
+
+                -- 🆕 FIX MÓVIL: refrescar visibilidad ANTES de buscar el prompt
                 local hrp = npcModel:FindFirstChild("HumanoidRootPart")
+                local finalTarget = (hrp and hrp.Position) or npcPos
+                refreshPromptVisibility(finalTarget)
+                task.wait(promptCooldownEnabled and 0.3 or 0.1)
+
+                -- Buscar prompt recursivamente en el modelo (por si no está en HRP)
                 local npcPrompt = hrp and hrp:FindFirstChildWhichIsA("ProximityPrompt")
+                if not npcPrompt then
+                    npcPrompt = npcModel:FindFirstChildWhichIsA("ProximityPrompt", true)
+                end
+
                 if npcPrompt then
-                    -- Pasar la posición para mirar al NPC
-                    bypassAndTriggerPrompt(npcPrompt, hrp.Position)
+                    bypassAndTriggerPrompt(npcPrompt, finalTarget)
                     promptFailCount = 0
                     infoLabel.Text = "⏳ Completando entrega..."
                     infoLabel.TextColor3 = Color3.fromRGB(150, 200, 255)
+
                     local waitTime = 0
                     local deliverySuccess = false
                     while waitTime < DELIVERY_TIMEOUT and autoJobEnabled and not systemPaused do
                         if not hasChicken() then deliverySuccess = true; break end
                         if waitTime > 0 and math.floor(waitTime) % RETRY_TRIGGER_EVERY == 0 then
                             local rHrp = npcModel:FindFirstChild("HumanoidRootPart")
-                            if rHrp then
-                                local rPrompt = rHrp:FindFirstChildWhichIsA("ProximityPrompt")
-                                if rPrompt then bypassAndTriggerPrompt(rPrompt, rHrp.Position) end
-                            end
+                            local rPos = (rHrp and rHrp.Position) or finalTarget
+                            refreshPromptVisibility(rPos)
+                            local rPrompt = npcModel:FindFirstChildWhichIsA("ProximityPrompt", true)
+                            if rPrompt then bypassAndTriggerPrompt(rPrompt, rPos) end
                         end
                         task.wait(promptCooldownEnabled and 0.5 or 0.1)
                         waitTime += 0.5
                     end
+
                     if deliverySuccess then
                         consecutiveFails = 0
                         infoLabel.Text = "✅ ¡Entrega exitosa! Repitiendo..."
@@ -635,11 +677,20 @@ function runAutoJob()
                         task.wait(1)
                     end
                 else
-                    promptFailCount += 1
-                    infoLabel.Text = string.format("⚠️ Prompt NPC no detectado (%d/%d)", promptFailCount, maxAntiLoopAttempts)
-                    infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
-                    if promptFailCount >= maxAntiLoopAttempts then triggerAntiLoopReset() end
-                    task.wait(1.5)
+                    -- 🆕 Último recurso: tap + retry una vez más
+                    simulateScreenTap()
+                    task.wait(0.3)
+                    local retryPrompt = npcModel:FindFirstChildWhichIsA("ProximityPrompt", true)
+                    if retryPrompt then
+                        bypassAndTriggerPrompt(retryPrompt, finalTarget)
+                        promptFailCount = 0
+                    else
+                        promptFailCount += 1
+                        infoLabel.Text = string.format("⚠️ Prompt NPC no detectado (%d/%d)", promptFailCount, maxAntiLoopAttempts)
+                        infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
+                        if promptFailCount >= maxAntiLoopAttempts then triggerAntiLoopReset() end
+                        task.wait(1.5)
+                    end
                 end
             else
                 infoLabel.Text = "❌ NPC no spawneó. Reintentando..."
