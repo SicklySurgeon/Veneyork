@@ -99,7 +99,6 @@ local function createToggle(parent, name, default, pos)
     return {Button = btn, State = function() return state end, SetCallback = function(cb) callback = cb end}
 end
 
--- 🆕 SLIDER CON SOPORTE TÁCTIL + HITBOX AMPLIADA
 local function createSlider(parent, name, min, max, default, pos)
     local frame = Instance.new("Frame", parent)
     frame.Name = name.."_Slider"
@@ -208,7 +207,6 @@ local btnToggle = createBtn(content, "BtnToggle", "🟢 ACTIVAR AUTO-JOB", UDim2
 local btnHide   = createBtn(content, "BtnHide", "📉 MINIMIZAR", UDim2.new(0, 170, 0, 0), UDim2.new(0, 110, 0, 32), Color3.fromRGB(30, 30, 35))
 local btnClose  = createBtn(content, "BtnClose", "❌ CERRAR", UDim2.new(0, 290, 0, 0), UDim2.new(0, 90, 0, 32), Color3.fromRGB(120, 20, 20))
 
--- 🆕 MAX 5000, LABEL ACTUALIZADO
 local sliderSpeed = createSlider(content, "Velocidad (Studs/s)", 10, 5000, 75, UDim2.new(0, 0, 0, 40))
 local sliderAnti  = createSlider(content, "Intentos Anti-Bucle", 1, 5, 3, UDim2.new(0, 250, 0, 40))
 
@@ -276,7 +274,6 @@ local function runAntiAfk()
 end
 task.spawn(runAntiAfk)
 
--- 🆕 TELEPORT CON HEARTBEAT + DELTA TIME (SIN LÍMITES)
 local function smoothTeleport(targetPos)
     local char = player.Character
     if not char then return false end
@@ -297,7 +294,6 @@ local function smoothTeleport(targetPos)
     local doneEvent = Instance.new("BindableEvent")
 
     conn = RunService.Heartbeat:Connect(function(dt)
-        -- Verificar integridad del personaje
         if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
             success = false
             conn:Disconnect()
@@ -314,7 +310,6 @@ local function smoothTeleport(targetPos)
             return
         end
 
-        -- 📏 MOVIMIENTO DESLIMITADO BASED EN DELTA TIME
         local move = math.min(speed * dt, dist)
         local dir = (targetPos - root.Position).Unit
         root.CFrame = CFrame.new(root.Position + dir * move)
@@ -322,22 +317,19 @@ local function smoothTeleport(targetPos)
         root.AssemblyAngularVelocity = Vector3.zero
     end)
 
-    -- Yield exacto sin limitar frames (evita task.wait() en el bucle)
     doneEvent.Event:Wait()
     doneEvent:Destroy()
 
-    -- Restaurar físicas
     if hum and hum.Parent then
         hum.WalkSpeed = oldWalkSpeed
         hum.AutoRotate = oldAutoRotate
     end
 
-    -- Posición final exacta
     if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
         player.Character:PivotTo(CFrame.new(targetPos))
     end
 
-    task.wait(0.1) -- Sync mínimo con el servidor
+    task.wait(0.1)
     return success
 end
 
@@ -376,19 +368,45 @@ local function getValidGiverPrompt()
     return nil
 end
 
-local function bypassAndTriggerPrompt(prompt)
+-- 🆕 FUNCIÓN MEJORADA PARA MÓVIL (FIX DE PROMPT FANTASMA)
+local function bypassAndTriggerPrompt(prompt, lookAtPos)
     if not prompt or not prompt:IsA("ProximityPrompt") then return false end
-    prompt.HoldDuration = 0
-    prompt.MaxActivationDistance = math.huge
-    prompt.Enabled = true
-    if promptCooldownEnabled then task.wait(0.02) end
+    
+    -- Forzar propiedades para que el prompt no desaparezca en la pantalla del celular
+    pcall(function()
+        prompt.HoldDuration = 0
+        prompt.MaxActivationDistance = math.huge
+        prompt.RequiresLineOfSight = false -- 👈 CLAVE PARA QUE NO DESAPAREZCA
+        prompt.Enabled = true
+    end)
+    
+    -- Orientar personaje y cámara hacia el objetivo (Crucial en móviles)
+    local char = player.Character
+    local root = char and char:FindFirstChild("HumanoidRootPart")
+    if root and lookAtPos then
+        pcall(function()
+            root.CFrame = CFrame.lookAt(root.Position, Vector3.new(lookAtPos.X, root.Position.Y, lookAtPos.Z))
+        end)
+    end
+    
+    local cam = workspace.CurrentCamera
+    if cam and lookAtPos then
+        pcall(function()
+            cam.CFrame = CFrame.lookAt(cam.CFrame.Position, lookAtPos)
+        end)
+    end
 
+    if promptCooldownEnabled then task.wait(0.05) end -- Pequeño delay para que la UI táctil renderice
+
+    -- Ejecutar el prompt con protección de errores
     if fireproximityprompt then
-        fireproximityprompt(prompt)
+        pcall(fireproximityprompt, prompt)
     else
-        prompt:InputHoldBegin()
-        if promptCooldownEnabled then task.wait(0.02) end
-        prompt:InputHoldEnd()
+        pcall(function()
+            prompt:InputHoldBegin()
+            task.wait(0.05)
+            prompt:InputHoldEnd()
+        end)
     end
     return true
 end
@@ -496,7 +514,9 @@ function runAutoJob()
                 smoothTeleport(promptPart.Position)
                 lockedGiverPos = promptPart.Position
             end
-            bypassAndTriggerPrompt(giverPrompt)
+            
+            -- 🆕 Pasar la posición para mirar al Giver
+            bypassAndTriggerPrompt(giverPrompt, promptPart.Position)
             promptFailCount = 0
             infoLabel.Text = "⏳ Esperando pedido..."
             infoLabel.TextColor3 = Color3.fromRGB(150, 200, 255)
@@ -507,7 +527,7 @@ function runAutoJob()
                 if hasChicken() then pickupSuccess = true; break end
                 if waitTime > 0 and math.floor(waitTime) % RETRY_TRIGGER_EVERY == 0 then
                     if lockedGiverPrompt and lockedGiverPrompt:IsA("ProximityPrompt") then
-                        bypassAndTriggerPrompt(lockedGiverPrompt)
+                        bypassAndTriggerPrompt(lockedGiverPrompt, lockedGiverPrompt.Parent.Position)
                     end
                 end
                 task.wait(promptCooldownEnabled and 0.5 or 0.1)
@@ -553,8 +573,10 @@ function runAutoJob()
                 task.wait(promptCooldownEnabled and 0.3 or 0.05)
                 local hrp = npcModel:FindFirstChild("HumanoidRootPart")
                 local npcPrompt = hrp and hrp:FindFirstChildWhichIsA("ProximityPrompt")
+                
                 if npcPrompt then
-                    bypassAndTriggerPrompt(npcPrompt)
+                    -- 🆕 Pasar la posición para mirar al NPC
+                    bypassAndTriggerPrompt(npcPrompt, hrp.Position)
                     promptFailCount = 0
                     infoLabel.Text = "⏳ Completando entrega..."
                     infoLabel.TextColor3 = Color3.fromRGB(150, 200, 255)
@@ -566,7 +588,7 @@ function runAutoJob()
                             local rHrp = npcModel:FindFirstChild("HumanoidRootPart")
                             if rHrp then
                                 local rPrompt = rHrp:FindFirstChildWhichIsA("ProximityPrompt")
-                                if rPrompt then bypassAndTriggerPrompt(rPrompt) end
+                                if rPrompt then bypassAndTriggerPrompt(rPrompt, rHrp.Position) end
                             end
                         end
                         task.wait(promptCooldownEnabled and 0.5 or 0.1)
