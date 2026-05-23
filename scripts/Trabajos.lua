@@ -1,5 +1,5 @@
 -- ==========================================
--- AUTO-JOB DELIVERY SYSTEM + PANEL HORIZONTAL (v5 MOBILE-FIX) + ANTI-AFK
+-- AUTO-JOB DELIVERY SYSTEM + PANEL HORIZONTAL (v6 HEARTBEAT UNLIMITED) + ANTI-AFK
 -- ==========================================
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
@@ -9,11 +9,11 @@ local UIS = game:GetService("UserInputService")
 local player = Players.LocalPlayer
 
 -- ⚙️ CONFIGURACIÓN DINÁMICA
-local moveSpeed = 75
-local maxAntiLoopAttempts = 3
-local noclipEnabled = true
-local promptCooldownEnabled = true
-local antiAfkEnabled = true
+local moveSpeed = 75               -- Slider: 10 - 5000 (Default: 75)
+local maxAntiLoopAttempts = 3       -- Slider: 1 - 5
+local noclipEnabled = true          -- Toggle: ON por defecto
+local promptCooldownEnabled = true  -- Toggle: ON por defecto
+local antiAfkEnabled = true         -- Toggle: ON por defecto
 
 local PICKUP_TIMEOUT = 12
 local DELIVERY_TIMEOUT = 12
@@ -116,7 +116,6 @@ local function createSlider(parent, name, min, max, default, pos)
     lbl.BackgroundTransparency = 1
     lbl.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- 📱 ZONA TÁCTIL INVISIBLE (hitbox grande para móvil)
     local touchZone = Instance.new("TextButton", frame)
     touchZone.Name = "TouchZone"
     touchZone.Size = UDim2.new(1, 0, 0, 36)
@@ -126,7 +125,6 @@ local function createSlider(parent, name, min, max, default, pos)
     touchZone.AutoButtonColor = false
     touchZone.Active = true
 
-    -- Barra visual (dentro del touchZone)
     local track = Instance.new("Frame", touchZone)
     track.Name = "Track"
     track.Size = UDim2.new(1, -20, 0, 8)
@@ -142,7 +140,6 @@ local function createSlider(parent, name, min, max, default, pos)
     fill.Active = false
     Instance.new("UICorner", fill).CornerRadius = UDim.new(0, 4)
 
-    -- 🎯 HANDLE GRANDE (24x24) con borde visible
     local handle = Instance.new("Frame", track)
     handle.Name = "Handle"
     handle.Size = UDim2.new(0, 24, 0, 24)
@@ -158,7 +155,6 @@ local function createSlider(parent, name, min, max, default, pos)
     local dragging = false
     local cb = nil
 
-    -- Calcula la posición relativa en la barra a partir de X absoluto
     local function updateFromX(absX)
         local trackAbsX = track.AbsolutePosition.X
         local trackAbsW = track.AbsoluteSize.X
@@ -176,7 +172,6 @@ local function createSlider(parent, name, min, max, default, pos)
             or i.UserInputType == Enum.UserInputType.Touch
     end
 
-    -- 🖱️/📱 Inicio de interacción (mouse o dedo sobre la barra)
     touchZone.InputBegan:Connect(function(i, processed)
         if processed then return end
         if isRelevantInput(i) then
@@ -185,7 +180,6 @@ local function createSlider(parent, name, min, max, default, pos)
         end
     end)
 
-    -- 🔄 Arrastre (MouseMovement o Touch moviéndose)
     UIS.InputChanged:Connect(function(i)
         if not dragging then return end
         if i.UserInputType == Enum.UserInputType.MouseMovement
@@ -194,7 +188,6 @@ local function createSlider(parent, name, min, max, default, pos)
         end
     end)
 
-    -- ⏹️ Fin de interacción
     UIS.InputEnded:Connect(function(i)
         if isRelevantInput(i) then
             dragging = false
@@ -215,7 +208,8 @@ local btnToggle = createBtn(content, "BtnToggle", "🟢 ACTIVAR AUTO-JOB", UDim2
 local btnHide   = createBtn(content, "BtnHide", "📉 MINIMIZAR", UDim2.new(0, 170, 0, 0), UDim2.new(0, 110, 0, 32), Color3.fromRGB(30, 30, 35))
 local btnClose  = createBtn(content, "BtnClose", "❌ CERRAR", UDim2.new(0, 290, 0, 0), UDim2.new(0, 90, 0, 32), Color3.fromRGB(120, 20, 20))
 
-local sliderSpeed = createSlider(content, "Velocidad (Studs)", 10, 150, 25, UDim2.new(0, 0, 0, 40))
+-- 🆕 MAX 5000, LABEL ACTUALIZADO
+local sliderSpeed = createSlider(content, "Velocidad (Studs/s)", 10, 5000, 75, UDim2.new(0, 0, 0, 40))
 local sliderAnti  = createSlider(content, "Intentos Anti-Bucle", 1, 5, 3, UDim2.new(0, 250, 0, 40))
 
 local toggleNoclip   = createToggle(content, "Noclip", true, UDim2.new(0, 500, 0, 0))
@@ -282,6 +276,7 @@ local function runAntiAfk()
 end
 task.spawn(runAntiAfk)
 
+-- 🆕 TELEPORT CON HEARTBEAT + DELTA TIME (SIN LÍMITES)
 local function smoothTeleport(targetPos)
     local char = player.Character
     if not char then return false end
@@ -296,50 +291,54 @@ local function smoothTeleport(targetPos)
     hum.WalkSpeed = 0
     hum.AutoRotate = false
 
-    local step = math.clamp(moveSpeed, 10, 150)
-    local maxAttempts = 200
-    local attempts = 0
+    local speed = math.clamp(moveSpeed, 10, 5000)
+    local conn
+    local success = false
+    local doneEvent = Instance.new("BindableEvent")
 
-    while (root.Position - targetPos).Magnitude > 3 and attempts < maxAttempts do
-        if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then break end
+    conn = RunService.Heartbeat:Connect(function(dt)
+        -- Verificar integridad del personaje
+        if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
+            success = false
+            conn:Disconnect()
+            doneEvent:Fire()
+            return
+        end
         root = player.Character.HumanoidRootPart
-        local currentPos = root.Position
-        local distToTarget = (targetPos - currentPos).Magnitude
-        local dir = (targetPos - currentPos).Unit
-        local move = math.min(step, distToTarget)
-        local newCFrame = CFrame.new(currentPos + (dir * move))
-        player.Character:PivotTo(newCFrame)
+        local dist = (targetPos - root.Position).Magnitude
+
+        if dist <= 3 then
+            success = true
+            conn:Disconnect()
+            doneEvent:Fire()
+            return
+        end
+
+        -- 📏 MOVIMIENTO DESLIMITADO BASED EN DELTA TIME
+        local move = math.min(speed * dt, dist)
+        local dir = (targetPos - root.Position).Unit
+        root.CFrame = CFrame.new(root.Position + dir * move)
         root.AssemblyLinearVelocity = Vector3.zero
         root.AssemblyAngularVelocity = Vector3.zero
-        attempts += 1
-        task.wait()
-    end
+    end)
 
+    -- Yield exacto sin limitar frames (evita task.wait() en el bucle)
+    doneEvent.Event:Wait()
+    doneEvent:Destroy()
+
+    -- Restaurar físicas
     if hum and hum.Parent then
         hum.WalkSpeed = oldWalkSpeed
         hum.AutoRotate = oldAutoRotate
     end
 
+    -- Posición final exacta
     if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-        local finalRoot = player.Character.HumanoidRootPart
         player.Character:PivotTo(CFrame.new(targetPos))
-        finalRoot.AssemblyLinearVelocity = Vector3.zero
-        finalRoot.AssemblyAngularVelocity = Vector3.zero
     end
 
-    task.wait(0.2)
-
-    local finalRoot = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-    if finalRoot then
-        local dist = (finalRoot.Position - targetPos).Magnitude
-        if dist > 5 and dist < 30 then
-            player.Character:PivotTo(CFrame.new(targetPos))
-            task.wait(0.1)
-            dist = (player.Character.HumanoidRootPart.Position - targetPos).Magnitude
-        end
-        if dist > 20 then return false end
-    end
-    return true
+    task.wait(0.1) -- Sync mínimo con el servidor
+    return success
 end
 
 local function getValidGiverPrompt()
