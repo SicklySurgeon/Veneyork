@@ -1,5 +1,5 @@
 -- ==========================================
--- AUTO-JOB DELIVERY SYSTEM (OPTIMIZED & STABLE v5)
+-- AUTO-JOB DELIVERY SYSTEM + PANEL HORIZONTAL (v6 HEARTBEAT UNLIMITED) + ANTI-AFK
 -- ==========================================
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
@@ -8,8 +8,8 @@ local UIS = game:GetService("UserInputService")
 
 local player = Players.LocalPlayer
 
--- ⚙️ CONFIGURACIÓN DINÁMICA REPARADA
-local moveSpeed = 160                -- Slider: 10 - 199 (Adaptado con capeo seguro)
+-- ⚙️ CONFIGURACIÓN DINÁMICA
+local moveSpeed = 75               -- Slider: 10 - 5000 (Default: 75)
 local maxAntiLoopAttempts = 3       -- Slider: 1 - 5
 local noclipEnabled = true          -- Toggle: ON por defecto
 local promptCooldownEnabled = true  -- Toggle: ON por defecto
@@ -23,7 +23,6 @@ local NPC_SPAWN_WAIT = 6
 
 local GIVER_HARDCODED_POS = Vector3.new(151.902512, 40.724411, 512.531128)
 
--- 🔒 SISTEMA DE BLOQUEO DE GIVER
 local lockedGiverPos = GIVER_HARDCODED_POS
 local lockedGiverPrompt = nil
 
@@ -45,7 +44,7 @@ screenGui.ResetOnSpawn = false
 
 local main = Instance.new("Frame", screenGui)
 main.Name = "MainPanel"
-main.Size = UDim2.new(0, 680, 0, 175)
+main.Size = UDim2.new(0, 680, 0, 185)
 main.Position = UDim2.new(0.5, -340, 0, 15)
 main.BackgroundColor3 = Color3.fromRGB(12, 12, 15)
 main.BorderSizePixel = 0
@@ -66,7 +65,7 @@ title.TextSize = 15
 Instance.new("UICorner", title).CornerRadius = UDim.new(0, 10)
 
 local content = Instance.new("Frame", main)
-content.Size = UDim2.new(1, -20, 0, 130)
+content.Size = UDim2.new(1, -20, 0, 140)
 content.Position = UDim2.new(0, 10, 0, 40)
 content.BackgroundTransparency = 1
 
@@ -100,58 +99,106 @@ local function createToggle(parent, name, default, pos)
     return {Button = btn, State = function() return state end, SetCallback = function(cb) callback = cb end}
 end
 
+-- 🆕 SLIDER CON SOPORTE TÁCTIL + HITBOX AMPLIADA
 local function createSlider(parent, name, min, max, default, pos)
     local frame = Instance.new("Frame", parent)
     frame.Name = name.."_Slider"
-    frame.Size = UDim2.new(0, 240, 0, 48)
+    frame.Size = UDim2.new(0, 240, 0, 56)
     frame.Position = pos
     frame.BackgroundTransparency = 1
 
     local lbl = Instance.new("TextLabel", frame)
-    lbl.Size = UDim2.new(1,0,0,16)
+    lbl.Size = UDim2.new(1, 0, 0, 18)
     lbl.Text = name..": "..default
-    lbl.TextColor3 = Color3.fromRGB(200,200,200)
+    lbl.TextColor3 = Color3.fromRGB(200, 200, 200)
     lbl.Font = Enum.Font.GothamBold
-    lbl.TextSize = 12
+    lbl.TextSize = 13
     lbl.BackgroundTransparency = 1
+    lbl.TextXAlignment = Enum.TextXAlignment.Left
 
-    local track = Instance.new("Frame", frame)
-    track.Size = UDim2.new(1,-10,0,6)
-    track.Position = UDim2.new(0,5,0,22)
-    track.BackgroundColor3 = Color3.fromRGB(45,45,50)
-    Instance.new("UICorner", track).CornerRadius = UDim.new(0,3)
+    local touchZone = Instance.new("TextButton", frame)
+    touchZone.Name = "TouchZone"
+    touchZone.Size = UDim2.new(1, 0, 0, 36)
+    touchZone.Position = UDim2.new(0, 0, 0, 18)
+    touchZone.BackgroundTransparency = 1
+    touchZone.Text = ""
+    touchZone.AutoButtonColor = false
+    touchZone.Active = true
+
+    local track = Instance.new("Frame", touchZone)
+    track.Name = "Track"
+    track.Size = UDim2.new(1, -20, 0, 8)
+    track.Position = UDim2.new(0, 10, 0.5, -4)
+    track.BackgroundColor3 = Color3.fromRGB(45, 45, 50)
+    track.Active = false
+    Instance.new("UICorner", track).CornerRadius = UDim.new(0, 4)
 
     local fill = Instance.new("Frame", track)
-    fill.Size = UDim2.new((default-min)/(max-min), 0, 1, 0)
-    fill.BackgroundColor3 = Color3.fromRGB(0,162,255)
-    Instance.new("UICorner", fill).CornerRadius = UDim.new(0,3)
+    fill.Name = "Fill"
+    fill.Size = UDim2.new((default - min) / (max - min), 0, 1, 0)
+    fill.BackgroundColor3 = Color3.fromRGB(0, 162, 255)
+    fill.Active = false
+    Instance.new("UICorner", fill).CornerRadius = UDim.new(0, 4)
 
-    local handle = Instance.new("TextButton", track)
-    handle.Size = UDim2.new(0,12,0,12)
-    handle.Position = UDim2.new((default-min)/(max-min), -6, 0.5, -6)
-    handle.BackgroundColor3 = Color3.fromRGB(255,255,255)
-    Instance.new("UICorner", handle).CornerRadius = UDim.new(1,0)
-    handle.Text = ""
-    handle.AutoButtonColor = false
+    local handle = Instance.new("Frame", track)
+    handle.Name = "Handle"
+    handle.Size = UDim2.new(0, 24, 0, 24)
+    handle.Position = UDim2.new((default - min) / (max - min), -12, 0.5, -12)
+    handle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    handle.Active = false
+    Instance.new("UICorner", handle).CornerRadius = UDim.new(1, 0)
+    local hStroke = Instance.new("UIStroke", handle)
+    hStroke.Color = Color3.fromRGB(0, 162, 255)
+    hStroke.Thickness = 2
 
     local val = default
     local dragging = false
     local cb = nil
-    handle.MouseButton1Down:Connect(function() dragging = true end)
-    UIS.InputEnded:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end end)
-    UIS.InputChanged:Connect(function(i)
-        if dragging and i.UserInputType == Enum.UserInputType.MouseMovement then
-            local absX = track.AbsolutePosition.X
-            local absW = track.AbsoluteSize.X
-            local rel = math.clamp((i.Position.X - absX) / absW, 0, 1)
-            val = math.floor(min + rel * (max - min))
-            fill.Size = UDim2.new(rel, 0, 1, 0)
-            handle.Position = UDim2.new(rel, -6, 0.5, -6)
-            lbl.Text = name..": "..val
-            if cb then cb(val) end
+
+    local function updateFromX(absX)
+        local trackAbsX = track.AbsolutePosition.X
+        local trackAbsW = track.AbsoluteSize.X
+        if trackAbsW <= 0 then return end
+        local rel = math.clamp((absX - trackAbsX) / trackAbsW, 0, 1)
+        val = math.floor(min + rel * (max - min) + 0.5)
+        fill.Size = UDim2.new(rel, 0, 1, 0)
+        handle.Position = UDim2.new(rel, -12, 0.5, -12)
+        lbl.Text = name..": "..val
+        if cb then cb(val) end
+    end
+
+    local function isRelevantInput(i)
+        return i.UserInputType == Enum.UserInputType.MouseButton1
+            or i.UserInputType == Enum.UserInputType.Touch
+    end
+
+    touchZone.InputBegan:Connect(function(i, processed)
+        if processed then return end
+        if isRelevantInput(i) then
+            dragging = true
+            updateFromX(i.Position.X)
         end
     end)
-    return {GetValue = function() return val end, SetCallback = function(f) cb = f end, Frame = frame}
+
+    UIS.InputChanged:Connect(function(i)
+        if not dragging then return end
+        if i.UserInputType == Enum.UserInputType.MouseMovement
+        or i.UserInputType == Enum.UserInputType.Touch then
+            updateFromX(i.Position.X)
+        end
+    end)
+
+    UIS.InputEnded:Connect(function(i)
+        if isRelevantInput(i) then
+            dragging = false
+        end
+    end)
+
+    return {
+        GetValue = function() return val end,
+        SetCallback = function(f) cb = f end,
+        Frame = frame,
+    }
 end
 
 -- ==========================================
@@ -161,23 +208,24 @@ local btnToggle = createBtn(content, "BtnToggle", "🟢 ACTIVAR AUTO-JOB", UDim2
 local btnHide   = createBtn(content, "BtnHide", "📉 MINIMIZAR", UDim2.new(0, 170, 0, 0), UDim2.new(0, 110, 0, 32), Color3.fromRGB(30, 30, 35))
 local btnClose  = createBtn(content, "BtnClose", "❌ CERRAR", UDim2.new(0, 290, 0, 0), UDim2.new(0, 90, 0, 32), Color3.fromRGB(120, 20, 20))
 
-local sliderSpeed = createSlider(content, "Velocidad (Studs)", 10, 250, moveSpeed, UDim2.new(0, 0, 0, 40))
-local sliderAnti  = createSlider(content, "Intentos Anti-Bucle", 1, 5, maxAntiLoopAttempts, UDim2.new(0, 250, 0, 40))
+-- 🆕 MAX 5000, LABEL ACTUALIZADO
+local sliderSpeed = createSlider(content, "Velocidad (Studs/s)", 10, 5000, 75, UDim2.new(0, 0, 0, 40))
+local sliderAnti  = createSlider(content, "Intentos Anti-Bucle", 1, 5, 3, UDim2.new(0, 250, 0, 40))
 
-local toggleNoclip   = createToggle(content, "Noclip", noclipEnabled, UDim2.new(0, 500, 0, 0))
-local toggleCooldown = createToggle(content, "Prompt Cooldown", promptCooldownEnabled, UDim2.new(0, 500, 0, 40))
-local toggleAntiAfk  = createToggle(content, "Anti-AFK", antiAfkEnabled, UDim2.new(0, 350, 0, 80))
+local toggleNoclip   = createToggle(content, "Noclip", true, UDim2.new(0, 500, 0, 0))
+local toggleCooldown = createToggle(content, "Prompt Cooldown", true, UDim2.new(0, 500, 0, 40))
+local toggleAntiAfk  = createToggle(content, "Anti-AFK", true, UDim2.new(0, 350, 0, 80))
 
 local infoLabel = Instance.new("TextLabel", content)
 infoLabel.Size = UDim2.new(1, 0, 0, 35)
-infoLabel.Position = UDim2.new(0, 0, 0, 100)
+infoLabel.Position = UDim2.new(0, 0, 0, 110)
 infoLabel.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
 infoLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
 infoLabel.Font = Enum.Font.GothamBold
 infoLabel.TextSize = 12
 infoLabel.TextWrapped = true
-infoLabel.TextYAlignment = "Top"
-infoLabel.TextXAlignment = "Left"
+infoLabel.TextYAlignment = Enum.TextYAlignment.Top
+infoLabel.TextXAlignment = Enum.TextXAlignment.Left
 Instance.new("UICorner", infoLabel).CornerRadius = UDim.new(0, 6)
 infoLabel.Text = "Sistema en espera. Presiona ACTIVAR para iniciar."
 
@@ -217,26 +265,18 @@ updateNoclip()
 
 local function runAntiAfk()
     while antiAfkEnabled do
-        task.wait(600 + math.random(-20, 20))
-        pcall(function()
-            if keypress and keyrelease then
-                keypress("w")
-                task.wait(0.05)
-                keyrelease("w")
-            elseif mouse1click then
-                mouse1click()
-            else
-                local VIM = game:GetService("VirtualInputManager")
-                VIM:SendKeyEvent(true, Enum.KeyCode.W, false, game)
-                task.wait(0.1)
-                VIM:SendKeyEvent(false, Enum.KeyCode.W, false, game)
-            end
-        end)
+        task.wait(600 + math.random(-30, 30))
+        local char = player.Character
+        if char and char:FindFirstChild("Humanoid") and char:FindFirstChild("HumanoidRootPart") then
+            char.Humanoid.Jump = true
+            task.wait(0.1)
+            char.Humanoid.Jump = false
+        end
     end
 end
 task.spawn(runAntiAfk)
 
--- ✅ TELEPORT ROBUSTO OPTIMIZADO (Solución anti Rubberbanding)
+-- 🆕 TELEPORT CON HEARTBEAT + DELTA TIME (SIN LÍMITES)
 local function smoothTeleport(targetPos)
     local char = player.Character
     if not char then return false end
@@ -244,51 +284,63 @@ local function smoothTeleport(targetPos)
     local hum = char:FindFirstChild("Humanoid")
     if not root or not hum then return false end
 
-    local startPos = root.Position
-    local totalDist = (targetPos - startPos).Magnitude
-    if totalDist < 3 then return true end
+    if (root.Position - targetPos).Magnitude < 3 then return true end
 
-    -- CAPEO FÍSICO SEGURO: Si moveSpeed es muy alto, lo dividimos en ticks menores
-    -- para evitar el anti-cheat de Roblox que causa Rubberband.
-    local safeStep = math.min(moveSpeed, 250)
-    local dir = (targetPos - startPos).Unit
-    local traveled = 0
+    local oldWalkSpeed = hum.WalkSpeed
+    local oldAutoRotate = hum.AutoRotate
+    hum.WalkSpeed = 0
+    hum.AutoRotate = false
 
-    -- Previene fricción del humanoide
-    hum:ChangeState(Enum.HumanoidStateType.Physics)
+    local speed = math.clamp(moveSpeed, 10, 5000)
+    local conn
+    local success = false
+    local doneEvent = Instance.new("BindableEvent")
 
-    while traveled < totalDist do
-        if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then return false end
-        local move = math.min(safeStep, totalDist - traveled)
+    conn = RunService.Heartbeat:Connect(function(dt)
+        -- Verificar integridad del personaje
+        if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
+            success = false
+            conn:Disconnect()
+            doneEvent:Fire()
+            return
+        end
+        root = player.Character.HumanoidRootPart
+        local dist = (targetPos - root.Position).Magnitude
+
+        if dist <= 3 then
+            success = true
+            conn:Disconnect()
+            doneEvent:Fire()
+            return
+        end
+
+        -- 📏 MOVIMIENTO DESLIMITADO BASED EN DELTA TIME
+        local move = math.min(speed * dt, dist)
+        local dir = (targetPos - root.Position).Unit
         root.CFrame = CFrame.new(root.Position + dir * move)
         root.AssemblyLinearVelocity = Vector3.zero
         root.AssemblyAngularVelocity = Vector3.zero
-        traveled += move
-        task.wait(0.015)
+    end)
+
+    -- Yield exacto sin limitar frames (evita task.wait() en el bucle)
+    doneEvent.Event:Wait()
+    doneEvent:Destroy()
+
+    -- Restaurar físicas
+    if hum and hum.Parent then
+        hum.WalkSpeed = oldWalkSpeed
+        hum.AutoRotate = oldAutoRotate
     end
 
+    -- Posición final exacta
     if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-        player.Character:FindFirstChild("HumanoidRootPart").CFrame = CFrame.new(targetPos)
-    end
-    task.wait(0.05)
-
-    -- Verificación de llegada con corrección forzada
-    local finalRoot = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-    if finalRoot then
-        local distError = (finalRoot.Position - targetPos).Magnitude
-        if distError > 12 then
-            finalRoot.CFrame = CFrame.new(targetPos)
-            task.wait(0.1)
-            distError = (finalRoot.Position - targetPos).Magnitude
-            if distError > 12 then return false end
-        end
+        player.Character:PivotTo(CFrame.new(targetPos))
     end
 
-    hum:ChangeState(Enum.HumanoidStateType.RunningNoPhysics)
-    return true
+    task.wait(0.1) -- Sync mínimo con el servidor
+    return success
 end
 
--- 🔒 DETECCIÓN INTELIGENTE DE GIVER
 local function getValidGiverPrompt()
     if lockedGiverPrompt and lockedGiverPrompt:IsA("ProximityPrompt") and lockedGiverPrompt.Parent then
         local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
@@ -312,10 +364,7 @@ local function getValidGiverPrompt()
     for _, d in ipairs(p:GetDescendants()) do
         if d:IsA("ProximityPrompt") and d.Parent:IsA("BasePart") then
             local dist = (d.Parent.Position - root.Position).Magnitude
-            if dist < minDist then
-                minDist = dist
-                closest = d
-            end
+            if dist < minDist then minDist = dist; closest = d end
         end
     end
 
@@ -370,7 +419,7 @@ local function getDeliveryTarget()
 end
 
 -- ==========================================
--- 4. SISTEMA ANTI-BUCLE (REGENERACIÓN ESTABLE)
+-- 4. SISTEMA ANTI-BUCLE
 -- ==========================================
 local function triggerAntiLoopReset()
     systemPaused = true
@@ -418,49 +467,40 @@ end
 function runAutoJob()
     while autoJobEnabled do
         if systemPaused then task.wait(0.5); continue end
-        
         local char = player.Character
         local root = char and char:FindFirstChild("HumanoidRootPart")
         if not root then
             infoLabel.Text = "⏳ Esperando personaje..."
             infoLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-            task.wait(1)
-            continue
+            task.wait(1); continue
         end
 
         if not hasChicken() then
             infoLabel.Text = "📦 Yendo al Giver..."
             infoLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
-            
             if not smoothTeleport(lockedGiverPos) then
                 infoLabel.Text = "⚠️ Teleport fallido. Reintentando..."
                 infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
-                task.wait(1)
-                continue
+                task.wait(1); continue
             end
-            
             local giverPrompt = getValidGiverPrompt()
             if not giverPrompt then
                 promptFailCount += 1
                 infoLabel.Text = string.format("⚠️ Giver no detectado (%d/%d)", promptFailCount, maxAntiLoopAttempts)
                 infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
                 if promptFailCount >= maxAntiLoopAttempts then triggerAntiLoopReset() end
-                task.wait(1.5)
-                continue
+                task.wait(1.5); continue
             end
-            
             local promptPart = giverPrompt.Parent
             if (root.Position - promptPart.Position).Magnitude > 4 then
                 smoothTeleport(promptPart.Position)
                 lockedGiverPos = promptPart.Position
             end
-            
             bypassAndTriggerPrompt(giverPrompt)
             promptFailCount = 0
-            
             infoLabel.Text = "⏳ Esperando pedido..."
             infoLabel.TextColor3 = Color3.fromRGB(150, 200, 255)
-            
+
             local waitTime = 0
             local pickupSuccess = false
             while waitTime < PICKUP_TIMEOUT and autoJobEnabled and not systemPaused do
@@ -473,7 +513,7 @@ function runAutoJob()
                 task.wait(promptCooldownEnabled and 0.5 or 0.1)
                 waitTime += 0.5
             end
-            
+
             if pickupSuccess then
                 consecutiveFails = 0
                 infoLabel.Text = "✅ Pedido recibido. Buscando NPC..."
@@ -489,44 +529,35 @@ function runAutoJob()
                     consecutiveFails = 0
                     lockedGiverPrompt = nil
                 end
-                task.wait(1)
-                continue
+                task.wait(1); continue
             end
         else
             infoLabel.Text = "🚚 Esperando spawn del NPC..."
             infoLabel.TextColor3 = Color3.fromRGB(0, 162, 255)
-            
             local npcPos, npcModel = nil, nil
             local spawnWait = 0
             while spawnWait < NPC_SPAWN_WAIT and autoJobEnabled and not systemPaused do
                 npcPos, npcModel = getDeliveryTarget()
                 if npcPos and npcModel then break end
-                task.wait(0.5)
-                spawnWait += 0.5
+                task.wait(0.5); spawnWait += 0.5
             end
-            
+
             if npcPos and npcModel then
                 infoLabel.Text = string.format("📍 NPC detectado: %.1f, %.1f, %.1f", npcPos.X, npcPos.Y, npcPos.Z)
                 infoLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
-                
                 if not smoothTeleport(npcPos) then
                     infoLabel.Text = "⚠️ Teleport al NPC fallido. Reintentando..."
                     infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
-                    task.wait(1)
-                    continue
+                    task.wait(1); continue
                 end
                 task.wait(promptCooldownEnabled and 0.3 or 0.05)
-                
                 local hrp = npcModel:FindFirstChild("HumanoidRootPart")
                 local npcPrompt = hrp and hrp:FindFirstChildWhichIsA("ProximityPrompt")
-                
                 if npcPrompt then
                     bypassAndTriggerPrompt(npcPrompt)
                     promptFailCount = 0
-                    
                     infoLabel.Text = "⏳ Completando entrega..."
                     infoLabel.TextColor3 = Color3.fromRGB(150, 200, 255)
-                    
                     local waitTime = 0
                     local deliverySuccess = false
                     while waitTime < DELIVERY_TIMEOUT and autoJobEnabled and not systemPaused do
@@ -541,7 +572,6 @@ function runAutoJob()
                         task.wait(promptCooldownEnabled and 0.5 or 0.1)
                         waitTime += 0.5
                     end
-                    
                     if deliverySuccess then
                         consecutiveFails = 0
                         infoLabel.Text = "✅ ¡Entrega exitosa! Repitiendo..."
@@ -584,7 +614,6 @@ btnToggle.MouseButton1Click:Connect(function()
     autoJobEnabled = not autoJobEnabled
     btnToggle.Text = autoJobEnabled and "🔴 DESACTIVAR AUTO-JOB" or "🟢 ACTIVAR AUTO-JOB"
     btnToggle.BackgroundColor3 = autoJobEnabled and Color3.fromRGB(120, 20, 20) or Color3.fromRGB(20, 100, 40)
-    
     if autoJobEnabled then
         infoLabel.Text = "🤖 Sistema activado. Iniciando ciclo..."
         infoLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
