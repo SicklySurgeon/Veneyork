@@ -591,17 +591,37 @@ local function morphToPlayer(target)
     end)
     rootPart.CFrame = savedCFrame
     rootPart.Anchored = savedAnchor
-    if applySuccess then
-        task.spawn(function()
-            local success, colider = pcall(function()
-                local found = workspace:FindFirstChild("ColiderMerengues")
-                if not found then found = workspace:WaitForChild("ColiderMerengues", 3) end
-                return found
-            end)
-            if success and colider and colider:IsA("BasePart") then
-                colider.CanCollide = false
-            end
-        end)
+	if applySuccess then
+		-- NoClip persistente para ColiderMerengues
+		task.spawn(function()
+			-- Desactivar inmediatamente si existe
+			local colider = workspace:FindFirstChild("ColiderMerengues")
+			if not colider then
+				colider = workspace:WaitForChild("ColiderMerengues", 5)
+			end
+			if colider and colider:IsA("BasePart") then
+				colider.CanCollide = false
+				-- Mantener desactivado continuamente
+				local noclipConn
+				noclipConn = game:GetService("RunService").Stepped:Connect(function()
+					if not character or not character.Parent then
+						noclipConn:Disconnect()
+						return
+					end
+					local c = workspace:FindFirstChild("ColiderMerengues")
+					if c and c:IsA("BasePart") then
+						c.CanCollide = false
+					end
+					-- También desactivar colisiones en partes del personaje
+					for _, part in ipairs(character:GetDescendants()) do
+						if part:IsA("BasePart") and part.Name == "ColiderMerengues" then
+							part.CanCollide = false
+						end
+					end
+				end)
+				table.insert(connections, noclipConn)
+			end
+		end)
         applyMorphEffects(character)
         flashCharacter(character)
         sendNotification("✅ Morph Exitoso", "Ahora eres " .. targetName .. "!", "SUCCESS")
@@ -647,8 +667,36 @@ local function morphToGlobalProfile(target)
     end)
     rootPart.CFrame = savedCFrame
     rootPart.Anchored = savedAnchor
-    if applySuccess then
-        applyMorphEffects(character)
+	if applySuccess then
+		-- NoClip persistente para ColiderMerengues
+		task.spawn(function()
+			local colider = workspace:FindFirstChild("ColiderMerengues")
+			if not colider then
+				colider = workspace:WaitForChild("ColiderMerengues", 5)
+			end
+			if colider and colider:IsA("BasePart") then
+				colider.CanCollide = false
+				local noclipConn
+				noclipConn = game:GetService("RunService").Stepped:Connect(function()
+					if not character or not character.Parent then
+						noclipConn:Disconnect()
+						return
+					end
+					local c = workspace:FindFirstChild("ColiderMerengues")
+					if c and c:IsA("BasePart") then
+						c.CanCollide = false
+					end
+					for _, part in ipairs(character:GetDescendants()) do
+						if part:IsA("BasePart") and part.Name == "ColiderMerengues" then
+							part.CanCollide = false
+						end
+					end
+				end)
+				table.insert(connections, noclipConn)
+			end
+		end)
+
+		applyMorphEffects(character)
         flashCharacter(character)
         sendNotification("🌐 Morph Global Exitoso", "Avatar global de " .. targetName .. " aplicado!", "SUCCESS")
         task.delay(0.5, function() forceAccessoryOrder(character) end)
