@@ -1,6 +1,6 @@
 -- ==========================================
 -- AUTO-JOB DELIVERY SYSTEM + PANEL HORIZONTAL
--- v7 HEARTBEAT UNLIMITED + ANTI-AFK + FIX MÓVIL (PROMPT VISIBILITY)
+-- v12 ULTRA-STABLE + FPS FIX + ZERO LEAKS
 -- ==========================================
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
@@ -11,15 +11,21 @@ local Workspace = game:GetService("Workspace")
 local player = Players.LocalPlayer
 
 -- ⚙️ CONFIGURACIÓN DINÁMICA
-local moveSpeed = 75               -- Slider: 10 - 5000 (Default: 75)
-local maxAntiLoopAttempts = 3       -- Slider: 1 - 5
-local noclipEnabled = true          -- Toggle: ON por defecto
-local promptCooldownEnabled = true  -- Toggle: ON por defecto
-local antiAfkEnabled = true         -- Toggle: ON por defecto
+local moveSpeed = 500
+local maxAntiLoopAttempts = 3
+local noclipEnabled = true
+local promptCooldownEnabled = true
+local antiAfkEnabled = true
 
-local PICKUP_TIMEOUT = 12
-local DELIVERY_TIMEOUT = 12
-local RETRY_TRIGGER_EVERY = 3
+-- SLIDERS DE TIEMPO (segundos)
+local waitOnArrival = 0.15
+local waitAfterPrompt = 0.30
+local waitBetweenNpcs = 0.30
+
+local RETRY_PROMPT_INTERVAL = 1.5
+
+local PICKUP_TIMEOUT = 8
+local DELIVERY_TIMEOUT = 8
 local FAIL_COOLDOWN = 5
 local NPC_SPAWN_WAIT = 6
 
@@ -33,6 +39,7 @@ local systemPaused = false
 local jobThread = nil
 local consecutiveFails = 0
 local promptFailCount = 0
+local currentCycleId = 0 -- 🆕 Sistema para matar hilos viejos
 
 -- ==========================================
 -- 1. GUI HORIZONTAL (PANEL)
@@ -46,8 +53,8 @@ screenGui.ResetOnSpawn = false
 
 local main = Instance.new("Frame", screenGui)
 main.Name = "MainPanel"
-main.Size = UDim2.new(0, 680, 0, 185)
-main.Position = UDim2.new(0.5, -340, 0, 15)
+main.Size = UDim2.new(0, 720, 0, 245)
+main.Position = UDim2.new(0.5, -360, 0, 15)
 main.BackgroundColor3 = Color3.fromRGB(12, 12, 15)
 main.BorderSizePixel = 0
 main.Active = true
@@ -67,7 +74,7 @@ title.TextSize = 15
 Instance.new("UICorner", title).CornerRadius = UDim.new(0, 10)
 
 local content = Instance.new("Frame", main)
-content.Size = UDim2.new(1, -20, 0, 140)
+content.Size = UDim2.new(1, -20, 0, 200)
 content.Position = UDim2.new(0, 10, 0, 40)
 content.BackgroundTransparency = 1
 
@@ -104,7 +111,7 @@ end
 local function createSlider(parent, name, min, max, default, pos)
     local frame = Instance.new("Frame", parent)
     frame.Name = name.."_Slider"
-    frame.Size = UDim2.new(0, 240, 0, 56)
+    frame.Size = UDim2.new(0, 220, 0, 56)
     frame.Position = pos
     frame.BackgroundTransparency = 1
 
@@ -113,7 +120,7 @@ local function createSlider(parent, name, min, max, default, pos)
     lbl.Text = name..": "..default
     lbl.TextColor3 = Color3.fromRGB(200, 200, 200)
     lbl.Font = Enum.Font.GothamBold
-    lbl.TextSize = 13
+    lbl.TextSize = 12
     lbl.BackgroundTransparency = 1
     lbl.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -143,8 +150,8 @@ local function createSlider(parent, name, min, max, default, pos)
 
     local handle = Instance.new("Frame", track)
     handle.Name = "Handle"
-    handle.Size = UDim2.new(0, 24, 0, 24)
-    handle.Position = UDim2.new((default - min) / (max - min), -12, 0.5, -12)
+    handle.Size = UDim2.new(0, 22, 0, 22)
+    handle.Position = UDim2.new((default - min) / (max - min), -11, 0.5, -11)
     handle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     handle.Active = false
     Instance.new("UICorner", handle).CornerRadius = UDim.new(1, 0)
@@ -163,8 +170,113 @@ local function createSlider(parent, name, min, max, default, pos)
         local rel = math.clamp((absX - trackAbsX) / trackAbsW, 0, 1)
         val = math.floor(min + rel * (max - min) + 0.5)
         fill.Size = UDim2.new(rel, 0, 1, 0)
-        handle.Position = UDim2.new(rel, -12, 0.5, -12)
+        handle.Position = UDim2.new(rel, -11, 0.5, -11)
         lbl.Text = name..": "..val
+        if cb then cb(val) end
+    end
+
+    local function isRelevantInput(i)
+        return i.UserInputType == Enum.UserInputType.MouseButton1
+            or i.UserInputType == Enum.UserInputType.Touch
+    end
+
+    touchZone.InputBegan:Connect(function(i, processed)
+        if processed then return end
+        if isRelevantInput(i) then
+            dragging = true
+            updateFromX(i.Position.X)
+        end
+    end)
+
+    UIS.InputChanged:Connect(function(i)
+        if not dragging then return end
+        if i.UserInputType == Enum.UserInputType.MouseMovement
+        or i.UserInputType == Enum.UserInputType.Touch then
+            updateFromX(i.Position.X)
+        end
+    end)
+
+    UIS.InputEnded:Connect(function(i)
+        if isRelevantInput(i) then
+            dragging = false
+        end
+    end)
+
+    return {
+        GetValue = function() return val end,
+        SetCallback = function(f) cb = f end,
+        Frame = frame,
+    }
+end
+
+local function createSliderFloat(parent, name, min, max, default, step, pos)
+    step = step or 0.05
+    local frame = Instance.new("Frame", parent)
+    frame.Name = name.."_Slider"
+    frame.Size = UDim2.new(0, 220, 0, 56)
+    frame.Position = pos
+    frame.BackgroundTransparency = 1
+
+    local lbl = Instance.new("TextLabel", frame)
+    lbl.Size = UDim2.new(1, 0, 0, 18)
+    lbl.Text = name..": "..string.format("%.2fs", default)
+    lbl.TextColor3 = Color3.fromRGB(200, 200, 200)
+    lbl.Font = Enum.Font.GothamBold
+    lbl.TextSize = 12
+    lbl.BackgroundTransparency = 1
+    lbl.TextXAlignment = Enum.TextXAlignment.Left
+
+    local touchZone = Instance.new("TextButton", frame)
+    touchZone.Name = "TouchZone"
+    touchZone.Size = UDim2.new(1, 0, 0, 36)
+    touchZone.Position = UDim2.new(0, 0, 0, 18)
+    touchZone.BackgroundTransparency = 1
+    touchZone.Text = ""
+    touchZone.AutoButtonColor = false
+    touchZone.Active = true
+
+    local track = Instance.new("Frame", touchZone)
+    track.Name = "Track"
+    track.Size = UDim2.new(1, -20, 0, 8)
+    track.Position = UDim2.new(0, 10, 0.5, -4)
+    track.BackgroundColor3 = Color3.fromRGB(45, 45, 50)
+    track.Active = false
+    Instance.new("UICorner", track).CornerRadius = UDim.new(0, 4)
+
+    local fill = Instance.new("Frame", track)
+    fill.Name = "Fill"
+    fill.Size = UDim2.new((default - min) / (max - min), 0, 1, 0)
+    fill.BackgroundColor3 = Color3.fromRGB(255, 140, 0)
+    fill.Active = false
+    Instance.new("UICorner", fill).CornerRadius = UDim.new(0, 4)
+
+    local handle = Instance.new("Frame", track)
+    handle.Name = "Handle"
+    handle.Size = UDim2.new(0, 22, 0, 22)
+    handle.Position = UDim2.new((default - min) / (max - min), -11, 0.5, -11)
+    handle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    handle.Active = false
+    Instance.new("UICorner", handle).CornerRadius = UDim.new(1, 0)
+    local hStroke = Instance.new("UIStroke", handle)
+    hStroke.Color = Color3.fromRGB(255, 140, 0)
+    hStroke.Thickness = 2
+
+    local val = default
+    local dragging = false
+    local cb = nil
+
+    local function updateFromX(absX)
+        local trackAbsX = track.AbsolutePosition.X
+        local trackAbsW = track.AbsoluteSize.X
+        if trackAbsW <= 0 then return end
+        local rel = math.clamp((absX - trackAbsX) / trackAbsW, 0, 1)
+        local raw = min + rel * (max - min)
+        val = math.floor(raw / step + 0.5) * step
+        val = math.clamp(val, min, max)
+        local newRel = (val - min) / (max - min)
+        fill.Size = UDim2.new(newRel, 0, 1, 0)
+        handle.Position = UDim2.new(newRel, -11, 0.5, -11)
+        lbl.Text = name..": "..string.format("%.2fs", val)
         if cb then cb(val) end
     end
 
@@ -209,16 +321,20 @@ local btnToggle = createBtn(content, "BtnToggle", "🟢 ACTIVAR AUTO-JOB", UDim2
 local btnHide   = createBtn(content, "BtnHide", "📉 MINIMIZAR", UDim2.new(0, 170, 0, 0), UDim2.new(0, 110, 0, 32), Color3.fromRGB(30, 30, 35))
 local btnClose  = createBtn(content, "BtnClose", "❌ CERRAR", UDim2.new(0, 290, 0, 0), UDim2.new(0, 90, 0, 32), Color3.fromRGB(120, 20, 20))
 
-local sliderSpeed = createSlider(content, "Velocidad (Studs/s)", 10, 5000, 75, UDim2.new(0, 0, 0, 40))
-local sliderAnti  = createSlider(content, "Intentos Anti-Bucle", 1, 5, 3, UDim2.new(0, 250, 0, 40))
+local sliderSpeed = createSlider(content, "Velocidad", 50, 5000, 500, UDim2.new(0, 0, 0, 40))
+local sliderAnti  = createSlider(content, "Anti-Bucle", 1, 5, 3, UDim2.new(0, 230, 0, 40))
 
-local toggleNoclip   = createToggle(content, "Noclip", true, UDim2.new(0, 500, 0, 0))
-local toggleCooldown = createToggle(content, "Prompt Cooldown", true, UDim2.new(0, 500, 0, 40))
-local toggleAntiAfk  = createToggle(content, "Anti-AFK", true, UDim2.new(0, 350, 0, 80))
+local sliderWaitArrival = createSliderFloat(content, "Espera al llegar", 0.05, 1.00, 0.15, 0.05, UDim2.new(0, 0, 0, 100))
+local sliderWaitPrompt  = createSliderFloat(content, "Espera tras prompt", 0.05, 2.00, 0.30, 0.05, UDim2.new(0, 230, 0, 100))
+local sliderWaitNpc     = createSliderFloat(content, "Espera entre NPCs", 0.10, 1.00, 0.30, 0.05, UDim2.new(0, 460, 0, 100))
+
+local toggleNoclip   = createToggle(content, "Noclip", true, UDim2.new(0, 460, 0, 40))
+local toggleCooldown = createToggle(content, "Prompt CD", true, UDim2.new(0, 390, 0, 0))
+local toggleAntiAfk  = createToggle(content, "Anti-AFK", true, UDim2.new(0, 540, 0, 0))
 
 local infoLabel = Instance.new("TextLabel", content)
 infoLabel.Size = UDim2.new(1, 0, 0, 35)
-infoLabel.Position = UDim2.new(0, 0, 0, 110)
+infoLabel.Position = UDim2.new(0, 0, 0, 165)
 infoLabel.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
 infoLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
 infoLabel.Font = Enum.Font.GothamBold
@@ -246,16 +362,23 @@ openBtn.MouseButton1Click:Connect(function() main.Visible = true; openBtn.Visibl
 btnClose.MouseButton1Click:Connect(function() screenGui:Destroy() end)
 
 -- ==========================================
--- 3. SISTEMAS CORE
+-- 3. SISTEMAS CORE OPTIMIZADOS
 -- ==========================================
 local noclipConn
 local function updateNoclip()
     if noclipConn then noclipConn:Disconnect(); noclipConn = nil end
     if noclipEnabled then
+        -- 🆕 Noclip optimizado: GetChildren en vez de GetDescendants
         noclipConn = RunService.Stepped:Connect(function()
-            if player.Character then
-                for _, part in ipairs(player.Character:GetDescendants()) do
-                    if part:IsA("BasePart") then part.CanCollide = false end
+            local char = player.Character
+            if char then
+                for _, child in ipairs(char:GetChildren()) do
+                    if child:IsA("BasePart") then
+                        child.CanCollide = false
+                    elseif child:IsA("Accessory") or child:IsA("Tool") then
+                        local handle = child:FindFirstChildWhichIsA("BasePart")
+                        if handle then handle.CanCollide = false end
+                    end
                 end
             end
         end)
@@ -276,43 +399,27 @@ local function runAntiAfk()
 end
 task.spawn(runAntiAfk)
 
--- ==========================================
--- 📱 FIX MÓVIL: FORZAR VISIBILIDAD DEL PROMPT
--- ==========================================
--- Orienta la cámara hacia el objetivo para que el engine
--- "vea" al NPC y muestre el ProximityPrompt correctamente.
 local function forceCameraLookAt(targetPos)
     local camera = Workspace.CurrentCamera
     if not camera then return end
     local camPos = camera.CFrame.Position
     local lookAt = CFrame.lookAt(camPos, targetPos)
-    pcall(function()
-        camera.CFrame = lookAt
-    end)
-    task.wait(0.08) -- tiempo para que el engine recalcule visibilidad
+    pcall(function() camera.CFrame = lookAt end)
+    task.wait(0.08)
 end
 
--- Simula un tap en el centro de la pantalla.
--- Fuerza al engine a considerar que hay input del usuario,
--- lo que hace que el ProximityPrompt aparezca y se mantenga.
 local function simulateScreenTap()
     local camera = Workspace.CurrentCamera
-    local center = (camera and camera.ViewportSize and Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2))
-        or Vector2.new(500, 500)
-
-    -- Método 1: VirtualInputManager (Delta, Fluxus, Arceus X, etc.)
+    local center = (camera and camera.ViewportSize and Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)) or Vector2.new(500, 500)
     local ok1, VIM = pcall(function() return game:GetService("VirtualInputManager") end)
     if ok1 and VIM then
         pcall(function()
-            VIM:SendTouchEvent(0, 0, {center})  -- touch begin
+            VIM:SendTouchEvent(0, 0, {center})
             task.wait(0.04)
-            VIM:SendTouchEvent(0, 2, {center})  -- touch end
+            VIM:SendTouchEvent(0, 2, {center})
         end)
-        task.wait(0.05)
-        return
+        task.wait(0.05); return
     end
-
-    -- Método 2: VirtualUser (fallback)
     local ok2, VU = pcall(function() return game:GetService("VirtualUser") end)
     if ok2 and VU then
         pcall(function()
@@ -321,20 +428,16 @@ local function simulateScreenTap()
             VU:Button1Up(center)
         end)
         task.wait(0.05)
-        return
     end
 end
 
--- Helper combinado: cámara + tap + espera
 local function refreshPromptVisibility(targetPos)
-    if targetPos then
-        forceCameraLookAt(targetPos)
-    end
+    if targetPos then forceCameraLookAt(targetPos) end
     simulateScreenTap()
     task.wait(0.1)
 end
--- ==========================================
 
+-- 🆕 TELEPORT SEGURO: No puede colgarse ni fugarse
 local function smoothTeleport(targetPos)
     local char = player.Character
     if not char then return false end
@@ -342,126 +445,151 @@ local function smoothTeleport(targetPos)
     local hum = char:FindFirstChild("Humanoid")
     if not root or not hum then return false end
 
-    if (root.Position - targetPos).Magnitude < 3 then return true end
+    if (root.Position - targetPos).Magnitude < 3 then 
+        pcall(function()
+            root.AssemblyLinearVelocity = Vector3.zero
+            root.AssemblyAngularVelocity = Vector3.zero
+        end)
+        return true 
+    end
 
     local oldWalkSpeed = hum.WalkSpeed
     local oldAutoRotate = hum.AutoRotate
     hum.WalkSpeed = 0
     hum.AutoRotate = false
 
-    local speed = math.clamp(moveSpeed, 10, 5000)
+    local speed = math.clamp(moveSpeed, 50, 5000)
     local conn
-    local success = false
     local doneEvent = Instance.new("BindableEvent")
+    local success = false
+    local elapsed = 0
+    local fired = false
+
+    local function fireDone(res)
+        if fired then return end
+        fired = true
+        success = res
+        if conn then pcall(function() conn:Disconnect() end); conn = nil end
+        doneEvent:Fire()
+    end
 
     conn = RunService.Heartbeat:Connect(function(dt)
+        elapsed += dt
+        if elapsed > 6 then fireDone(false); return end -- Seguro anti-cuelgue
         if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
-            success = false
-            conn:Disconnect()
-            doneEvent:Fire()
-            return
+            fireDone(false); return
         end
-        root = player.Character.HumanoidRootPart
-        local dist = (targetPos - root.Position).Magnitude
+        local r = player.Character.HumanoidRootPart
+        local dist = (targetPos - r.Position).Magnitude
 
-        if dist <= 3 then
-            success = true
-            conn:Disconnect()
-            doneEvent:Fire()
-            return
-        end
+        if dist <= 3 then fireDone(true); return end
 
         local move = math.min(speed * dt, dist)
-        local dir = (targetPos - root.Position).Unit
-        root.CFrame = CFrame.new(root.Position + dir * move)
-        root.AssemblyLinearVelocity = Vector3.zero
-        root.AssemblyAngularVelocity = Vector3.zero
+        local dir = (targetPos - r.Position).Unit
+        pcall(function()
+            r.CFrame = CFrame.new(r.Position + dir * move)
+            r.AssemblyLinearVelocity = Vector3.zero
+            r.AssemblyAngularVelocity = Vector3.zero
+        end)
     end)
+
+    -- Seguro si el evento nunca dispara
+    task.delay(6.5, function() fireDone(false) end)
 
     doneEvent.Event:Wait()
     doneEvent:Destroy()
+
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        pcall(function()
+            player.Character:PivotTo(CFrame.new(targetPos))
+            player.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.zero
+            player.Character.HumanoidRootPart.AssemblyAngularVelocity = Vector3.zero
+        end)
+    end
 
     if hum and hum.Parent then
         hum.WalkSpeed = oldWalkSpeed
         hum.AutoRotate = oldAutoRotate
     end
 
-    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-        player.Character:PivotTo(CFrame.new(targetPos))
-    end
-
-    task.wait(0.1)
+    task.wait(waitOnArrival)
     return success
 end
 
 local function getValidGiverPrompt()
-    if lockedGiverPrompt and lockedGiverPrompt:IsA("ProximityPrompt") and lockedGiverPrompt.Parent then
-        local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-        if root and (lockedGiverPrompt.Parent.Position - root.Position).Magnitude < 12 then
-            return lockedGiverPrompt
-        end
-        lockedGiverPrompt = nil
-    end
-
-    local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-    if not root then return nil end
-
     local works = Workspace:FindFirstChild("Works")
-    if not works then return nil end
+    if not works then return nil, lockedGiverPos end
     local p = works:FindFirstChild("Arturos")
     if p then p = p:FindFirstChild("Delivery") end
     if p then p = p:FindFirstChild("Giver") end
-    if not p then return nil end
+    if not p then return nil, lockedGiverPos end
 
-    local closest, minDist = nil, math.huge
+    if lockedGiverPrompt and lockedGiverPrompt:IsA("ProximityPrompt") and lockedGiverPrompt.Parent then
+        return lockedGiverPrompt, lockedGiverPrompt.Parent.Position
+    end
+
+    local closest, bestPos, minDist = nil, lockedGiverPos, math.huge
     for _, d in ipairs(p:GetDescendants()) do
         if d:IsA("ProximityPrompt") and d.Parent:IsA("BasePart") then
-            local dist = (d.Parent.Position - root.Position).Magnitude
-            if dist < minDist then minDist = dist; closest = d end
+            local dist = (d.Parent.Position - lockedGiverPos).Magnitude
+            if dist < minDist then minDist = dist; closest = d; bestPos = d.Parent.Position end
         end
     end
 
-    if closest and minDist < 10 then
+    if closest then
         lockedGiverPrompt = closest
-        lockedGiverPos = closest.Parent.Position
-        return closest
+        lockedGiverPos = bestPos
+        return closest, bestPos
     end
-    return nil
+    return nil, lockedGiverPos
 end
 
--- 🔧 MODIFICADA: ahora acepta targetPos opcional y es más robusta en móvil
 local function bypassAndTriggerPrompt(prompt, targetPos)
     if not prompt or not prompt:IsA("ProximityPrompt") then return false end
+    pcall(function()
+        prompt.HoldDuration = 0
+        prompt.MaxActivationDistance = math.huge
+        prompt.RequiresLineOfSight = false
+        prompt.Enabled = true
+        prompt.ClickablePrompt = true
+    end)
 
-    -- Forzar propiedades para que siempre sea activable
-    prompt.HoldDuration = 0
-    prompt.MaxActivationDistance = math.huge
-    pcall(function() prompt.RequiresLineOfSight = false end)
-    prompt.Enabled = true
-    pcall(function() prompt.ClickablePrompt = true end)
+    if targetPos then refreshPromptVisibility(targetPos) end
+    task.wait(waitAfterPrompt * 0.1)
 
-    -- 🆕 Refrescar visibilidad si nos dieron la posición
-    if targetPos then
-        refreshPromptVisibility(targetPos)
-    end
-
-    if promptCooldownEnabled then task.wait(0.03) end
-
-    -- Intento principal con fireproximityprompt
     if fireproximityprompt then
         pcall(fireproximityprompt, prompt)
     else
         pcall(function() prompt:InputHoldBegin() end)
-        if promptCooldownEnabled then task.wait(0.03) end
+        task.wait(waitAfterPrompt * 0.1)
         pcall(function() prompt:InputHoldEnd() end)
     end
 
-    -- 🆕 Segundo intento por seguridad en móvil (algunos exploits fallan a la primera)
-    task.wait(0.05)
+    task.wait(waitAfterPrompt)
     pcall(function() prompt:InputHoldBegin() end)
     task.wait(0.02)
     pcall(function() prompt:InputHoldEnd() end)
+    return true
+end
 
+local function quickTriggerPrompt(prompt, targetPos)
+    if not prompt or not prompt:IsA("ProximityPrompt") then return false end
+    pcall(function()
+        prompt.HoldDuration = 0
+        prompt.MaxActivationDistance = math.huge
+        prompt.RequiresLineOfSight = false
+        prompt.Enabled = true
+    end)
+
+    if targetPos then pcall(forceCameraLookAt, targetPos); simulateScreenTap() end
+
+    if fireproximityprompt then
+        pcall(fireproximityprompt, prompt)
+    else
+        pcall(function() prompt:InputHoldBegin() end)
+        task.wait(0.02)
+        pcall(function() prompt:InputHoldEnd() end)
+    end
     return true
 end
 
@@ -491,6 +619,95 @@ local function getDeliveryTarget()
 end
 
 -- ==========================================
+-- 🚀 SISTEMA REACTIVO SEGURO (ANTI-LEAKS)
+-- ==========================================
+local function waitForChickenAcquired(timeout)
+    if hasChicken() then return true end
+
+    local acquiredEvent = Instance.new("BindableEvent")
+    local conns = {}
+    local fired = false
+
+    local function fire()
+        if fired then return end; fired = true; acquiredEvent:Fire()
+    end
+
+    local function check(obj)
+        if obj.Name == "Fried Chicken" then fire() end
+    end
+
+    table.insert(conns, player.Backpack.ChildAdded:Connect(check))
+
+    local char = player.Character
+    if char then
+        table.insert(conns, char.ChildAdded:Connect(check))
+        local hum = char:FindFirstChild("Humanoid")
+        if hum then table.insert(conns, hum.Died:Connect(fire)) end
+    end
+
+    local charAddedConn = player.CharacterAdded:Connect(function(newChar)
+        if fired then return end
+        table.insert(conns, newChar.ChildAdded:Connect(check))
+        local hum = newChar:WaitForChild("Humanoid", 2)
+        if hum then table.insert(conns, hum.Died:Connect(fire)) end
+    end)
+    table.insert(conns, charAddedConn)
+
+    task.delay(timeout, fire)
+
+    acquiredEvent.Event:Wait()
+
+    for _, c in ipairs(conns) do pcall(function() c:Disconnect() end) end
+    acquiredEvent:Destroy()
+
+    return hasChicken()
+end
+
+local function waitForChickenDelivered(timeout)
+    if not hasChicken() then return true end
+
+    local deliveredEvent = Instance.new("BindableEvent")
+    local conns = {}
+    local fired = false
+
+    local function fire()
+        if fired then return end; fired = true; deliveredEvent:Fire()
+    end
+
+    local function check()
+        if not hasChicken() then fire() end
+    end
+
+    local char = player.Character
+    local trackedChicken = char and char:FindFirstChild("Fried Chicken") or player.Backpack:FindFirstChild("Fried Chicken")
+
+    if trackedChicken then
+        table.insert(conns, trackedChicken.AncestryChanged:Connect(function() task.wait(0.02); check() end))
+    end
+
+    table.insert(conns, player.Backpack.ChildRemoved:Connect(function(obj)
+        if obj.Name == "Fried Chicken" then task.wait(0.02); check() end
+    end))
+
+    if char then
+        table.insert(conns, char.ChildRemoved:Connect(function(obj)
+            if obj.Name == "Fried Chicken" then task.wait(0.02); check() end
+        end))
+        local hum = char:FindFirstChild("Humanoid")
+        if hum then table.insert(conns, hum.Died:Connect(fire)) end
+    end
+
+    task.delay(timeout, fire)
+
+    deliveredEvent.Event:Wait()
+
+    for _, c in ipairs(conns) do pcall(function() c:Disconnect() end) end
+    deliveredEvent:Destroy()
+
+    return not hasChicken()
+end
+
+-- ==========================================
 -- 4. SISTEMA ANTI-BUCLE
 -- ==========================================
 local function triggerAntiLoopReset()
@@ -509,22 +726,16 @@ local function triggerAntiLoopReset()
 
     local waitTime = 0
     repeat
-        task.wait(0.2)
-        waitTime += 0.2
+        task.wait(0.2); waitTime += 0.2
         if waitTime > 8 then
+            systemPaused = false; promptFailCount = 0; lockedGiverPrompt = nil
             infoLabel.Text = "⚠️ Timeout respawn. Reanudando..."
-            infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
-            systemPaused = false
-            promptFailCount = 0
-            lockedGiverPrompt = nil
-            return
+            infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0); return
         end
     until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 
     task.wait(1.2)
-    promptFailCount = 0
-    lockedGiverPrompt = nil
-    systemPaused = false
+    promptFailCount = 0; lockedGiverPrompt = nil; systemPaused = false
     infoLabel.Text = "✅ Personaje regenerado. Reanudando..."
     infoLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
 
@@ -534,171 +745,189 @@ local function triggerAntiLoopReset()
 end
 
 -- ==========================================
--- 5. CICLO PRINCIPAL
+-- 5. CICLO PRINCIPAL (CICLOLIMPIO + PCALL)
 -- ==========================================
 function runAutoJob()
     while autoJobEnabled do
-        if systemPaused then task.wait(0.5); continue end
-        local char = player.Character
-        local root = char and char:FindFirstChild("HumanoidRootPart")
-        if not root then
-            infoLabel.Text = "⏳ Esperando personaje..."
-            infoLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-            task.wait(1); continue
-        end
-
-        if not hasChicken() then
-            infoLabel.Text = "📦 Yendo al Giver..."
-            infoLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
-            if not smoothTeleport(lockedGiverPos) then
-                infoLabel.Text = "⚠️ Teleport fallido. Reintentando..."
-                infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
-                task.wait(1); continue
-            end
-            local giverPrompt = getValidGiverPrompt()
-            if not giverPrompt then
-                promptFailCount += 1
-                infoLabel.Text = string.format("⚠️ Giver no detectado (%d/%d)", promptFailCount, maxAntiLoopAttempts)
-                infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
-                if promptFailCount >= maxAntiLoopAttempts then triggerAntiLoopReset() end
-                task.wait(1.5); continue
-            end
-            local promptPart = giverPrompt.Parent
-            if (root.Position - promptPart.Position).Magnitude > 4 then
-                smoothTeleport(promptPart.Position)
-                lockedGiverPos = promptPart.Position
-            end
-            -- 🆕 Pasamos la posición para refrescar visibilidad en móvil
-            bypassAndTriggerPrompt(giverPrompt, promptPart.Position)
-            promptFailCount = 0
-            infoLabel.Text = "⏳ Esperando pedido..."
-            infoLabel.TextColor3 = Color3.fromRGB(150, 200, 255)
-
-            local waitTime = 0
-            local pickupSuccess = false
-            while waitTime < PICKUP_TIMEOUT and autoJobEnabled and not systemPaused do
-                if hasChicken() then pickupSuccess = true; break end
-                if waitTime > 0 and math.floor(waitTime) % RETRY_TRIGGER_EVERY == 0 then
-                    if lockedGiverPrompt and lockedGiverPrompt:IsA("ProximityPrompt") then
-                        local gp = lockedGiverPrompt.Parent
-                        local gPos = gp and gp.Position or lockedGiverPos
-                        refreshPromptVisibility(gPos)
-                        bypassAndTriggerPrompt(lockedGiverPrompt, gPos)
-                    end
-                end
-                task.wait(promptCooldownEnabled and 0.5 or 0.1)
-                waitTime += 0.5
+        local ok, err = pcall(function()
+            if systemPaused then task.wait(0.5); return end
+            local char = player.Character
+            local root = char and char:FindFirstChild("HumanoidRootPart")
+            if not root then
+                infoLabel.Text = "⏳ Esperando personaje..."
+                infoLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+                task.wait(1); return
             end
 
-            if pickupSuccess then
-                consecutiveFails = 0
-                infoLabel.Text = "✅ Pedido recibido. Buscando NPC..."
-                infoLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
-            else
-                consecutiveFails += 1
-                infoLabel.Text = string.format("⚠️ Timeout recogiendo (%d/3)", consecutiveFails)
-                infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
-                if consecutiveFails >= 3 then
-                    infoLabel.Text = "❌ Pausa por fallos..."
-                    infoLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
-                    task.wait(FAIL_COOLDOWN)
-                    consecutiveFails = 0
-                    lockedGiverPrompt = nil
-                end
-                task.wait(1); continue
-            end
-        else
-            infoLabel.Text = "🚚 Esperando spawn del NPC..."
-            infoLabel.TextColor3 = Color3.fromRGB(0, 162, 255)
-            local npcPos, npcModel = nil, nil
-            local spawnWait = 0
-            while spawnWait < NPC_SPAWN_WAIT and autoJobEnabled and not systemPaused do
-                npcPos, npcModel = getDeliveryTarget()
-                if npcPos and npcModel then break end
-                task.wait(0.5); spawnWait += 0.5
-            end
+            currentCycleId = currentCycleId + 1
+            local myCycleId = currentCycleId
 
-            if npcPos and npcModel then
-                infoLabel.Text = string.format("📍 NPC detectado: %.1f, %.1f, %.1f", npcPos.X, npcPos.Y, npcPos.Z)
-                infoLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
-                if not smoothTeleport(npcPos) then
-                    infoLabel.Text = "⚠️ Teleport al NPC fallido. Reintentando..."
+            if not hasChicken() then
+                -- ============ FASE 1 ============
+                infoLabel.Text = "📦 Yendo al Giver..."
+                infoLabel.TextColor3 = Color3.fromRGB(255, 200, 0)
+                
+                local giverPrompt, exactGiverPos = getValidGiverPrompt()
+                local targetPos = exactGiverPos or lockedGiverPos
+                
+                if not smoothTeleport(targetPos) then
+                    infoLabel.Text = "⚠️ Teleport fallido. Reintentando..."
                     infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
-                    task.wait(1); continue
+                    task.wait(1); return
                 end
-
-                -- 🆕 FIX MÓVIL: refrescar visibilidad ANTES de buscar el prompt
-                local hrp = npcModel:FindFirstChild("HumanoidRootPart")
-                local finalTarget = (hrp and hrp.Position) or npcPos
-                refreshPromptVisibility(finalTarget)
-                task.wait(promptCooldownEnabled and 0.3 or 0.1)
-
-                -- Buscar prompt recursivamente en el modelo (por si no está en HRP)
-                local npcPrompt = hrp and hrp:FindFirstChildWhichIsA("ProximityPrompt")
-                if not npcPrompt then
-                    npcPrompt = npcModel:FindFirstChildWhichIsA("ProximityPrompt", true)
+                
+                if not giverPrompt then giverPrompt, exactGiverPos = getValidGiverPrompt() end
+                if not giverPrompt then
+                    promptFailCount += 1
+                    infoLabel.Text = string.format("⚠️ Giver no detectado (%d/%d)", promptFailCount, maxAntiLoopAttempts)
+                    infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
+                    if promptFailCount >= maxAntiLoopAttempts then triggerAntiLoopReset() end
+                    task.wait(1.5); return
                 end
+                
+                bypassAndTriggerPrompt(giverPrompt, exactGiverPos or targetPos)
+                promptFailCount = 0
+                infoLabel.Text = "⚡ Esperando pollo (auto-retry)..."
+                infoLabel.TextColor3 = Color3.fromRGB(150, 200, 255)
 
-                if npcPrompt then
-                    bypassAndTriggerPrompt(npcPrompt, finalTarget)
-                    promptFailCount = 0
-                    infoLabel.Text = "⏳ Completando entrega..."
-                    infoLabel.TextColor3 = Color3.fromRGB(150, 200, 255)
-
-                    local waitTime = 0
-                    local deliverySuccess = false
-                    while waitTime < DELIVERY_TIMEOUT and autoJobEnabled and not systemPaused do
-                        if not hasChicken() then deliverySuccess = true; break end
-                        if waitTime > 0 and math.floor(waitTime) % RETRY_TRIGGER_EVERY == 0 then
-                            local rHrp = npcModel:FindFirstChild("HumanoidRootPart")
-                            local rPos = (rHrp and rHrp.Position) or finalTarget
-                            refreshPromptVisibility(rPos)
-                            local rPrompt = npcModel:FindFirstChildWhichIsA("ProximityPrompt", true)
-                            if rPrompt then bypassAndTriggerPrompt(rPrompt, rPos) end
+                -- 🆕 HILO PARALELO SEGURO CON CYCLE ID
+                task.spawn(function()
+                    local retryCount = 0
+                    while myCycleId == currentCycleId and autoJobEnabled and not systemPaused do
+                        task.wait(RETRY_PROMPT_INTERVAL)
+                        if myCycleId ~= currentCycleId or not autoJobEnabled or systemPaused then break end
+                        if hasChicken() then break end
+                        
+                        local currentPrompt = getValidGiverPrompt()
+                        if currentPrompt then
+                            retryCount += 1
+                            infoLabel.Text = string.format("🔄 Reintento #%d del Giver...", retryCount)
+                            infoLabel.TextColor3 = Color3.fromRGB(255, 200, 100)
+                            quickTriggerPrompt(currentPrompt, currentPrompt.Parent and currentPrompt.Parent.Position)
                         end
-                        task.wait(promptCooldownEnabled and 0.5 or 0.1)
-                        waitTime += 0.5
+                    end
+                end)
+
+                local pickupSuccess = waitForChickenAcquired(PICKUP_TIMEOUT)
+
+                if pickupSuccess then
+                    consecutiveFails = 0
+                    infoLabel.Text = "✅ Pollo recibido. Buscando NPC..."
+                    infoLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
+                else
+                    consecutiveFails += 1
+                    infoLabel.Text = string.format("⚠️ Timeout recogida (%d/3)", consecutiveFails)
+                    infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
+                    if consecutiveFails >= 3 then
+                        infoLabel.Text = "❌ Pausa por fallos..."
+                        infoLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
+                        task.wait(FAIL_COOLDOWN); consecutiveFails = 0; lockedGiverPrompt = nil
+                    end
+                    task.wait(1); return
+                end
+            else
+                -- ============ FASE 2 ============
+                infoLabel.Text = "🚚 Esperando spawn del NPC..."
+                infoLabel.TextColor3 = Color3.fromRGB(0, 162, 255)
+                local npcPos, npcModel = nil, nil
+                local spawnWait = 0
+                while spawnWait < NPC_SPAWN_WAIT and autoJobEnabled and not systemPaused do
+                    npcPos, npcModel = getDeliveryTarget()
+                    if npcPos and npcModel then break end
+                    task.wait(0.1); spawnWait += 0.1
+                end
+
+                if npcPos and npcModel then
+                    infoLabel.Text = string.format("📍 NPC detectado: %.1f, %.1f, %.1f", npcPos.X, npcPos.Y, npcPos.Z)
+                    infoLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
+                    if not smoothTeleport(npcPos) then
+                        infoLabel.Text = "⚠️ Teleport al NPC fallido. Reintentando..."
+                        infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
+                        task.wait(1); return
                     end
 
-                    if deliverySuccess then
-                        consecutiveFails = 0
-                        infoLabel.Text = "✅ ¡Entrega exitosa! Repitiendo..."
-                        infoLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
-                    else
-                        consecutiveFails += 1
-                        infoLabel.Text = string.format("⚠️ Timeout entrega (%d/3)", consecutiveFails)
-                        infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
-                        if consecutiveFails >= 3 then
-                            infoLabel.Text = "❌ Pausa por fallos..."
-                            infoLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
-                            task.wait(FAIL_COOLDOWN)
+                    local hrp = npcModel:FindFirstChild("HumanoidRootPart")
+                    local finalTarget = (hrp and hrp.Position) or npcPos
+                    refreshPromptVisibility(finalTarget)
+                    task.wait(0.1)
+
+                    local npcPrompt = hrp and hrp:FindFirstChildWhichIsA("ProximityPrompt")
+                    if not npcPrompt then npcPrompt = npcModel:FindFirstChildWhichIsA("ProximityPrompt", true) end
+
+                    if npcPrompt then
+                        bypassAndTriggerPrompt(npcPrompt, finalTarget)
+                        promptFailCount = 0
+                        infoLabel.Text = "⚡ Entregando (auto-retry)..."
+                        infoLabel.TextColor3 = Color3.fromRGB(150, 200, 255)
+
+                        -- 🆕 HILO PARALELO SEGURO
+                        task.spawn(function()
+                            local retryCount = 0
+                            while myCycleId == currentCycleId and autoJobEnabled and not systemPaused do
+                                task.wait(RETRY_PROMPT_INTERVAL)
+                                if myCycleId ~= currentCycleId or not autoJobEnabled or systemPaused or not hasChicken() then break end
+                                if not npcModel or not npcModel.Parent then break end
+                                
+                                local rHrp = npcModel:FindFirstChild("HumanoidRootPart")
+                                local rPrompt = rHrp and rHrp:FindFirstChildWhichIsA("ProximityPrompt")
+                                if not rPrompt then rPrompt = npcModel:FindFirstChildWhichIsA("ProximityPrompt", true) end
+                                
+                                if rPrompt then
+                                    retryCount += 1
+                                    infoLabel.Text = string.format("🔄 Reintento #%d al NPC...", retryCount)
+                                    infoLabel.TextColor3 = Color3.fromRGB(255, 200, 100)
+                                    quickTriggerPrompt(rPrompt, (rHrp and rHrp.Position) or finalTarget)
+                                end
+                            end
+                        end)
+
+                        local deliverySuccess = waitForChickenDelivered(DELIVERY_TIMEOUT)
+
+                        if deliverySuccess then
                             consecutiveFails = 0
+                            infoLabel.Text = "✅ ¡Entrega exitosa! Repitiendo..."
+                            infoLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
+                        else
+                            consecutiveFails += 1
+                            infoLabel.Text = string.format("⚠️ Timeout entrega (%d/3)", consecutiveFails)
+                            infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
+                            if consecutiveFails >= 3 then
+                                infoLabel.Text = "❌ Pausa por fallos..."
+                                infoLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
+                                task.wait(FAIL_COOLDOWN); consecutiveFails = 0
+                            end
+                            task.wait(1)
                         end
-                        task.wait(1)
+                    else
+                        simulateScreenTap()
+                        task.wait(0.3)
+                        local retryPrompt = npcModel:FindFirstChildWhichIsA("ProximityPrompt", true)
+                        if retryPrompt then
+                            bypassAndTriggerPrompt(retryPrompt, finalTarget)
+                            promptFailCount = 0
+                        else
+                            promptFailCount += 1
+                            infoLabel.Text = string.format("⚠️ Prompt NPC no detectado (%d/%d)", promptFailCount, maxAntiLoopAttempts)
+                            infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
+                            if promptFailCount >= maxAntiLoopAttempts then triggerAntiLoopReset() end
+                            task.wait(1.5)
+                        end
                     end
                 else
-                    -- 🆕 Último recurso: tap + retry una vez más
-                    simulateScreenTap()
-                    task.wait(0.3)
-                    local retryPrompt = npcModel:FindFirstChildWhichIsA("ProximityPrompt", true)
-                    if retryPrompt then
-                        bypassAndTriggerPrompt(retryPrompt, finalTarget)
-                        promptFailCount = 0
-                    else
-                        promptFailCount += 1
-                        infoLabel.Text = string.format("⚠️ Prompt NPC no detectado (%d/%d)", promptFailCount, maxAntiLoopAttempts)
-                        infoLabel.TextColor3 = Color3.fromRGB(255, 150, 0)
-                        if promptFailCount >= maxAntiLoopAttempts then triggerAntiLoopReset() end
-                        task.wait(1.5)
-                    end
+                    infoLabel.Text = "❌ NPC no spawneó. Reintentando..."
+                    infoLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
+                    task.wait(2)
                 end
-            else
-                infoLabel.Text = "❌ NPC no spawneó. Reintentando..."
-                infoLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
-                task.wait(2)
             end
+            task.wait(waitBetweenNpcs)
+        end)
+
+        -- Si hubo un error de script, lo muestra y espera en vez de crashear el loop
+        if not ok then
+            warn("AutoJob Error Capturado: " .. tostring(err))
+            infoLabel.Text = "⚠️ Error recuperándose... Reanudando."
+            task.wait(2)
         end
-        task.wait(promptCooldownEnabled and 1 or 0.2)
     end
     infoLabel.Text = "⏸️ Sistema detenido."
     infoLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
@@ -714,10 +943,7 @@ btnToggle.MouseButton1Click:Connect(function()
     if autoJobEnabled then
         infoLabel.Text = "🤖 Sistema activado. Iniciando ciclo..."
         infoLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
-        consecutiveFails = 0
-        promptFailCount = 0
-        systemPaused = false
-        lockedGiverPrompt = nil
+        consecutiveFails = 0; promptFailCount = 0; systemPaused = false; lockedGiverPrompt = nil
         if not jobThread or coroutine.status(jobThread) == "dead" then
             jobThread = task.spawn(runAutoJob)
         end
@@ -729,6 +955,10 @@ end)
 
 sliderSpeed.SetCallback(function(v) moveSpeed = v end)
 sliderAnti.SetCallback(function(v) maxAntiLoopAttempts = v end)
+sliderWaitArrival.SetCallback(function(v) waitOnArrival = v end)
+sliderWaitPrompt.SetCallback(function(v) waitAfterPrompt = v end)
+sliderWaitNpc.SetCallback(function(v) waitBetweenNpcs = v end)
+
 toggleNoclip.SetCallback(function(v) noclipEnabled = v; updateNoclip() end)
 toggleCooldown.SetCallback(function(v) promptCooldownEnabled = v end)
 toggleAntiAfk.SetCallback(function(v) antiAfkEnabled = v end)
