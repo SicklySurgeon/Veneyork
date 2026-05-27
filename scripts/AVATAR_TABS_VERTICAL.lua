@@ -1752,9 +1752,8 @@ end)
 
 -- Botones principales
 connect(closeBtn.MouseButton1Click, function()
-    cleanupAll()
-    screenGui:Destroy()
-    toastGui:Destroy()
+    screenGui.Enabled = false
+    sendNotification("👁️ GUI Oculta", "Presiona [" .. toggleKey.Name .. "] para volver a mostrar.", "INFO")
 end)
 
 connect(themeBtn.MouseButton1Click, function()
